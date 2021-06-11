@@ -1,4 +1,4 @@
 export interface Bill {
-  creator: string;
+  name: string;
   users: { string: string }[];
 }
