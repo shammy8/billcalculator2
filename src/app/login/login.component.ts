@@ -5,7 +5,12 @@ import firebase from 'firebase/app';
 
 @Component({
   selector: 'bc-login',
-  template: `<button pButton (click)="login()">Log in</button>`,
+  template: `<button
+    pButton
+    icon="pi pi-google"
+    label="Sign in"
+    (click)="login()"
+  ></button>`,
   styles: [],
 })
 export class LoginComponent implements OnInit {
