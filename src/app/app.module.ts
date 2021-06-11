@@ -19,6 +19,7 @@ import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MainAppComponent } from './main-app/main-app.component';
+import { BillComponent } from './bill/bill.component';
 
 const routes: Routes = [
   {
@@ -41,7 +42,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, MainAppComponent],
+  declarations: [AppComponent, LoginComponent, MainAppComponent, BillComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

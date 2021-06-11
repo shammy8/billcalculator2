@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { Bill } from '../model/bill.model';
 
 @Component({
@@ -19,22 +24,28 @@ import { Bill } from '../model/bill.model';
       (click)="signOut()"
     ></button>
     <br />
-    <ng-container *ngIf="bills$ | async as bills">
-      <p-dropdown
-        [options]="bills"
-        optionLabel="name"
-        [formControl]="selectedBill"
-      >
-        <ng-template let-item pTemplate="item"> {{ item.name }}</ng-template>
-      </p-dropdown>
-      <pre> {{ bills | json }}</pre>
-    </ng-container>
+
+    <p-dropdown
+      [options]="bills"
+      optionLabel="name"
+      optionValue="name"
+      [formControl]="selectedBillControl"
+      placeholder="Select a bill"
+    >
+      <ng-template let-item pTemplate="item"> {{ item.name }}</ng-template>
+    </p-dropdown>
+
+    <bc-bill *ngIf="selectedBill" [bill]="selectedBill"></bc-bill>
   `,
   styles: [],
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainAppComponent implements OnInit {
-  bills$: Observable<Bill[] | []> = of([]);
-  selectedBill = new FormControl();
+export class MainAppComponent implements OnInit, OnDestroy {
+  bills: Bill[] = [];
+  selectedBill: Bill | null = null;
+  selectedBillControl = new FormControl();
+
+  private readonly onDestroy = new Subject<void>();
 
   constructor(
     private auth: AngularFireAuth,
@@ -43,21 +54,34 @@ export class MainAppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.bills$ = this.auth.user.pipe(
-      switchMap((user) =>
-        this.store
-          // only return documents with a users.userid field where userid is the uid of the currently signed in user
-          .collection<Bill>('bills', (ref) => ref.orderBy(`users.${user?.uid}`))
-          .valueChanges()
+    this.auth.user
+      .pipe(
+        takeUntil(this.onDestroy),
+        switchMap((user) =>
+          this.store
+            // only return documents with a users.userid field where userid is the uid of the currently signed in user
+            .collection<Bill>('bills', (ref) =>
+              ref.orderBy(`users.${user?.uid}`)
+            )
+            .valueChanges()
+        )
       )
-    );
+      .subscribe((bills) => (this.bills = bills));
 
-    this.selectedBill.valueChanges.subscribe(console.log);
+    this.selectedBillControl.valueChanges
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((billName) => {
+        this.selectedBill = this.bills.find((bill) => bill.name === billName)!;
+      });
   }
 
   signOut() {
     this.auth.signOut().then(() => {
       this.router.navigate(['login']);
     });
+  }
+
+  ngOnDestroy() {
+    this.onDestroy.next();
   }
 }
