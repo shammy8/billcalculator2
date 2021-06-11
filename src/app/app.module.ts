@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -9,6 +10,7 @@ import {
   redirectLoggedInTo,
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
+import { ButtonModule } from 'primeng/button';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
@@ -39,10 +41,12 @@ const routes: Routes = [
   declarations: [AppComponent, LoginComponent, MainAppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    ButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

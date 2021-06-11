@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'bc-main-app',
   template: `
-    <button (click)="signOut()">Sign out</button>
+    <button pButton (click)="signOut()">Sign out</button>
     <p>main-app works!</p>
   `,
   styles: [],
