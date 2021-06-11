@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'bc-root',
-  template: ` {{ title }} `,
+  template: `<router-outlet></router-outlet>`,
   styles: [],
 })
 export class AppComponent {
