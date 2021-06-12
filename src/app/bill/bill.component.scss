@@ -1,6 +1,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  margin-top: 1rem;
 }
 
 .description {
@@ -17,6 +18,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .justify-self-right {

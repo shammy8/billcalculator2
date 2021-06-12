@@ -27,6 +27,7 @@
             [disabled]="friend.user === item.paidBy"
             pTooltip="Can't edit the original payer of the item"
             [tooltipDisabled]="friend.user !== item.paidBy"
+            tooltipPosition="top"
           ></p-inputSwitch>
           <label class="p-ml-2" *ngIf="i % 2 === 0">{{ friend.user }}</label>
         </div>
