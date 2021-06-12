@@ -1,6 +1,7 @@
 export interface Bill {
   name: string;
-  users: { string: string }[];
+  users: { [key: string]: string };
+  usersArray: string[];
   items: Item[];
 }
 

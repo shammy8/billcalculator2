@@ -24,6 +24,13 @@ import { Bill } from '../model/bill.model';
               <div class="description">
                 {{ item.description }}
               </div>
+              <p-multiSelect
+                [options]="bill.usersArray"
+                placeholder="Select shared users"
+                [filter]="false"
+                [maxSelectedLabels]="1"
+                [selectedItemsLabel]="'{0} users selected'"
+              ></p-multiSelect>
             </div>
             <div class="right">
               <div class="price">£{{ item.cost }}</div>
