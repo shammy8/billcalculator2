@@ -19,15 +19,23 @@ import { Bill } from '../model/bill.model';
       <ng-template pTemplate="header">Items</ng-template>
       <ng-template let-item pTemplate="listItem">
         <div class="p-col-12">
-          {{ item.description }}
-          {{ item.cost }}
-          {{ item.paidBy }}
+          <div class="item">
+            <div class="left">
+              <div class="description">
+                {{ item.description }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="price">£{{ item.cost }}</div>
+              <div><span class="paid-by">Paid by </span>{{ item.paidBy }}</div>
+            </div>
+          </div>
         </div>
       </ng-template>
       <!-- <ng-template pTemplate="footer">Choose from the list.</ng-template> -->
     </p-dataView>
   `,
-  styles: [],
+  styleUrls: ['bill.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BillComponent implements OnInit {

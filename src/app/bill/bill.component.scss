@@ -1,0 +1,30 @@
+.item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left {
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.description {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.price {
+  font-size: 1.3rem;
+  font-weight: 600;
+  // align-self: flex-end;
+}
+
+.paid-by {
+  // font-weight: bold;
+  font-size: 0.8rem;
+  // opacity: 0.6;
+}

@@ -8,5 +8,11 @@ export interface Item {
   description: string;
   cost: number;
   paidBy: string;
-  sharedBy: string[];
+  date: Date; // TODO firebase date??
+  sharedBy: SharedBy[];
+}
+
+export interface SharedBy {
+  user: string;
+  settled: boolean;
 }
