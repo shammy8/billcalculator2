@@ -44,6 +44,6 @@
 >
   <bc-add-item
     [users]="bill.usersArray"
-    (addItem)="addItem.emit($event)"
+    (addItem)="addItem.emit({ newItem: $event, bill: bill })"
   ></bc-add-item>
 </p-dialog>

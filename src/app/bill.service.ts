@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Item } from './model/bill.model';
+import { Bill, Item, NewItemWithBill } from './model/bill.model';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ import { Item } from './model/bill.model';
 export class BillService {
   constructor(private store: AngularFirestore) {}
 
-  addItem(newItem: Item) {
-    console.log(newItem);
+  addItem(newItemWithBill: NewItemWithBill) {
+    console.log(newItemWithBill);
   }
 }

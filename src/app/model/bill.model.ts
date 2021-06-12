@@ -17,3 +17,8 @@ export interface SharedBy {
   user: string;
   settled: boolean;
 }
+
+export interface NewItemWithBill {
+  newItem: Item;
+  bill: Bill;
+}
