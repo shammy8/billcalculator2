@@ -14,6 +14,7 @@ import {
 import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
+import { DataViewModule } from 'primeng/dataview';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
@@ -54,6 +55,7 @@ const routes: Routes = [
     SharedModule,
     ButtonModule,
     DropdownModule,
+    DataViewModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
