@@ -1,15 +1,6 @@
-.item {
+.header {
   display: flex;
   justify-content: space-between;
-}
-
-.left {
-}
-
-.right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
 }
 
 .description {
@@ -20,11 +11,14 @@
 .price {
   font-size: 1.3rem;
   font-weight: 600;
-  // align-self: flex-end;
 }
 
-.paid-by {
-  // font-weight: bold;
-  font-size: 0.8rem;
-  // opacity: 0.6;
+.sharedBy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 1rem;
+}
+
+.justify-self-right {
+  justify-self: right;
 }

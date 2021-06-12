@@ -16,6 +16,8 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { DataViewModule } from 'primeng/dataview';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
@@ -59,6 +61,8 @@ const routes: Routes = [
     DropdownModule,
     DataViewModule,
     MultiSelectModule,
+    InputSwitchModule,
+    TooltipModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

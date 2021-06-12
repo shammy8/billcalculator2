@@ -1,0 +1,37 @@
+<button
+  pButton
+  class="p-button-rounded"
+  icon="pi pi-plus"
+  (click)="addItem()"
+></button>
+<p-dataView [value]="bill.items">
+  <ng-template pTemplate="header">Items</ng-template>
+  <ng-template let-item pTemplate="listItem">
+    <div class="p-col-12">
+      <div class="header">
+        <div class="description">
+          {{ item.description }}
+        </div>
+        <div class="price">£{{ item.cost }}</div>
+      </div>
+
+      <div class="sharedBy-grid">
+        <div
+          class="p-mb-2"
+          *ngFor="let friend of item.sharedBy; index as i"
+          [ngClass]="{ 'justify-self-right': i % 2 === 1 }"
+        >
+          <label class="p-mr-2" *ngIf="i % 2 === 1">{{ friend.user }}</label>
+          <p-inputSwitch
+            [ngModel]="friend.settled"
+            [disabled]="friend.user === item.paidBy"
+            pTooltip="Can't edit the original payer of the item"
+            [tooltipDisabled]="friend.user !== item.paidBy"
+          ></p-inputSwitch>
+          <label class="p-ml-2" *ngIf="i % 2 === 0">{{ friend.user }}</label>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <!-- <ng-template pTemplate="footer">Choose from the list.</ng-template> -->
+</p-dataView>
