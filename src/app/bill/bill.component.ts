@@ -15,7 +15,7 @@ import { Bill, Item, NewItemWithBill } from '../model/bill.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BillComponent implements OnInit {
-  displayAddItemBottomBar = false;
+  displayAddItemDialog = false;
 
   @Input() bill!: Bill;
   @Output() addItem = new EventEmitter<NewItemWithBill>();
@@ -24,7 +24,11 @@ export class BillComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  openAddItemBottomBar() {
-    this.displayAddItemBottomBar = true;
+  openAddItemDialog() {
+    this.displayAddItemDialog = true;
+  }
+
+  closeAddItemDialog() {
+    this.displayAddItemDialog = false;
   }
 }
