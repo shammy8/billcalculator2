@@ -9,22 +9,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
-import { map, share, switchMap } from 'rxjs/operators';
+import { map, share, switchMap, tap } from 'rxjs/operators';
 import { Bill } from '../model/bill.model';
 
 @Component({
   selector: 'bc-main-app',
   template: `
-    <button
-      type="button"
-      pButton
-      label="Sign out"
-      icon="pi pi-sign-out"
-      iconPos="left"
-      (click)="signOut()"
-    ></button>
-    <br />
-
     <ng-container *ngIf="bills$ | async as bills">
       <p-dropdown
         [options]="bills"
@@ -36,6 +26,15 @@ import { Bill } from '../model/bill.model';
         <ng-template let-item pTemplate="item"> {{ item.name }}</ng-template>
       </p-dropdown>
     </ng-container>
+
+    <button
+      type="button"
+      pButton
+      icon="pi pi-sign-out"
+      iconPos="left"
+      (click)="signOut()"
+    ></button>
+    <br />
 
     <bc-bill
       *ngIf="selectedBill$ | async as selectedBill"
@@ -64,6 +63,7 @@ export class MainAppComponent implements OnInit, OnDestroy {
           .collection<Bill>('bills', (ref) => ref.orderBy(`users.${user?.uid}`))
           .valueChanges()
       ),
+      tap((bills) => this.selectedBillControl.setValue(bills[0].name)),
       share()
     );
 
