@@ -2,7 +2,7 @@
   pButton
   class="p-button-rounded"
   icon="pi pi-plus"
-  (click)="addItem()"
+  (click)="openAddItemBottomBar()"
 ></button>
 <p-dataView [value]="bill.items">
   <ng-template pTemplate="header">Items</ng-template>
@@ -36,3 +36,14 @@
   </ng-template>
   <!-- <ng-template pTemplate="footer">Choose from the list.</ng-template> -->
 </p-dataView>
+
+<p-dialog
+  header="Add Item"
+  [(visible)]="displayAddItemBottomBar"
+  [style]="{ width: '100%' }"
+>
+  <bc-add-item
+    [users]="bill.usersArray"
+    (addItem)="addItem.emit($event)"
+  ></bc-add-item>
+</p-dialog>

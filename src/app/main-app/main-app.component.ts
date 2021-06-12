@@ -10,6 +10,7 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { map, share, switchMap, tap } from 'rxjs/operators';
+import { BillService } from '../bill.service';
 import { Bill } from '../model/bill.model';
 
 @Component({
@@ -39,6 +40,7 @@ import { Bill } from '../model/bill.model';
     <bc-bill
       *ngIf="selectedBill$ | async as selectedBill"
       [bill]="selectedBill"
+      (addItem)="this.billService.addItem($event)"
     ></bc-bill>
   `,
   styles: [],
@@ -52,7 +54,8 @@ export class MainAppComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AngularFireAuth,
     private store: AngularFirestore,
-    private router: Router
+    private router: Router,
+    public billService: BillService
   ) {}
 
   ngOnInit(): void {

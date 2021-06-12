@@ -18,12 +18,17 @@ import { DataViewModule } from 'primeng/dataview';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CalendarModule } from 'primeng/calendar';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MainAppComponent } from './main-app/main-app.component';
 import { BillComponent } from './bill/bill.component';
+import { AddItemComponent } from './add-item/add-item.component';
 
 const routes: Routes = [
   {
@@ -46,7 +51,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, MainAppComponent, BillComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    MainAppComponent,
+    BillComponent,
+    AddItemComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -63,6 +74,10 @@ const routes: Routes = [
     MultiSelectModule,
     InputSwitchModule,
     TooltipModule,
+    DialogModule,
+    InputTextModule,
+    InputNumberModule,
+    CalendarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,10 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
 } from '@angular/core';
-import { Bill } from '../model/bill.model';
+import { Bill, Item } from '../model/bill.model';
 
 @Component({
   selector: 'bc-bill',
@@ -13,11 +15,17 @@ import { Bill } from '../model/bill.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BillComponent implements OnInit {
+  displayAddItemBottomBar = false;
+
   @Input() bill!: Bill;
+
+  @Output() addItem = new EventEmitter<Item>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  addItem() {}
+  openAddItemBottomBar() {
+    this.displayAddItemBottomBar = true;
+  }
 }
