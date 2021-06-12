@@ -76,7 +76,14 @@ export class AddItemComponent implements OnInit {
   ngOnInit(): void {}
 
   onAddItem() {
-    this.addItem.emit(this.form.value);
+    this.addItem.emit({
+      ...this.form.value,
+      // need to change sharedBy to the correct format for Firestore
+      sharedBy: this.form.value.sharedBy.map((sharedBy: string) => ({
+        user: sharedBy,
+        settled: this.form.value.paidBy === sharedBy ? true : false,
+      })),
+    });
     this.form.reset({ cost: 0.0, date: new Date() });
   }
 }
