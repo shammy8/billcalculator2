@@ -1,4 +1,5 @@
 export interface Bill {
+  uid: string;
   name: string;
   users: { [key: string]: string };
   usersArray: string[];

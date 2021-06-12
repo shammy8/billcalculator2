@@ -64,7 +64,7 @@ export class MainAppComponent implements OnInit, OnDestroy {
         this.store
           // only return documents with a users.userid field where userid is the uid of the currently signed in user
           .collection<Bill>('bills', (ref) => ref.orderBy(`users.${user?.uid}`))
-          .valueChanges()
+          .valueChanges({ idField: 'uid' })
       ),
       tap((bills) => this.selectedBillControl.setValue(bills[0].name)),
       share()
