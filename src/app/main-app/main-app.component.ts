@@ -41,6 +41,7 @@ import { Bill } from '../model/bill.model';
       *ngIf="selectedBill$ | async as selectedBill"
       [bill]="selectedBill"
       (addItem)="this.billService.addItem($event)"
+      (itemsChanged)="this.billService.itemChanged($event)"
     ></bc-bill>
   `,
   styles: [],
