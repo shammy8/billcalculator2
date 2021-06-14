@@ -33,6 +33,14 @@
           formControlName="settled"
           pTooltip="Can't edit the original payer of the item"
           tooltipPosition="top"
+          (onChange)="
+            settledChange$.next({
+              checked: $event.checked,
+              itemKey: item.key,
+              sharedByKey: sharedBy.key,
+              billId: bill.uid
+            })
+          "
         ></p-inputSwitch>
         <label class="p-ml-2" *ngIf="j % 2 === 0">{{
           bill.items[item.key].sharedBy[sharedBy.key].user

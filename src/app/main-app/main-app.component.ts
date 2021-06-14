@@ -42,6 +42,7 @@ import { Bill } from '../model/bill.model';
       [bill]="selectedBill"
       (addItem)="this.billService.addItem($event)"
       (itemsChanged)="this.billService.itemChanged($event)"
+      (onSettledChange)="this.billService.settledChanged($event)"
     ></bc-bill>
   `,
   styles: [],

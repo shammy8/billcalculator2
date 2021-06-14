@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { Bill, Item, NewItemWithBill } from './model/bill.model';
+import { Bill, Item, NewItemWithBill, SettledChange } from './model/bill.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,5 +18,9 @@ export class BillService {
 
   itemChanged(newItems: Item[]) {
     console.log(newItems);
+  }
+
+  settledChanged(a: SettledChange) {
+    console.log(a);
   }
 }

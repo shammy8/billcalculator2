@@ -10,8 +10,13 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
-import { Bill, Item, NewItemWithBill } from '../model/bill.model';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import {
+  Bill,
+  Item,
+  NewItemWithBill,
+  SettledChange,
+} from '../model/bill.model';
 
 @Component({
   selector: 'bc-bill',
@@ -31,6 +36,9 @@ export class BillComponent implements OnInit, OnDestroy {
   @Input() bill!: Bill;
   @Output() addItem = new EventEmitter<NewItemWithBill>();
   @Output() itemsChanged = new EventEmitter<Item[]>();
+  @Output() onSettledChange = new EventEmitter<SettledChange>();
+
+  settledChange$ = new Subject<SettledChange>();
 
   destroy = new Subject<void>();
 
@@ -38,7 +46,8 @@ export class BillComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.buildForm();
-    this.handleEmitItemsChanged();
+    // this.handleEmitItemsChanged();
+    this.handleEmitSettledChange();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -87,11 +96,23 @@ export class BillComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleEmitItemsChanged() {
-    this.itemsForm.valueChanges
-      .pipe(takeUntil(this.destroy), debounceTime(2000)) // TODO? distinctUntilChanged(compareMethod) can pass in method to deep compare the object
-      .subscribe(() => {
-        this.itemsChanged.emit(this.itemsForm.getRawValue());
+  // private handleEmitItemsChanged() {
+  //   this.itemsForm.valueChanges
+  //     .pipe(takeUntil(this.destroy), debounceTime(2000)) // TODO? distinctUntilChanged(compareMethod) can pass in method to deep compare the object
+  //     .subscribe(() => {
+  //       this.itemsChanged.emit(this.itemsForm.getRawValue());
+  //     });
+  // }
+
+  handleEmitSettledChange() {
+    this.settledChange$
+      .pipe(
+        takeUntil(this.destroy),
+        debounceTime(1000),
+        distinctUntilChanged((curr, prev) => curr.checked === prev.checked)
+      )
+      .subscribe((event) => {
+        this.onSettledChange.emit(event);
       });
   }
 

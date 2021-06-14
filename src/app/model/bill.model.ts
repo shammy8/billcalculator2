@@ -23,3 +23,10 @@ export interface NewItemWithBill {
   newItem: Item;
   bill: Bill;
 }
+
+export interface SettledChange {
+  checked: boolean;
+  itemKey: string;
+  sharedByKey: string;
+  billId: string;
+}
