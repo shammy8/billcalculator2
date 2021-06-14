@@ -16,11 +16,11 @@ export class BillService {
     doc.update({ items: arrayUnion(newItemWithBill.newItem) as any }); // TODO can't get it to work without the as any
   }
 
-  itemChanged(newItems: Item[]) {
-    console.log(newItems);
-  }
-
-  settledChanged(a: SettledChange) {
-    console.log(a);
+  settledChanged(settleChange: SettledChange) {
+    const doc = this.store.doc<Bill>(`bills/${settleChange.billId}`);
+    doc.update({
+      [`items.${settleChange.itemKey}.sharedBy.${settleChange.sharedByKey}.settled`]:
+        settleChange.checked,
+    });
   }
 }
