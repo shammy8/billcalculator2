@@ -3,7 +3,7 @@ export interface Bill {
   name: string;
   users: { [key: string]: string };
   usersArray: string[];
-  items: Item[];
+  items: { [key: string]: Item };
 }
 
 export interface Item {
@@ -11,7 +11,7 @@ export interface Item {
   cost: number;
   paidBy: string;
   date: Date; // TODO firebase date??
-  sharedBy: SharedBy[];
+  sharedBy: { [key: string]: SharedBy };
 }
 
 export interface SharedBy {

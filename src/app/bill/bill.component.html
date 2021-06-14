@@ -6,26 +6,29 @@
 ></button>
 
 <form [formGroup]="form">
-  <ng-container formArrayName="items">
-    <div
-      *ngFor="let item of itemsForm.controls; let i = index"
-      [formGroupName]="i"
+  <ng-container formGroupName="items">
+    <ng-container
+      *ngFor="let item of itemsForm.controls | keyvalue"
+      [formGroupName]="item.key"
     >
       <div class="header">
         <div class="description">
-          {{ bill.items[i].description }}
+          {{ bill.items[item.key].description }}
         </div>
-        <div class="price">£{{ bill.items[i].cost }}</div>
+        <div class="price">£{{ bill.items[item.key].cost }}</div>
       </div>
-      <div formArrayName="sharedBy" class="sharedBy-grid">
+      <div formGroupName="sharedByList" class="sharedBy-grid">
         <div
           class="p-mb-2"
           [ngClass]="{ 'justify-self-right': j % 2 === 1 }"
-          *ngFor="let sharedBy of sharedByForm(i).controls; let j = index"
-          [formGroupName]="j"
+          *ngFor="
+            let sharedBy of sharedByForm(item.key).controls | keyvalue;
+            let j = index
+          "
+          [formGroupName]="sharedBy.key"
         >
           <label class="p-mr-2" *ngIf="j % 2 === 1">{{
-            bill.items[i].sharedBy[j].user
+            bill.items[item.key].sharedBy[sharedBy.key].user
           }}</label>
           <p-inputSwitch
             formControlName="settled"
@@ -33,12 +36,12 @@
             tooltipPosition="top"
           ></p-inputSwitch>
           <label class="p-ml-2" *ngIf="j % 2 === 0">{{
-            bill.items[i].sharedBy[j].user
+            bill.items[item.key].sharedBy[sharedBy.key].user
           }}</label>
         </div>
       </div>
       <hr />
-    </div>
+    </ng-container>
   </ng-container>
 </form>
 

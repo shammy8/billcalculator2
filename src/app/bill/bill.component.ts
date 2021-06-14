@@ -7,7 +7,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormArray, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Bill, Item, NewItemWithBill } from '../model/bill.model';
@@ -22,15 +22,17 @@ export class BillComponent implements OnInit, OnDestroy {
   displayAddItemDialog = false;
 
   form = this.fb.group({
-    items: this.fb.array([]),
+    items: this.fb.group({}),
   });
 
   get itemsForm() {
-    return this.form.get('items') as FormArray;
+    return this.form.get('items') as FormGroup;
   }
 
-  sharedByForm(i: number) {
-    return this.itemsForm.at(i).get('sharedBy') as FormArray;
+  sharedByForm(itemKey: string) {
+    return (this.itemsForm.get(itemKey) as FormGroup).get(
+      'sharedByList'
+    ) as FormGroup;
   }
 
   @Input() bill!: Bill;
@@ -47,27 +49,28 @@ export class BillComponent implements OnInit, OnDestroy {
   }
 
   buildForm() {
-    for (let i = 0; i < this.bill.items.length; i++) {
-      const sharedByFormArray = this.fb.array([]);
-      for (let j = 0; j < this.bill.items[i].sharedBy.length; j++) {
+    for (let itemKey in this.bill.items) {
+      const sharedByFormList = this.fb.group({});
+      for (let sharedByKey in this.bill.items[itemKey].sharedBy) {
         const sharedByFormElement = this.fb.group({
-          user: this.bill.items[i].sharedBy[j].user,
+          user: this.bill.items[itemKey].sharedBy[sharedByKey].user,
           settled: {
-            value: this.bill.items[i].sharedBy[j].settled,
+            value: this.bill.items[itemKey].sharedBy[sharedByKey].settled,
             disabled:
-              this.bill.items[i].paidBy === this.bill.items[i].sharedBy[j].user,
+              this.bill.items[itemKey].paidBy ===
+              this.bill.items[itemKey].sharedBy[sharedByKey].user,
           },
         });
-        sharedByFormArray.push(sharedByFormElement);
+        sharedByFormList.addControl(sharedByKey, sharedByFormElement);
       }
 
       const itemFormElement = this.fb.group({
-        description: this.bill.items[i].description,
-        sharedBy: sharedByFormArray,
-        paidBy: this.bill.items[i].paidBy,
-        cost: this.bill.items[i].cost,
+        description: this.bill.items[itemKey].description,
+        sharedByList: sharedByFormList,
+        paidBy: this.bill.items[itemKey].paidBy,
+        cost: this.bill.items[itemKey].cost,
       });
-      this.itemsForm.push(itemFormElement);
+      this.itemsForm.addControl(itemKey, itemFormElement);
     }
   }
 
