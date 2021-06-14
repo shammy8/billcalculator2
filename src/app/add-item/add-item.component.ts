@@ -1,6 +1,7 @@
 import { Component, Input, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Item } from '../model/bill.model';
+import { nanoid } from 'nanoid';
+import { ItemElement, SharedByElement } from '../model/bill.model';
 
 @Component({
   selector: 'bc-add-item',
@@ -61,7 +62,7 @@ import { Item } from '../model/bill.model';
 })
 export class AddItemComponent implements OnInit {
   @Input() users!: string[];
-  @Output() addItem = new EventEmitter<Item>();
+  @Output() addItem = new EventEmitter<ItemElement>();
 
   form = this.fb.group({
     description: ['', [Validators.required]],
@@ -76,13 +77,16 @@ export class AddItemComponent implements OnInit {
   ngOnInit(): void {}
 
   onAddItem() {
+    const sharedByInCorrectFormat: { [key: string]: SharedByElement } = {};
+    this.form.get('sharedBy')?.value.forEach((user: string) => {
+      sharedByInCorrectFormat[nanoid(6)] = {
+        user: user,
+        settled: this.form.get('paidBy')?.value === user,
+      };
+    });
     this.addItem.emit({
       ...this.form.value,
-      // need to change sharedBy to the correct format for Firestore
-      sharedBy: this.form.value.sharedBy.map((sharedBy: string) => ({
-        user: sharedBy,
-        settled: this.form.value.paidBy === sharedBy ? true : false,
-      })),
+      sharedBy: sharedByInCorrectFormat,
     });
     this.form.reset({ cost: 0.0, date: new Date() });
   }

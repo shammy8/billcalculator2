@@ -3,24 +3,32 @@ export interface Bill {
   name: string;
   users: { [key: string]: string };
   usersArray: string[];
-  items: { [key: string]: Item };
+  items: Items;
 }
 
-export interface Item {
+export interface Items {
+  [key: string]: ItemElement;
+}
+
+export interface ItemElement {
   description: string;
   cost: number;
   paidBy: string;
   date: Date; // TODO firebase date??
-  sharedBy: { [key: string]: SharedBy };
+  sharedBy: SharedBy;
 }
 
 export interface SharedBy {
+  [key: string]: SharedByElement;
+}
+
+export interface SharedByElement {
   user: string;
   settled: boolean;
 }
 
 export interface NewItemWithBill {
-  newItem: Item;
+  newItem: ItemElement;
   bill: Bill;
 }
 

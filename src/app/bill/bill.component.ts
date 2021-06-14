@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import {
   Bill,
-  Item,
+  ItemElement,
   NewItemWithBill,
   SettledChange,
 } from '../model/bill.model';
@@ -35,7 +35,7 @@ export class BillComponent implements OnInit, OnDestroy {
 
   @Input() bill!: Bill;
   @Output() addItem = new EventEmitter<NewItemWithBill>();
-  @Output() itemsChanged = new EventEmitter<Item[]>();
+  @Output() itemsChanged = new EventEmitter<ItemElement[]>();
   @Output() onSettledChange = new EventEmitter<SettledChange>();
 
   settledChange$ = new Subject<SettledChange>();
@@ -52,7 +52,7 @@ export class BillComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.bill && !changes.bill.firstChange) {
-      this.updateSettledInForm(changes.bill.currentValue);
+      this.updateForm(changes.bill.currentValue);
     }
   }
 
@@ -82,16 +82,41 @@ export class BillComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateSettledInForm(newBill: Bill) {
+  /**
+   * TODO need to tidy this up along with buildForm
+   */
+  updateForm(newBill: Bill) {
     const items = newBill.items;
     for (let itemKey in items) {
-      // this.itemsForm
-      //   .get(`${itemKey}.description`)
-      //   ?.patchValue(items[itemKey].description);
-      for (let sharedByKey in items[itemKey].sharedBy) {
-        this.itemsForm
-          .get(`${itemKey}.sharedBy.${sharedByKey}.settled`)
-          ?.patchValue(items[itemKey].sharedBy[sharedByKey].settled);
+      if (!this.itemsForm.get('itemKey')) {
+        // if a new item is added
+        const sharedByFormList = this.fb.group({});
+        for (let sharedByKey in items[itemKey].sharedBy) {
+          const sharedByFormElement = this.fb.group({
+            user: this.bill.items[itemKey].sharedBy[sharedByKey].user,
+            settled: {
+              value: this.bill.items[itemKey].sharedBy[sharedByKey].settled,
+              disabled:
+                this.bill.items[itemKey].paidBy ===
+                this.bill.items[itemKey].sharedBy[sharedByKey].user,
+            },
+          });
+          sharedByFormList.addControl(sharedByKey, sharedByFormElement);
+        }
+        const itemFormElement = this.fb.group({
+          description: this.bill.items[itemKey].description,
+          sharedBy: sharedByFormList,
+          paidBy: this.bill.items[itemKey].paidBy,
+          cost: this.bill.items[itemKey].cost,
+        });
+        this.itemsForm.addControl(itemKey, itemFormElement);
+      } else {
+        // else if item already exists just update the shareBy
+        for (let sharedByKey in items[itemKey].sharedBy) {
+          this.itemsForm
+            .get(`${itemKey}.sharedBy.${sharedByKey}.settled`)
+            ?.patchValue(items[itemKey].sharedBy[sharedByKey].settled);
+        }
       }
     }
   }
