@@ -91,7 +91,7 @@ export class BillComponent implements OnInit, OnDestroy {
     this.itemsForm.valueChanges
       .pipe(takeUntil(this.destroy), debounceTime(2000)) // TODO? distinctUntilChanged(compareMethod) can pass in method to deep compare the object
       .subscribe(() => {
-        this.itemsChanged.emit(this.itemsForm.getRawValue().items);
+        this.itemsChanged.emit(this.itemsForm.getRawValue());
       });
   }
 
