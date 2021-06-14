@@ -65,7 +65,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     SharedModule,
     ButtonModule,
