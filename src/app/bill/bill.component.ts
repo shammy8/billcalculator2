@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -21,18 +22,10 @@ import { Bill, Item, NewItemWithBill } from '../model/bill.model';
 export class BillComponent implements OnInit, OnDestroy {
   displayAddItemDialog = false;
 
-  form = this.fb.group({
-    items: this.fb.group({}),
-  });
-
-  get itemsForm() {
-    return this.form.get('items') as FormGroup;
-  }
+  itemsForm = this.fb.group({});
 
   sharedByForm(itemKey: string) {
-    return (this.itemsForm.get(itemKey) as FormGroup).get(
-      'sharedByList'
-    ) as FormGroup;
+    return this.itemsForm.get(`${itemKey}.sharedBy`) as FormGroup;
   }
 
   @Input() bill!: Bill;
@@ -46,6 +39,12 @@ export class BillComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.buildForm();
     this.handleEmitItemsChanged();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.bill && !changes.bill.firstChange) {
+      this.updateSettledInForm(changes.bill.currentValue);
+    }
   }
 
   buildForm() {
@@ -66,7 +65,7 @@ export class BillComponent implements OnInit, OnDestroy {
 
       const itemFormElement = this.fb.group({
         description: this.bill.items[itemKey].description,
-        sharedByList: sharedByFormList,
+        sharedBy: sharedByFormList,
         paidBy: this.bill.items[itemKey].paidBy,
         cost: this.bill.items[itemKey].cost,
       });
@@ -74,11 +73,25 @@ export class BillComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateSettledInForm(newBill: Bill) {
+    const items = newBill.items;
+    for (let itemKey in items) {
+      // this.itemsForm
+      //   .get(`${itemKey}.description`)
+      //   ?.patchValue(items[itemKey].description);
+      for (let sharedByKey in items[itemKey].sharedBy) {
+        this.itemsForm
+          .get(`${itemKey}.sharedBy.${sharedByKey}.settled`)
+          ?.patchValue(items[itemKey].sharedBy[sharedByKey].settled);
+      }
+    }
+  }
+
   private handleEmitItemsChanged() {
-    this.form.valueChanges
+    this.itemsForm.valueChanges
       .pipe(takeUntil(this.destroy), debounceTime(2000)) // TODO? distinctUntilChanged(compareMethod) can pass in method to deep compare the object
       .subscribe(() => {
-        this.itemsChanged.emit(this.form.getRawValue().items);
+        this.itemsChanged.emit(this.itemsForm.getRawValue().items);
       });
   }
 
