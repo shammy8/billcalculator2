@@ -14,6 +14,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import {
   Bill,
   ItemElement,
+  Items,
   NewItemWithBill,
   SettledChange,
 } from '../model/bill.model';
@@ -45,79 +46,48 @@ export class BillComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.buildForm();
-    // this.handleEmitItemsChanged();
+    this.buildForm(this.bill.items);
     this.handleEmitSettledChange();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.bill && !changes.bill.firstChange) {
-      this.updateForm(changes.bill.currentValue);
+      this.buildForm(changes.bill.currentValue.items);
     }
   }
 
-  buildForm() {
-    for (let itemKey in this.bill.items) {
+  buildForm(items: Items) {
+    this.itemsForm = this.fb.group({});
+
+    for (let itemKey in items) {
+      const itemFormElement = this.fb.group({
+        description: '',
+        paidBy: '',
+        cost: '',
+      });
+      itemFormElement.patchValue({
+        description: items[itemKey].description,
+        paidBy: items[itemKey].paidBy,
+        cost: items[itemKey].cost,
+      });
+
       const sharedByFormList = this.fb.group({});
-      for (let sharedByKey in this.bill.items[itemKey].sharedBy) {
+      for (let sharedByKey in items[itemKey].sharedBy) {
         const sharedByFormElement = this.fb.group({
-          user: this.bill.items[itemKey].sharedBy[sharedByKey].user,
-          settled: {
-            value: this.bill.items[itemKey].sharedBy[sharedByKey].settled,
-            disabled:
-              this.bill.items[itemKey].paidBy ===
-              this.bill.items[itemKey].sharedBy[sharedByKey].user,
-          },
+          user: '',
+          settled: '',
         });
+        sharedByFormElement.patchValue({
+          user: items[itemKey].sharedBy[sharedByKey].user,
+          settled: items[itemKey].sharedBy[sharedByKey].settled,
+        });
+        if (sharedByFormElement.get('user')?.value === items[itemKey].paidBy) {
+          sharedByFormElement.get(`settled`)?.disable();
+        }
         sharedByFormList.addControl(sharedByKey, sharedByFormElement);
       }
-
-      const itemFormElement = this.fb.group({
-        description: this.bill.items[itemKey].description,
-        sharedBy: sharedByFormList,
-        paidBy: this.bill.items[itemKey].paidBy,
-        cost: this.bill.items[itemKey].cost,
-      });
+      itemFormElement.addControl('sharedBy', sharedByFormList);
       this.itemsForm.addControl(itemKey, itemFormElement);
-    }
-  }
-
-  /**
-   * TODO need to tidy this up along with buildForm
-   */
-  updateForm(newBill: Bill) {
-    const items = newBill.items;
-    for (let itemKey in items) {
-      if (!this.itemsForm.get('itemKey')) {
-        // if a new item is added
-        const sharedByFormList = this.fb.group({});
-        for (let sharedByKey in items[itemKey].sharedBy) {
-          const sharedByFormElement = this.fb.group({
-            user: this.bill.items[itemKey].sharedBy[sharedByKey].user,
-            settled: {
-              value: this.bill.items[itemKey].sharedBy[sharedByKey].settled,
-              disabled:
-                this.bill.items[itemKey].paidBy ===
-                this.bill.items[itemKey].sharedBy[sharedByKey].user,
-            },
-          });
-          sharedByFormList.addControl(sharedByKey, sharedByFormElement);
-        }
-        const itemFormElement = this.fb.group({
-          description: this.bill.items[itemKey].description,
-          sharedBy: sharedByFormList,
-          paidBy: this.bill.items[itemKey].paidBy,
-          cost: this.bill.items[itemKey].cost,
-        });
-        this.itemsForm.addControl(itemKey, itemFormElement);
-      } else {
-        // else if item already exists just update the shareBy
-        for (let sharedByKey in items[itemKey].sharedBy) {
-          this.itemsForm
-            .get(`${itemKey}.sharedBy.${sharedByKey}.settled`)
-            ?.patchValue(items[itemKey].sharedBy[sharedByKey].settled);
-        }
-      }
     }
   }
 
