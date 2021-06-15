@@ -9,8 +9,14 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
+import {
+  debounceTime,
+  groupBy,
+  mergeMap,
+  switchMap,
+  takeUntil,
+} from 'rxjs/operators';
 import {
   Bill,
   ItemElement,
@@ -99,16 +105,27 @@ export class BillComponent implements OnInit, OnDestroy {
   //     });
   // }
 
+  /**
+   * All sharedBy share this method so need groupBy
+   * TODO might be memory leak below need to check. takeUntil changing bills maybe?
+   */
   handleEmitSettledChange() {
     this.settledChange$
       .pipe(
         takeUntil(this.destroy),
-        debounceTime(1000),
-        distinctUntilChanged((curr, prev) => curr.checked === prev.checked)
+        groupBy((settleChanged) => settleChanged.sharedByKey),
+        mergeMap((settledChangedGrouped) =>
+          settledChangedGrouped.pipe(
+            debounceTime(1000),
+            // distinctUntilChanged((curr, prev) => curr.checked === prev.checked) // don't need this?
+            switchMap((settleChanged) => {
+              this.onSettledChange.emit(settleChanged);
+              return of(settleChanged);
+            })
+          )
+        )
       )
-      .subscribe((event) => {
-        this.onSettledChange.emit(event);
-      });
+      .subscribe();
   }
 
   openAddItemDialog() {
