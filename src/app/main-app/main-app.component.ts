@@ -9,7 +9,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
-import { map, share, switchMap, tap } from 'rxjs/operators';
+import { map, share, switchMap, take, tap } from 'rxjs/operators';
 import { BillService } from '../bill.service';
 import { Bill } from '../model/bill.model';
 
@@ -67,9 +67,12 @@ export class MainAppComponent implements OnInit, OnDestroy {
           .collection<Bill>('bills', (ref) => ref.orderBy(`users.${user?.uid}`))
           .valueChanges({ idField: 'uid' })
       ),
-      tap((bills) => this.selectedBillControl.setValue(bills[0].name)),
       share()
     );
+
+    this.bills$
+      .pipe(take(1))
+      .subscribe((bills) => this.selectedBillControl.setValue(bills[0].name));
 
     this.selectedBill$ = combineLatest([
       this.bills$,
