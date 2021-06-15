@@ -32,6 +32,10 @@
         <p-inputSwitch
           formControlName="settled"
           pTooltip="Can't edit the original payer of the item"
+          [tooltipDisabled]="
+            bill.items[item.key].sharedBy[sharedBy.key].user !==
+            bill.items[item.key].paidBy
+          "
           tooltipPosition="top"
           (onChange)="
             settledChange$.next({
