@@ -32,12 +32,25 @@ form {
 .price {
   font-size: 1.1rem;
   font-weight: 600;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  .paid-by {
+    font-size: 0.8rem;
+    font-weight: normal;
+    opacity: 0.8;
+  }
+  .name {
+    opacity: 1;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
 }
 
 .sharedBy-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-top: 1rem;
+  margin-top: 0.7rem;
 }
 
 .justify-self-right {

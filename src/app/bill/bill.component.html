@@ -20,7 +20,15 @@
       <div class="description">
         {{ bill.items[item.key].description }}
       </div>
-      <div class="price">£{{ bill.items[item.key].cost }}</div>
+      <div class="price">
+        £{{ bill.items[item.key].cost }}
+        <div class="paid-by">
+          paid by
+          <span class="name">
+            {{ bill.items[item.key].paidBy }}
+          </span>
+        </div>
+      </div>
     </div>
     <div formGroupName="sharedBy" class="sharedBy-grid">
       <div
