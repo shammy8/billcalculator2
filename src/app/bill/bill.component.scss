@@ -25,12 +25,12 @@ form {
 }
 
 .description {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
 }
 
 .price {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
 }
 
@@ -38,7 +38,6 @@ form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
 
 .justify-self-right {
