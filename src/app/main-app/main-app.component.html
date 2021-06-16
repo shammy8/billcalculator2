@@ -1,0 +1,69 @@
+<p-sidebar [(visible)]="displaySidebar">
+  <button
+    class="p-button-text p-button-danger"
+    pButton
+    label="Sign out"
+    icon="pi pi-sign-out"
+    iconPos="left"
+    (click)="signOut()"
+  ></button>
+  <button
+    pButton
+    icon="pi pi-copy"
+    class="p-button-text"
+    label="Copy user ID to clipboard"
+    (click)="copyUidToClipboard()"
+    pTooltip="{{ user?.uid }}"
+  ></button>
+
+  <hr style="margin: 5px 0 15px 0" />
+
+  <ng-container *ngIf="bills$ | async as bills">
+    <button
+      type="button"
+      pButton
+      icon="pi pi-plus"
+      label="Add bill"
+      class="p-button-primary"
+      (click)="openAddBillDialog()"
+    ></button>
+    <ng-container *ngFor="let bill of bills">
+      <button
+        pButton
+        label="{{ bill.name }}"
+        class="p-button-text"
+        (click)="
+          selectedBillControl.setValue(bill.name); displaySidebar = false
+        "
+        style="margin-left: 10px"
+      ></button>
+    </ng-container>
+  </ng-container>
+</p-sidebar>
+
+<button
+  pButton
+  (click)="displaySidebar = true"
+  icon="pi pi-bars"
+  class="p-button-text"
+></button>
+
+<bc-bill
+  *ngIf="selectedBill$ | async as selectedBill"
+  [bill]="selectedBill"
+  (addItem)="this.billService.addItem($event)"
+  (onSettledChange)="this.billService.settledChanged($event)"
+  (addUsersEditors)="this.billService.addUsersEditors($event)"
+></bc-bill>
+
+<p-dialog
+  header="Add Bill"
+  [(visible)]="displayAddBillDialog"
+  [style]="{ width: '100%' }"
+>
+  <bc-add-bill
+    (addBill)="
+      this.billService.addBill($event, user!.uid); closeAddBillDialog()
+    "
+  ></bc-add-bill>
+</p-dialog>

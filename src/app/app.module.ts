@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -24,6 +25,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ChipsModule } from 'primeng/chips';
 import { MenuModule } from 'primeng/menu';
+import { SidebarModule } from 'primeng/sidebar';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
@@ -86,6 +88,8 @@ const routes: Routes = [
     CalendarModule,
     ChipsModule,
     MenuModule,
+    SidebarModule,
+    ClipboardModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

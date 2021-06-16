@@ -13,59 +13,22 @@ import { combineLatest, Observable } from 'rxjs';
 import { map, share, switchMap, take, tap } from 'rxjs/operators';
 import { BillService } from '../bill.service';
 import { Bill } from '../model/bill.model';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'bc-main-app',
-  template: `
-    <ng-container *ngIf="bills$ | async as bills">
-      <p-dropdown
-        [options]="bills"
-        optionLabel="name"
-        optionValue="name"
-        [formControl]="selectedBillControl"
-        placeholder="Select a bill"
-      >
-        <ng-template let-item pTemplate="item"> {{ item.name }}</ng-template>
-      </p-dropdown>
-    </ng-container>
-
-    <button
-      type="button"
-      pButton
-      label="Add Bill"
-      (click)="openAddBillDialog()"
-    ></button>
-    <button
-      type="button"
-      class="p-button-warning"
-      pButton
-      icon="pi pi-sign-out"
-      iconPos="left"
-      (click)="signOut()"
-    ></button>
-    <br />
-
-    <bc-bill
-      *ngIf="selectedBill$ | async as selectedBill"
-      [bill]="selectedBill"
-      (addItem)="this.billService.addItem($event)"
-      (onSettledChange)="this.billService.settledChanged($event)"
-      (addUsersEditors)="this.billService.addUsersEditors($event)"
-    ></bc-bill>
-
-    <p-dialog
-      header="Add Bill"
-      [(visible)]="displayAddBillDialog"
-      [style]="{ width: '100%' }"
-    >
-      <bc-add-bill
-        (addBill)="
-          this.billService.addBill($event, user!.uid); closeAddBillDialog()
-        "
-      ></bc-add-bill>
-    </p-dialog>
-  `,
-  styles: [],
+  templateUrl: 'main-app.component.html',
+  styles: [
+    `
+      :host ::ng-deep .p-sidebar-content {
+        display: flex;
+        flex-direction: column;
+      }
+      :host ::ng-deep .p-button-label {
+        text-align: left;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainAppComponent implements OnInit, OnDestroy {
@@ -73,14 +36,17 @@ export class MainAppComponent implements OnInit, OnDestroy {
   selectedBill$: Observable<Bill> | undefined;
   selectedBillControl = new FormControl();
 
+  displaySidebar = true;
   displayAddBillDialog = false;
+
   user: firebase.User | null = null;
 
   constructor(
     private auth: AngularFireAuth,
     private store: AngularFirestore,
     private router: Router,
-    public billService: BillService
+    public billService: BillService,
+    private clipboard: Clipboard
   ) {}
 
   ngOnInit(): void {
@@ -116,6 +82,10 @@ export class MainAppComponent implements OnInit, OnDestroy {
 
   closeAddBillDialog() {
     this.displayAddBillDialog = false;
+  }
+
+  copyUidToClipboard() {
+    this.clipboard.copy(this.user!.uid);
   }
 
   signOut() {
