@@ -36,7 +36,7 @@ export class MainAppComponent implements OnInit, OnDestroy {
   selectedBill$: Observable<Bill> | undefined;
   selectedBillControl = new FormControl();
 
-  displaySidebar = true;
+  displaySidebar = false;
   displayAddBillDialog = false;
 
   user: firebase.User | null = null;

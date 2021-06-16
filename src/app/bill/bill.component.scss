@@ -1,20 +1,32 @@
+.header {
+  padding: 0rem 1rem 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 form {
   padding: 0.6rem;
 }
 
-.header {
+.bill-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.item-header {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
 }
 
 .description {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 700;
 }
 
 .price {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 600;
 }
 

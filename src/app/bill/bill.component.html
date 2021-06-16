@@ -1,24 +1,22 @@
-<button
-  pButton
-  class="p-button-rounded"
-  icon="pi pi-plus"
-  (click)="openAddItemDialog()"
-></button>
-
-<p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
-<button
-  pButton
-  class="p-button-text"
-  icon="pi pi-chevron-down"
-  (click)="menu.toggle($event)"
-></button>
+<div class="header">
+  <span class="bill-name">
+    {{ bill.name }}
+  </span>
+  <p-splitButton
+    label="Add item"
+    icon="pi pi-plus"
+    [model]="menuItems"
+    (onClick)="openAddItemDialog()"
+    appendTo="body"
+  ></p-splitButton>
+</div>
 
 <form [formGroup]="itemsForm">
   <ng-container
     *ngFor="let item of itemsForm.controls | keyvalue"
     [formGroupName]="item.key"
   >
-    <div class="header">
+    <div class="item-header">
       <div class="description">
         {{ bill.items[item.key].description }}
       </div>
