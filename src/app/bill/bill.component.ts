@@ -8,7 +8,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
+import { KeyValue } from '@angular/common';
 import { of, Subject } from 'rxjs';
 import {
   debounceTime,
@@ -66,6 +67,20 @@ export class BillComponent implements OnInit, OnDestroy {
         this.openAddUsersDialog();
       },
     },
+    {
+      label: 'Order by description',
+      icon: 'pi pi-user-plus',
+      command: (e) => {
+        // this.order = (
+        //   a: KeyValue<string, AbstractControl>,
+        //   b: KeyValue<string, AbstractControl>
+        // ) => {
+        //   const valueA = a.value.value.date.seconds;
+        //   const valueB = b.value.value.date.seconds;
+        //   return valueA > valueB ? -1 : valueB > valueA ? 1 : 0;
+        // };
+      },
+    },
     { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
   ];
 
@@ -90,11 +105,13 @@ export class BillComponent implements OnInit, OnDestroy {
         description: '',
         paidBy: '',
         cost: '',
+        date: null,
       });
       itemFormElement.patchValue({
         description: items[itemKey].description,
         paidBy: items[itemKey].paidBy,
         cost: items[itemKey].cost,
+        date: items[itemKey].date,
       });
 
       const sharedByFormList = this.fb.group({});
@@ -146,6 +163,15 @@ export class BillComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe();
+  }
+
+  orderByDate(
+    a: KeyValue<string, AbstractControl>,
+    b: KeyValue<string, AbstractControl>
+  ) {
+    const valueA = a.value.value.date.seconds;
+    const valueB = b.value.value.date.seconds;
+    return valueA > valueB ? -1 : valueB > valueA ? 1 : 0;
   }
 
   openAddItemDialog() {

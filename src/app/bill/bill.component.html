@@ -13,7 +13,7 @@
 
 <form [formGroup]="itemsForm">
   <ng-container
-    *ngFor="let item of itemsForm.controls | keyvalue"
+    *ngFor="let item of itemsForm.controls | keyvalue: orderByDate"
     [formGroupName]="item.key"
   >
     <div class="item-header">
