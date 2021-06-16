@@ -42,5 +42,6 @@ export interface SettledChange {
 
 export interface NewBill {
   name: string;
-  users: string[];
+  usersArray: string[];
+  editorsArray: string[];
 }

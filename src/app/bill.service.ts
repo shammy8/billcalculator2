@@ -31,12 +31,19 @@ export class BillService {
   }
 
   addBill(newBill: NewBill, userUid: string) {
+    const users: { [key: string]: string } = {};
+    for (let editor in newBill.editorsArray) {
+      users[newBill.editorsArray[editor]] = '';
+    }
+    users[userUid] = '';
+
     const billCollection = this.store.collection('bills');
     billCollection.add({
-      ...newBill,
+      name: newBill.name,
+      usersArray: newBill.usersArray,
       creatorUid: userUid,
       items: {},
-      users: { [userUid]: '' },
+      users,
     });
   }
 }
