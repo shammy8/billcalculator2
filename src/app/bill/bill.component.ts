@@ -55,6 +55,11 @@ export class BillComponent implements OnInit, OnDestroy {
 
   menuItems: MenuItem[] = [
     {
+      label: 'Calculate',
+      icon: 'pi pi-wallet',
+      command: (e) => {},
+    },
+    {
       label: 'Add users and editors',
       icon: 'pi pi-user-plus',
       command: (e) => {
