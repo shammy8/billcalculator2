@@ -6,7 +6,11 @@
 }
 
 form {
+  overflow: auto;
   padding: 0.6rem;
+  max-height: calc(
+    100vh - 5rem
+  ); // TODO this will depend on the height of the part above the form
 }
 
 .bill-name {
