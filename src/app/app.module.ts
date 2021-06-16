@@ -23,6 +23,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ChipsModule } from 'primeng/chips';
+import { MenuModule } from 'primeng/menu';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
@@ -82,6 +83,7 @@ const routes: Routes = [
     InputNumberModule,
     CalendarModule,
     ChipsModule,
+    MenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

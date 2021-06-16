@@ -17,6 +17,7 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs/operators';
+import { MenuItem } from 'primeng/api';
 import {
   Bill,
   ItemElement,
@@ -33,6 +34,7 @@ import {
 })
 export class BillComponent implements OnInit, OnDestroy {
   displayAddItemDialog = false;
+  displayAddUsersDialog = false;
 
   itemsForm = this.fb.group({});
 
@@ -48,6 +50,17 @@ export class BillComponent implements OnInit, OnDestroy {
   settledChange$ = new Subject<SettledChange>();
 
   destroy = new Subject<void>();
+
+  menuItems: MenuItem[] = [
+    {
+      label: 'Add users and editors',
+      icon: 'pi pi-user-plus',
+      command: (e) => {
+        this.openAddUsersDialog();
+      },
+    },
+    { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
+  ];
 
   constructor(private fb: FormBuilder) {}
 
@@ -135,6 +148,8 @@ export class BillComponent implements OnInit, OnDestroy {
   closeAddItemDialog() {
     this.displayAddItemDialog = false;
   }
+
+  openAddUsersDialog() {}
 
   ngOnDestroy() {
     this.destroy.next();

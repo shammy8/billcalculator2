@@ -5,6 +5,14 @@
   (click)="openAddItemDialog()"
 ></button>
 
+<p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
+<button
+  pButton
+  class="p-button-text"
+  icon="pi pi-chevron-down"
+  (click)="menu.toggle($event)"
+></button>
+
 <form [formGroup]="itemsForm">
   <ng-container
     *ngFor="let item of itemsForm.controls | keyvalue"
@@ -66,4 +74,17 @@
       addItem.emit({ newItem: $event, bill: bill }); closeAddItemDialog()
     "
   ></bc-add-item>
+</p-dialog>
+
+<p-dialog
+  header="Add Users and Editors"
+  [(visible)]="displayAddUsersDialog"
+  [style]="{ width: '100%' }"
+>
+  <!-- <bc-add-item
+    [users]="bill.usersArray"
+    (addItem)="
+      addItem.emit({ newItem: $event, bill: bill }); closeAddItemDialog()
+    "
+  ></bc-add-item> -->
 </p-dialog>
