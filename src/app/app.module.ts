@@ -22,6 +22,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
+import { ChipsModule } from 'primeng/chips';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
@@ -29,6 +30,7 @@ import { LoginComponent } from './login/login.component';
 import { MainAppComponent } from './main-app/main-app.component';
 import { BillComponent } from './bill/bill.component';
 import { AddItemComponent } from './add-item/add-item.component';
+import { AddBillComponent } from './add-bill/add-bill.component';
 
 const routes: Routes = [
   {
@@ -57,6 +59,7 @@ const routes: Routes = [
     MainAppComponent,
     BillComponent,
     AddItemComponent,
+    AddBillComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,6 +81,7 @@ const routes: Routes = [
     InputTextModule,
     InputNumberModule,
     CalendarModule,
+    ChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

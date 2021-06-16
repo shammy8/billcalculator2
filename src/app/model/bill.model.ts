@@ -38,3 +38,8 @@ export interface SettledChange {
   sharedByKey: string;
   billId: string;
 }
+
+export interface NewBill {
+  name: string;
+  users: string[];
+}

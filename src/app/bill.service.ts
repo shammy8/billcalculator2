@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { nanoid } from 'nanoid';
-import { Bill, NewItemWithBill, SettledChange } from './model/bill.model';
+import {
+  Bill,
+  NewBill,
+  NewItemWithBill,
+  SettledChange,
+} from './model/bill.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,5 +28,10 @@ export class BillService {
       [`items.${settleChange.itemKey}.sharedBy.${settleChange.sharedByKey}.settled`]:
         settleChange.checked,
     });
+  }
+
+  addBill(newBill: NewBill, userUid: string) {
+    const billCollection = this.store.collection('bills');
+    billCollection.add({ ...newBill, users: { [userUid]: '' } });
   }
 }
