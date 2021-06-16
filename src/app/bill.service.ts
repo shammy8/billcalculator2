@@ -32,6 +32,11 @@ export class BillService {
 
   addBill(newBill: NewBill, userUid: string) {
     const billCollection = this.store.collection('bills');
-    billCollection.add({ ...newBill, users: { [userUid]: '' } });
+    billCollection.add({
+      ...newBill,
+      creatorUid: userUid,
+      items: {},
+      users: { [userUid]: '' },
+    });
   }
 }

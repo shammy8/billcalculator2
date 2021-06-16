@@ -4,6 +4,7 @@ export interface Bill {
   users: { [key: string]: string };
   usersArray: string[];
   items: Items;
+  creatorUid: string;
 }
 
 export interface Items {
