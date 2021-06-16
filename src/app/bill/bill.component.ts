@@ -19,6 +19,7 @@ import {
 } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
 import {
+  AddUsersEditorsWithBill,
   Bill,
   ItemElement,
   Items,
@@ -44,6 +45,7 @@ export class BillComponent implements OnInit, OnDestroy {
 
   @Input() bill!: Bill;
   @Output() addItem = new EventEmitter<NewItemWithBill>();
+  @Output() addUsersEditors = new EventEmitter<AddUsersEditorsWithBill>();
   @Output() itemsChanged = new EventEmitter<ItemElement[]>();
   @Output() onSettledChange = new EventEmitter<SettledChange>();
 
@@ -149,7 +151,13 @@ export class BillComponent implements OnInit, OnDestroy {
     this.displayAddItemDialog = false;
   }
 
-  openAddUsersDialog() {}
+  openAddUsersDialog() {
+    this.displayAddUsersDialog = true;
+  }
+
+  closeAddUsersDialog() {
+    this.displayAddUsersDialog = false;
+  }
 
   ngOnDestroy() {
     this.destroy.next();

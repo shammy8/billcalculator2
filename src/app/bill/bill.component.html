@@ -81,10 +81,10 @@
   [(visible)]="displayAddUsersDialog"
   [style]="{ width: '100%' }"
 >
-  <!-- <bc-add-item
-    [users]="bill.usersArray"
-    (addItem)="
-      addItem.emit({ newItem: $event, bill: bill }); closeAddItemDialog()
+  <bc-add-users-editors
+    (addUsersEditors)="
+      addUsersEditors.emit({ usersAndEditors: $event, bill: bill });
+      closeAddUsersDialog()
     "
-  ></bc-add-item> -->
+  ></bc-add-users-editors>
 </p-dialog>

@@ -50,6 +50,7 @@ import { Bill } from '../model/bill.model';
       [bill]="selectedBill"
       (addItem)="this.billService.addItem($event)"
       (onSettledChange)="this.billService.settledChanged($event)"
+      (addUsersEditors)="this.billService.addUsersEditors($event)"
     ></bc-bill>
 
     <p-dialog

@@ -45,3 +45,11 @@ export interface NewBill {
   usersArray: string[];
   editorsArray: string[];
 }
+
+export interface AddUsersEditorsWithBill {
+  usersAndEditors: {
+    usersArray: string[];
+    editorsArray: string[];
+  };
+  bill: Bill;
+}
