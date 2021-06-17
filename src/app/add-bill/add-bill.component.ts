@@ -38,7 +38,7 @@ export class AddBillComponent implements OnInit {
   form = this.fb.group({
     name: ['', [Validators.required]],
     usersArray: [[], [Validators.required]],
-    editorsArray: [[], [Validators.required]],
+    editorsArray: [[]],
   });
 
   @Output() addBill = new EventEmitter<NewBill>();
