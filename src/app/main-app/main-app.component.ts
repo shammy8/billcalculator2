@@ -10,7 +10,7 @@ import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { combineLatest, Observable } from 'rxjs';
-import { map, share, switchMap, take, tap } from 'rxjs/operators';
+import { filter, map, share, switchMap, take, tap } from 'rxjs/operators';
 import { BillService } from '../bill.service';
 import { Bill } from '../model/bill.model';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -52,10 +52,13 @@ export class MainAppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.bills$ = this.auth.user.pipe(
       tap((user) => (this.user = user)),
+      filter((user) => user != null),
       switchMap((user) =>
         this.store
           // only return documents with a users.userid field where userid is the uid of the currently signed in user
-          .collection<Bill>('bills', (ref) => ref.orderBy(`users.${user?.uid}`))
+          .collection<Bill>('bills', (ref) =>
+            ref.where(`users.${user!.uid}`, '!=', null)
+          )
           .valueChanges({ idField: 'uid' })
       ),
       share()
