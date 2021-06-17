@@ -27,6 +27,7 @@ import { ChipsModule } from 'primeng/chips';
 import { MenuModule } from 'primeng/menu';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { DividerModule } from 'primeng/divider';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
@@ -93,6 +94,7 @@ const routes: Routes = [
     MenuModule,
     SidebarModule,
     SplitButtonModule,
+    DividerModule,
     ClipboardModule,
   ],
   providers: [],

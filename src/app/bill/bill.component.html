@@ -21,7 +21,7 @@
         {{ bill.items[item.key].description }}
       </div>
       <div class="price">
-        £{{ bill.items[item.key].cost }}
+        £{{ bill.items[item.key].cost | number: '1.2-2' }}
         <div class="paid-by">
           paid by
           <span class="name">
@@ -32,7 +32,7 @@
     </div>
     <div formGroupName="sharedBy" class="sharedBy-grid">
       <div
-        class="p-mb-3"
+        class="p-mt-1 p-mb-1 p-d-flex p-ai-center"
         [ngClass]="{ 'justify-self-right': j % 2 === 1 }"
         *ngFor="
           let sharedBy of sharedByForm(item.key).controls | keyvalue;
@@ -65,7 +65,7 @@
         }}</label>
       </div>
     </div>
-    <hr />
+    <p-divider></p-divider>
   </ng-container>
 </form>
 

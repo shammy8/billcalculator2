@@ -21,7 +21,6 @@ form {
 .item-header {
   display: flex;
   justify-content: space-between;
-  margin-top: 1rem;
 }
 
 .description {
@@ -48,7 +47,7 @@ form {
 .sharedBy-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-top: 0.7rem;
+  // margin-top: 0.7rem;
 }
 
 .justify-self-right {
