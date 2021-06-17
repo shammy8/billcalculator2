@@ -36,6 +36,7 @@ import { BillComponent } from './bill/bill.component';
 import { AddItemComponent } from './add-item/add-item.component';
 import { AddBillComponent } from './add-bill/add-bill.component';
 import { AddUsersEditorsComponent } from './add-users-editors/add-users-editors.component';
+import { CalculateComponent } from './calculate/calculate.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,7 @@ const routes: Routes = [
     AddItemComponent,
     AddBillComponent,
     AddUsersEditorsComponent,
+    CalculateComponent,
   ],
   imports: [
     BrowserModule,

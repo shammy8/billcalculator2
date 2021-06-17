@@ -73,6 +73,8 @@
   header="Add Item"
   [(visible)]="displayAddItemDialog"
   [style]="{ width: '100%' }"
+  [modal]="true"
+  [dismissableMask]="true"
 >
   <bc-add-item
     [users]="bill.usersArray"
@@ -86,6 +88,8 @@
   header="Add Users and Editors"
   [(visible)]="displayAddUsersDialog"
   [style]="{ width: '100%' }"
+  [modal]="true"
+  [dismissableMask]="true"
 >
   <bc-add-users-editors
     (addUsersEditors)="
@@ -93,4 +97,14 @@
       closeAddUsersDialog()
     "
   ></bc-add-users-editors>
+</p-dialog>
+
+<p-dialog
+  header="Calculate"
+  [(visible)]="displayCalculateDialog"
+  [style]="{ width: '100%' }"
+  [modal]="true"
+  [dismissableMask]="true"
+>
+  <bc-calculate *ngIf="displayCalculateDialog" [bill]="bill"></bc-calculate>
 </p-dialog>

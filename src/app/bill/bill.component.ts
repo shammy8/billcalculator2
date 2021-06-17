@@ -37,6 +37,7 @@ import {
 export class BillComponent implements OnInit, OnDestroy {
   displayAddItemDialog = false;
   displayAddUsersDialog = false;
+  displayCalculateDialog = false;
 
   itemsForm = this.fb.group({});
 
@@ -58,7 +59,9 @@ export class BillComponent implements OnInit, OnDestroy {
     {
       label: 'Calculate',
       icon: 'pi pi-wallet',
-      command: (e) => {},
+      command: (e) => {
+        this.openCalculateDialog();
+      },
     },
     {
       label: 'Add users and editors',
@@ -188,6 +191,10 @@ export class BillComponent implements OnInit, OnDestroy {
 
   closeAddUsersDialog() {
     this.displayAddUsersDialog = false;
+  }
+
+  openCalculateDialog() {
+    this.displayCalculateDialog = true;
   }
 
   ngOnDestroy() {

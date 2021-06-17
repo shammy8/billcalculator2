@@ -53,3 +53,7 @@ export interface AddUsersEditorsWithBill {
   };
   bill: Bill;
 }
+
+export interface Ledger {
+  [key: string]: { [key: string]: number };
+}

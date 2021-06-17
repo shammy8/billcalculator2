@@ -61,6 +61,8 @@
   header="Add Bill"
   [(visible)]="displayAddBillDialog"
   [style]="{ width: '100%' }"
+  [modal]="true"
+  [dismissableMask]="true"
 >
   <bc-add-bill
     (addBill)="
