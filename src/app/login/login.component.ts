@@ -11,7 +11,17 @@ import firebase from 'firebase/app';
     label="Sign in"
     (click)="login()"
   ></button>`,
-  styles: [],
+  styles: [
+    `
+      :host {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--surface-0);
+      }
+    `,
+  ],
 })
 export class LoginComponent implements OnInit {
   constructor(private auth: AngularFireAuth, private router: Router) {}
