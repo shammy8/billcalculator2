@@ -3,14 +3,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 10px;
 }
 
 form {
+  background: var(--surface-0);
   overflow: auto;
   padding: 0.6rem;
   max-height: calc(
-    100vh - 7rem
+    100vh - 7.2rem
   ); // TODO this will depend on the height of the part above the form
+  border-top-left-radius: 1.3rem;
+  border-top-right-radius: 1.3rem;
 }
 
 .bill-name {
