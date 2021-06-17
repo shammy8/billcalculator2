@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "bill-calculator-eaac9"
+  },
+  "targets": {
+    "bill-calculator-eaac9": {
+      "hosting": {
+        "billcalculator2": [
+          "bill-calculator-eaac9"
+        ]
+      }
+    }
+  }
+}
