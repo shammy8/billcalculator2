@@ -38,6 +38,7 @@ import { AddItemComponent } from './add-item/add-item.component';
 import { AddBillComponent } from './add-bill/add-bill.component';
 import { AddUsersEditorsComponent } from './add-users-editors/add-users-editors.component';
 import { CalculateComponent } from './calculate/calculate.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 const routes: Routes = [
   {
@@ -96,6 +97,12 @@ const routes: Routes = [
     SplitButtonModule,
     DividerModule,
     ClipboardModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
