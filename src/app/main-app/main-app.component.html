@@ -15,6 +15,7 @@
     (click)="copyUidToClipboard()"
     pTooltip="{{ user?.uid }}"
   ></button>
+  <input type="text" pInputText [value]="user?.uid" />
 
   <p-divider></p-divider>
 

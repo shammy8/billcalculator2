@@ -24,6 +24,7 @@ import { ItemElement, SharedByElement } from '../model/bill.model';
           mode="currency"
           currency="GBP"
           [max]="1000000"
+          type="number"
         ></p-inputNumber>
       </div>
       <div class="p-field">
@@ -44,6 +45,7 @@ import { ItemElement, SharedByElement } from '../model/bill.model';
           appendTo="body"
           formControlName="sharedBy"
           placeholder="Select who are to pay for this item"
+          [filter]="false"
         ></p-multiSelect>
       </div>
       <div class="p-field">
