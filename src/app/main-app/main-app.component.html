@@ -29,15 +29,18 @@
       (click)="openAddBillDialog()"
     ></button>
     <ng-container *ngFor="let bill of bills">
-      <button
-        pButton
-        label="{{ bill.name }}"
-        class="p-button-text"
-        (click)="
+      <p-button
+        styleClass="p-button-text"
+        (onClick)="
           selectedBillControl.setValue(bill.name); displaySidebar = false
         "
-        style="margin-left: 10px"
-      ></button>
+      >
+        <ng-template pTemplate="content">
+          <span class="p-text-bold">
+            {{ bill.name }}
+          </span>
+        </ng-template>
+      </p-button>
     </ng-container>
   </ng-container>
 </p-sidebar>

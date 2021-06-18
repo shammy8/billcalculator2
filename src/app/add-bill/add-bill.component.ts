@@ -30,7 +30,6 @@ import { NewBill } from '../model/bill.model';
       </div>
       <button pButton type="submit" [disabled]="form.invalid">Add Bill</button>
     </form>
-    <pre>{{ form.value | json }}</pre>
   `,
   styles: [],
 })
