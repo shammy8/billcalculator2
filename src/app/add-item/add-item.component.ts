@@ -18,6 +18,16 @@ import { ItemElement, SharedByElement } from '../model/bill.model';
       </div>
       <div class="p-field">
         <label for="cost-input">Cost</label>
+        <input
+          id="cost-input"
+          (keyup.enter)="calculateCost($event)"
+          (blur)="calculateCost($event)"
+          formControlName="cost"
+          pInputText
+        />
+      </div>
+      <!-- <div class="p-field">
+        <label for="cost-input">Cost</label>
         <p-inputNumber
           id="cost-input"
           formControlName="cost"
@@ -26,7 +36,7 @@ import { ItemElement, SharedByElement } from '../model/bill.model';
           [max]="1000000"
           type="number"
         ></p-inputNumber>
-      </div>
+      </div> -->
       <div class="p-field">
         <label for="paidBy-input">Paid by</label>
         <p-dropdown
@@ -68,7 +78,11 @@ export class AddItemComponent implements OnInit {
 
   form = this.fb.group({
     description: ['', [Validators.required]],
-    cost: [0.0, [Validators.required]],
+    // cost: [0.0, [Validators.required]],
+    cost: [
+      0.0, // TODO add validation for it being a number and only 2 decimal places
+      [Validators.required, Validators.max(1000000), Validators.min(0)],
+    ],
     paidBy: ['', [Validators.required]],
     sharedBy: [[], [Validators.required]],
     date: [new Date(), [Validators.required]],
@@ -77,6 +91,18 @@ export class AddItemComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {}
+
+  calculateCost(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    // TODO add validation to only eval when all digits are numbers, +,-,*,/,( or )
+    if (value[0] !== '=') return;
+    const calculatedCost = eval(value.substring(1));
+    if (typeof calculatedCost === 'number') {
+      this.form.get('cost')?.patchValue(calculatedCost);
+    } else {
+      this.form.get('cost')?.patchValue('');
+    }
+  }
 
   onAddItem() {
     const sharedByInCorrectFormat: { [key: string]: SharedByElement } = {};
