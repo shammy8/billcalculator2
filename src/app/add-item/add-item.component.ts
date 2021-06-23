@@ -83,7 +83,7 @@ export class AddItemComponent implements OnInit {
     description: ['', [Validators.required]],
     // cost: [0.0, [Validators.required]],
     cost: [
-      0.0, // add validation for it being a number and only 2 decimal places
+      0.0,
       [
         Validators.required,
         Validators.max(1000000),
