@@ -17,7 +17,10 @@ import { ItemElement, SharedByElement } from '../model/bill.model';
         />
       </div>
       <div class="p-field">
-        <label for="cost-input">Cost</label>
+        <label for="cost-input">Cost</label> &nbsp;
+        <span class="p-text-light" style="font-size: 0.8rem"
+          >Try simple maths like "=(10/2)+1"</span
+        >
         <input
           id="cost-input"
           (keyup.enter)="calculateCost($event)"
@@ -80,7 +83,7 @@ export class AddItemComponent implements OnInit {
     description: ['', [Validators.required]],
     // cost: [0.0, [Validators.required]],
     cost: [
-      0.0, // TODO add validation for it being a number and only 2 decimal places
+      0.0, // add validation for it being a number and only 2 decimal places
       [Validators.required, Validators.max(1000000), Validators.min(0)],
     ],
     paidBy: ['', [Validators.required]],
@@ -97,6 +100,7 @@ export class AddItemComponent implements OnInit {
     // TODO add validation to only eval when all digits are numbers, +,-,*,/,( or )
     if (value[0] !== '=') return;
     const calculatedCost = eval(value.substring(1));
+    if (value[0] !== '=') return;
     if (typeof calculatedCost === 'number') {
       this.form.get('cost')?.patchValue(calculatedCost);
     } else {
