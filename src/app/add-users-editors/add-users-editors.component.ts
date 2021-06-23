@@ -12,6 +12,7 @@ import { FormBuilder } from '@angular/forms';
           formControlName="usersArray"
           [allowDuplicate]="false"
           separator=","
+          [addOnBlur]="true"
         ></p-chips>
       </div>
       <div class="p-field">
@@ -21,6 +22,7 @@ import { FormBuilder } from '@angular/forms';
           formControlName="editorsArray"
           [allowDuplicate]="false"
           separator=","
+          [addOnBlur]="true"
         ></p-chips>
       </div>
       <button

@@ -17,6 +17,7 @@ import { NewBill } from '../model/bill.model';
           formControlName="usersArray"
           [allowDuplicate]="false"
           separator=","
+          [addOnBlur]="true"
         ></p-chips>
       </div>
       <div class="p-field">
@@ -26,6 +27,7 @@ import { NewBill } from '../model/bill.model';
           formControlName="editorsArray"
           [allowDuplicate]="false"
           separator=","
+          [addOnBlur]="true"
         ></p-chips>
       </div>
       <button pButton type="submit" [disabled]="form.invalid">Add Bill</button>
