@@ -57,3 +57,8 @@ export interface AddUsersEditorsWithBill {
 export interface Ledger {
   [key: string]: { [key: string]: number };
 }
+
+export interface DeleteItem {
+  billId: string;
+  itemId: string;
+}

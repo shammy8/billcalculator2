@@ -12,7 +12,7 @@ import {
   redirectLoggedInTo,
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
-import { SharedModule } from 'primeng/api';
+import { ConfirmationService, SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { DataViewModule } from 'primeng/dataview';
@@ -28,6 +28,7 @@ import { MenuModule } from 'primeng/menu';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { DividerModule } from 'primeng/divider';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
@@ -97,14 +98,15 @@ const routes: Routes = [
     SplitButtonModule,
     DividerModule,
     ClipboardModule,
+    ConfirmPopupModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
-  providers: [],
+  providers: [ConfirmationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

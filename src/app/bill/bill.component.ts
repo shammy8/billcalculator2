@@ -19,9 +19,11 @@ import {
   takeUntil,
 } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import {
   AddUsersEditorsWithBill,
   Bill,
+  DeleteItem,
   ItemElement,
   Items,
   NewItemWithBill,
@@ -50,6 +52,7 @@ export class BillComponent implements OnInit, OnDestroy {
   @Output() addUsersEditors = new EventEmitter<AddUsersEditorsWithBill>();
   @Output() itemsChanged = new EventEmitter<ItemElement[]>();
   @Output() onSettledChange = new EventEmitter<SettledChange>();
+  @Output() onItemDelete = new EventEmitter<DeleteItem>();
 
   settledChange$ = new Subject<SettledChange>();
 
@@ -87,7 +90,10 @@ export class BillComponent implements OnInit, OnDestroy {
     { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private confirmationService: ConfirmationService
+  ) {}
 
   ngOnInit(): void {
     this.buildForm(this.bill.items);
@@ -195,6 +201,25 @@ export class BillComponent implements OnInit, OnDestroy {
 
   openCalculateDialog() {
     this.displayCalculateDialog = true;
+  }
+
+  deleteItem({
+    event,
+    itemId,
+    item,
+  }: {
+    event: MouseEvent;
+    itemId: string;
+    item: ItemElement;
+  }) {
+    this.confirmationService.confirm({
+      target: event.target as undefined | EventTarget,
+      message: `Are you sure you want to delete this item: ${item.description} £${item.cost}?`,
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.onItemDelete.emit({ billId: this.bill.uid, itemId: itemId });
+      },
+    });
   }
 
   ngOnDestroy() {

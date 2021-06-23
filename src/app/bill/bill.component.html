@@ -19,6 +19,19 @@
     <div class="item-header">
       <div class="description">
         {{ bill.items[item.key].description }}
+        <button
+          pButton
+          icon="pi pi-trash"
+          class="p-button-text p-button-sm p-button-secondary"
+          style="padding: 0; width: 1.5rem"
+          (click)="
+            deleteItem({
+              event: $event,
+              itemId: item.key,
+              item: bill.items[item.key]
+            })
+          "
+        ></button>
       </div>
       <div class="price">
         £{{ bill.items[item.key].cost | number: '1.2-2' }}
@@ -108,3 +121,5 @@
 >
   <bc-calculate *ngIf="displayCalculateDialog" [bill]="bill"></bc-calculate>
 </p-dialog>
+
+<p-confirmPopup></p-confirmPopup>

@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 import {
   AddUsersEditorsWithBill,
   Bill,
+  DeleteItem,
   NewBill,
   NewItemWithBill,
   SettledChange,
@@ -81,5 +82,10 @@ export class BillService {
         ),
       });
     }
+  }
+
+  deleteItem({ billId, itemId }: DeleteItem) {
+    const doc = this.store.doc(`bills/${billId}`);
+    doc.update({ [`items.${itemId}`]: firebase.firestore.FieldValue.delete() });
   }
 }
