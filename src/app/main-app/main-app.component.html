@@ -60,6 +60,7 @@
   (onSettledChange)="this.billService.settledChanged($event)"
   (addUsersEditors)="this.billService.addUsersEditors($event)"
   (onItemDelete)="this.billService.deleteItem($event)"
+  (onSetAsPrimaryBill)="this.billService.setAsPrimaryBill($event, user!.uid)"
 ></bc-bill>
 
 <p-dialog

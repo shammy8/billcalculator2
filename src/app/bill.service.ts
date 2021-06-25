@@ -88,4 +88,9 @@ export class BillService {
     const doc = this.store.doc(`bills/${billId}`);
     doc.update({ [`items.${itemId}`]: firebase.firestore.FieldValue.delete() });
   }
+
+  setAsPrimaryBill(billId: string, uid: string) {
+    const doc = this.store.doc(`users/${uid}`);
+    doc.update({ primaryBill: billId });
+  }
 }

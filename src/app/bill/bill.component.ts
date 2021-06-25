@@ -53,6 +53,7 @@ export class BillComponent implements OnInit, OnDestroy {
   @Output() itemsChanged = new EventEmitter<ItemElement[]>();
   @Output() onSettledChange = new EventEmitter<SettledChange>();
   @Output() onItemDelete = new EventEmitter<DeleteItem>();
+  @Output() onSetAsPrimaryBill = new EventEmitter<string>();
 
   settledChange$ = new Subject<SettledChange>();
 
@@ -71,6 +72,13 @@ export class BillComponent implements OnInit, OnDestroy {
       icon: 'pi pi-user-plus',
       command: (e) => {
         this.openAddUsersDialog();
+      },
+    },
+    {
+      label: 'Set as primary bill',
+      icon: 'pi pi-bookmark',
+      command: (e) => {
+        this.onSetAsPrimaryBill.emit(this.bill.uid);
       },
     },
     {

@@ -1,10 +1,11 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null
+    }
+
     match /bills/{billDoc} {
-      function isSignedIn() {
-        return request.auth != null
-      }
       function isEditor() {
       	return request.auth.uid in resource.data.users
       }
@@ -28,6 +29,14 @@ service cloud.firestore {
         // might be better to do the other rules inside a cloud function
       
       allow delete: if isCreator();
+    }
+
+    match /users/{userDoc} {
+      allow read: if isSignedIn() && userDoc == request.auth.uid
+
+      // only allow update of primaryBill
+      allow update: if isSignedIn() && userDoc == request.auth.uid
+        && (request.resource.data.keys().hasOnly(['primaryBill']))
     }
   }
 }

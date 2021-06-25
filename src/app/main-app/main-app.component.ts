@@ -9,11 +9,12 @@ import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { filter, map, share, switchMap, take, tap } from 'rxjs/operators';
 import { BillService } from '../bill.service';
 import { Bill } from '../model/bill.model';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { UserDoc } from '../model/user.model';
 
 @Component({
   selector: 'bc-main-app',
@@ -40,6 +41,8 @@ export class MainAppComponent implements OnInit, OnDestroy {
   displayAddBillDialog = false;
 
   user: firebase.User | null = null;
+  user$!: Observable<firebase.User | null>;
+  userDoc$: Observable<UserDoc | undefined> = of(undefined);
 
   constructor(
     private auth: AngularFireAuth,
@@ -49,10 +52,15 @@ export class MainAppComponent implements OnInit, OnDestroy {
     private clipboard: Clipboard
   ) {}
 
+  // TODO need to tidy everything in here
   ngOnInit(): void {
-    this.bills$ = this.auth.user.pipe(
-      tap((user) => (this.user = user)),
+    this.user$ = this.auth.user.pipe(
       filter((user) => user != null),
+      tap((user) => (this.user = user))
+    );
+
+    // get all bills for user
+    this.bills$ = this.user$.pipe(
       switchMap((user) =>
         this.store
           // only return documents with a users.userid field where userid is the uid of the currently signed in user
@@ -64,10 +72,28 @@ export class MainAppComponent implements OnInit, OnDestroy {
       share()
     );
 
-    this.bills$
-      .pipe(take(1))
-      .subscribe((bills) => this.selectedBillControl.setValue(bills[0].name));
+    // get user doc for user
+    this.userDoc$ = this.auth.user.pipe(
+      switchMap((user) =>
+        this.store.doc<UserDoc>(`users/${user!.uid}`).valueChanges()
+      )
+    );
 
+    // set the first bill to be display
+    combineLatest([this.userDoc$, this.bills$])
+      .pipe(take(2)) // firebase persistence will load from cache first before loading from firestore
+      .subscribe(([userDoc, bills]) => {
+        if (userDoc?.primaryBill) {
+          const primaryBill = bills.find(
+            (bill) => bill.uid === userDoc.primaryBill
+          );
+          this.selectedBillControl.setValue(primaryBill!.name);
+        } else {
+          this.selectedBillControl.setValue(bills[0]?.name);
+        }
+      });
+
+    // handle changing bill
     this.selectedBill$ = combineLatest([
       this.bills$,
       this.selectedBillControl.valueChanges,
