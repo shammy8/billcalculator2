@@ -170,7 +170,7 @@ export class BillComponent implements OnInit, OnDestroy {
         groupBy((settleChanged) => settleChanged.sharedByKey),
         mergeMap((settledChangedGrouped) =>
           settledChangedGrouped.pipe(
-            debounceTime(1000),
+            debounceTime(100),
             // distinctUntilChanged((curr, prev) => curr.checked === prev.checked) // don't need this?
             switchMap((settleChanged) => {
               this.onSettledChange.emit(settleChanged);
