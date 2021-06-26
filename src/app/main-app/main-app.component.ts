@@ -14,6 +14,7 @@ import { Bill } from '../model/bill.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { UserDoc } from '../model/user.model';
 import { BillRTDBService } from '../bill-rtdb.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'bc-main-app',
@@ -47,10 +48,17 @@ export class MainAppComponent implements OnInit, OnDestroy {
     private auth: AngularFireAuth,
     private router: Router,
     private clipboard: Clipboard,
-    private billRTDBService: BillRTDBService
+    private billRTDBService: BillRTDBService,
+    private userService: UserService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // TODO need to handle when primaryBill hasn't been set yet
+    this.userService.userObject$.subscribe((userObject) => {
+      if (!userObject) return;
+      this.router.navigate([userObject.primaryBill]);
+    });
+  }
 
   navigateToBill(bill: Bill) {
     this.router.navigate([bill.key]);
