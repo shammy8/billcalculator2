@@ -18,44 +18,38 @@ import { Bill, Items, Ledger } from '../model/bill.model';
 })
 export class CalculateComponent implements OnInit {
   ledger: Ledger | null = null;
-
-  @Input() bill!: Bill;
-
-  constructor() {}
-
+  // @Input() bill!: Bill;
+  // constructor() {}
   ngOnInit(): void {
-    this.ledger = this.calculate(this.bill.items);
+    // this.ledger = this.calculate(this.bill.items);
   }
-
-  calculate(items: Items) {
-    const ledger: Ledger = this.createObjectWithEveryone(
-      this.createObjectWithEveryone<number>(0)
-    );
-
-    for (const item of Object.values(items)) {
-      for (const sharedBy of Object.values(item.sharedBy)) {
-        ledger[item.paidBy][sharedBy.user] +=
-          sharedBy.settled === true
-            ? 0
-            : item.cost / Object.keys(item.sharedBy).length;
-        ledger[sharedBy.user][item.paidBy] -=
-          sharedBy.settled === true
-            ? 0
-            : item.cost / Object.keys(item.sharedBy).length;
-      }
-    }
-    return ledger;
-  }
-
-  private createObjectWithEveryone<T>(value: T): { [key: string]: T } {
-    const object: { [key: string]: T } = {};
-    this.bill.usersArray.forEach((person) => {
-      if (typeof value === 'object' && value !== null) {
-        object[person] = { ...value };
-      } else {
-        object[person] = value;
-      }
-    });
-    return object;
-  }
+  // calculate(items: Items) {
+  //   const ledger: Ledger = this.createObjectWithEveryone(
+  //     this.createObjectWithEveryone<number>(0)
+  //   );
+  //   for (const item of Object.values(items)) {
+  //     for (const sharedBy of Object.values(item.sharedBy)) {
+  //       ledger[item.paidBy][sharedBy.user] +=
+  //         sharedBy.settled === true
+  //           ? 0
+  //           : item.cost / Object.keys(item.sharedBy).length;
+  //       ledger[sharedBy.user][item.paidBy] -=
+  //         sharedBy.settled === true
+  //           ? 0
+  //           : item.cost / Object.keys(item.sharedBy).length;
+  //     }
+  //   }
+  //   return ledger;
+  // }
+  // private createObjectWithEveryone<T>(value: T): { [key: string]: T } {
+  //   const object: { [key: string]: T } = {};
+  //   this.bill.usersArray.forEach((person) => {
+  //     if (typeof value === 'object' && value !== null) {
+  //       object[person] = { ...value };
+  //     } else {
+  //       object[person] = value;
+  //     }
+  //   });
+  //   return object;
+  // }
 }
