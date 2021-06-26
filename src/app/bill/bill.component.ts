@@ -2,14 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
-import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
-import { KeyValue } from '@angular/common';
 import { combineLatest, Observable, of, Subject } from 'rxjs';
 import {
   debounceTime,
@@ -34,7 +30,7 @@ import {
   // NewItemWithBill,
   SettledChange,
 } from '../model/bill.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { BillRTDBService } from '../bill-rtdb.service';
 
 @Component({
@@ -61,11 +57,6 @@ export class BillComponent implements OnInit, OnDestroy {
   displayAddUsersDialog = false;
   displayCalculateDialog = false;
 
-  // itemsForm = this.fb.group({});
-  // sharedByForm(itemKey: string) {
-  //   return this.itemsForm.get(`${itemKey}.sharedBy`) as FormGroup;
-  // }
-  // @Input() bill!: Bill;
   // @Output() addItem = new EventEmitter<NewItemWithBill>();
   // @Output() addUsersEditors = new EventEmitter<AddUsersEditorsWithBill>();
   // @Output() itemsChanged = new EventEmitter<ItemElement[]>();
@@ -116,10 +107,8 @@ export class BillComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    private fb: FormBuilder,
     private confirmationService: ConfirmationService,
     private billRTDBService: BillRTDBService,
-    private router: Router,
     private route: ActivatedRoute
   ) {}
 
@@ -140,48 +129,8 @@ export class BillComponent implements OnInit, OnDestroy {
       map(([items, bill]) => ({ ...bill, items: items }))
     );
 
-    //   this.buildForm(this.bill.items);
     //   this.handleEmitSettledChange();
   }
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.bill && !changes.bill.firstChange) {
-  //     this.buildForm(changes.bill.currentValue.items);
-  //   }
-  // }
-  // buildForm(items: Items) {
-  //   this.itemsForm = this.fb.group({});
-  //   for (let itemKey in items) {
-  //     const itemFormElement = this.fb.group({
-  //       description: '',
-  //       paidBy: '',
-  //       cost: '',
-  //       date: null,
-  //     });
-  //     itemFormElement.patchValue({
-  //       description: items[itemKey].description,
-  //       paidBy: items[itemKey].paidBy,
-  //       cost: items[itemKey].cost,
-  //       date: items[itemKey].date,
-  //     });
-  //     const sharedByFormList = this.fb.group({});
-  //     for (let sharedByKey in items[itemKey].sharedBy) {
-  //       const sharedByFormElement = this.fb.group({
-  //         user: '',
-  //         settled: '',
-  //       });
-  //       sharedByFormElement.patchValue({
-  //         user: items[itemKey].sharedBy[sharedByKey].user,
-  //         settled: items[itemKey].sharedBy[sharedByKey].settled,
-  //       });
-  //       if (sharedByFormElement.get('user')?.value === items[itemKey].paidBy) {
-  //         sharedByFormElement.get(`settled`)?.disable();
-  //       }
-  //       sharedByFormList.addControl(sharedByKey, sharedByFormElement);
-  //     }
-  //     itemFormElement.addControl('sharedBy', sharedByFormList);
-  //     this.itemsForm.addControl(itemKey, itemFormElement);
-  //   }
-  // }
   // // private handleEmitItemsChanged() {
   // //   this.itemsForm.valueChanges
   // //     .pipe(takeUntil(this.destroy), debounceTime(2000)) // TODO? distinctUntilChanged(compareMethod) can pass in method to deep compare the object
