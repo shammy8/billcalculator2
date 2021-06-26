@@ -11,11 +11,12 @@ export interface Bill {
 // }
 
 export interface Item {
+  key: string;
   description: string;
   cost: number;
   paidBy: string;
   date: Date; // TODO firebase date??
-  sharedBy: SharedBy;
+  sharedBy: SharedBy[];
 }
 
 // export interface ItemElement {
@@ -26,12 +27,12 @@ export interface Item {
 //   sharedBy: SharedBy;
 // }
 
-export interface SharedBy {
-  [key: string]: SharedByElement;
-}
+// export interface SharedBy {
+//   [key: string]: SharedByElement;
+// }
 
-export interface SharedByElement {
-  user: string;
+export interface SharedBy {
+  friend: string;
   settled: boolean;
 }
 
@@ -43,7 +44,7 @@ export interface SharedByElement {
 export interface SettledChange {
   checked: boolean;
   itemKey: string;
-  sharedByKey: string;
+  sharedByKey: number;
   billId: string;
 }
 

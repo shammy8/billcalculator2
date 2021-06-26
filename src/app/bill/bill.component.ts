@@ -47,13 +47,14 @@ export class BillComponent implements OnInit, OnDestroy {
   items$: Observable<Item[]> = of([]);
   bill$: Observable<Bill | null> = of();
   billId$: Observable<string | null> = of(null);
+  // TODO fix typings
   billWithItems$: Observable<{
-    key?: string | undefined;
+    items: Item[];
+    key?: string;
     name?: string | undefined;
     viewers?: { [key: string]: boolean } | undefined;
     friends?: string[] | undefined;
     creator?: string | undefined;
-    items?: Item[];
   } | null> = of(null);
 
   displayAddItemDialog = false;
@@ -69,10 +70,12 @@ export class BillComponent implements OnInit, OnDestroy {
   // @Output() addUsersEditors = new EventEmitter<AddUsersEditorsWithBill>();
   // @Output() itemsChanged = new EventEmitter<ItemElement[]>();
   // @Output() onSettledChange = new EventEmitter<SettledChange>();
-  // @Output() onItemDelete = new EventEmitter<DeleteItem>();
+  @Output() onItemDelete = new EventEmitter<DeleteItem>();
   @Output() onSetAsPrimaryBill = new EventEmitter<string>();
-  // settledChange$ = new Subject<SettledChange>();
+
+  settledChange$ = new Subject<SettledChange>();
   // destroy = new Subject<void>();
+
   menuItems: MenuItem[] = [
     {
       label: 'Calculate',
@@ -111,6 +114,7 @@ export class BillComponent implements OnInit, OnDestroy {
     },
     { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
   ];
+
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
@@ -236,24 +240,25 @@ export class BillComponent implements OnInit, OnDestroy {
     this.displayCalculateDialog = true;
   }
 
-  // deleteItem({
-  //   event,
-  //   itemId,
-  //   item,
-  // }: {
-  //   event: MouseEvent;
-  //   itemId: string;
-  //   item: ItemElement;
-  // }) {
-  //   this.confirmationService.confirm({
-  //     target: event.target as undefined | EventTarget,
-  //     message: `Are you sure you want to delete this item: ${item.description} £${item.cost}?`,
-  //     icon: 'pi pi-exclamation-triangle',
-  //     accept: () => {
-  //       this.onItemDelete.emit({ billId: this.bill.uid, itemId: itemId });
-  //     },
-  //   });
-  // }
+  deleteItem({
+    event,
+    itemId,
+    item,
+  }: {
+    event: MouseEvent;
+    itemId: string;
+    item: Item;
+  }) {
+    this.confirmationService.confirm({
+      target: event.target as undefined | EventTarget,
+      message: `Are you sure you want to delete this item: ${item.description} £${item.cost}?`,
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        // this.onItemDelete.emit({ billId: this.bill.uid, itemId: itemId });
+      },
+    });
+  }
+
   ngOnDestroy() {
     //   this.destroy.next();
   }

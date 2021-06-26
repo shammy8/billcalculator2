@@ -36,6 +36,16 @@ export class BillRTDBService {
   }
 
   getItemsForBill(billId: string) {
-    return this.db.list<Item>(`items/${billId}`).valueChanges();
+    return this.db
+      .list<Item>(`items/${billId}`)
+      .snapshotChanges()
+      .pipe(
+        map((snapshotActionItems) =>
+          snapshotActionItems.map((item) => ({
+            ...item.payload.val()!,
+            key: item.key!,
+          }))
+        )
+      );
   }
 }

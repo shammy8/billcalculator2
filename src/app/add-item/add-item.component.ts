@@ -1,7 +1,7 @@
 import { Component, Input, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { nanoid } from 'nanoid';
-import { /* ItemElement, */ SharedByElement } from '../model/bill.model';
+// import /* ItemElement, */ /* SharedByElement */ '../model/bill.model';
 
 @Component({
   selector: 'bc-add-item',
@@ -114,17 +114,17 @@ export class AddItemComponent implements OnInit {
   }
 
   onAddItem() {
-    const sharedByInCorrectFormat: { [key: string]: SharedByElement } = {};
-    this.form.get('sharedBy')?.value.forEach((user: string) => {
-      sharedByInCorrectFormat[nanoid(6)] = {
-        user: user,
-        settled: this.form.get('paidBy')?.value === user,
-      };
-    });
-    // this.addItem.emit({
-    //   ...this.form.value,
-    //   sharedBy: sharedByInCorrectFormat,
+    // const sharedByInCorrectFormat: { [key: string]: SharedByElement } = {};
+    // this.form.get('sharedBy')?.value.forEach((user: string) => {
+    //   sharedByInCorrectFormat[nanoid(6)] = {
+    //     user: user,
+    //     settled: this.form.get('paidBy')?.value === user,
+    //   };
     // });
-    this.form.reset({ cost: 0.0, date: new Date() });
+    // // this.addItem.emit({
+    // //   ...this.form.value,
+    // //   sharedBy: sharedByInCorrectFormat,
+    // // });
+    // this.form.reset({ cost: 0.0, date: new Date() });
   }
 }
