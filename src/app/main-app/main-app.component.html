@@ -7,15 +7,17 @@
     iconPos="left"
     (click)="signOut()"
   ></button>
-  <button
-    pButton
-    icon="pi pi-copy"
-    class="p-button-text"
-    label="Copy user ID to clipboard"
-    (click)="copyUidToClipboard()"
-    pTooltip="{{ user?.uid }}"
-  ></button>
-  <input type="text" pInputText [value]="user?.uid" />
+  <ng-container *ngIf="user$ | async as user">
+    <button
+      pButton
+      icon="pi pi-copy"
+      class="p-button-text"
+      label="Copy user ID to clipboard"
+      (click)="copyUidToClipboard(user.uid)"
+      pTooltip="{{ user.uid }}"
+    ></button>
+    <input type="text" pInputText [value]="user.uid" />
+  </ng-container>
 
   <p-divider></p-divider>
 

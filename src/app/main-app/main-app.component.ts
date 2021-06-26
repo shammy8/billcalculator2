@@ -40,8 +40,7 @@ export class MainAppComponent implements OnInit, OnDestroy {
   displaySidebar = false;
   displayAddBillDialog = false;
 
-  user: firebase.User | null = null;
-  user$!: Observable<firebase.User | null>;
+  user$ = this.auth.user;
   userDoc$: Observable<UserDoc | undefined> = of(undefined);
 
   constructor(
@@ -65,8 +64,8 @@ export class MainAppComponent implements OnInit, OnDestroy {
     this.displayAddBillDialog = false;
   }
 
-  copyUidToClipboard() {
-    this.clipboard.copy(this.user!.uid);
+  copyUidToClipboard(uid: string) {
+    this.clipboard.copy(uid);
   }
 
   signOut() {
