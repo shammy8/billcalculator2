@@ -92,16 +92,7 @@ export class BillComponent implements OnInit, OnDestroy {
     {
       label: 'Order by description',
       icon: 'pi pi-user-plus',
-      command: (e) => {
-        // this.order = (
-        //   a: KeyValue<string, AbstractControl>,
-        //   b: KeyValue<string, AbstractControl>
-        // ) => {
-        //   const valueA = a.value.value.date.seconds;
-        //   const valueB = b.value.value.date.seconds;
-        //   return valueA > valueB ? -1 : valueB > valueA ? 1 : 0;
-        // };
-      },
+      command: (e) => {},
     },
     { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
   ];
@@ -128,16 +119,8 @@ export class BillComponent implements OnInit, OnDestroy {
     this.billWithItems$ = combineLatest([this.items$, this.bill$]).pipe(
       map(([items, bill]) => ({ ...bill, items: items }))
     );
-
-    //   this.handleEmitSettledChange();
   }
-  // // private handleEmitItemsChanged() {
-  // //   this.itemsForm.valueChanges
-  // //     .pipe(takeUntil(this.destroy), debounceTime(2000)) // TODO? distinctUntilChanged(compareMethod) can pass in method to deep compare the object
-  // //     .subscribe(() => {
-  // //       this.itemsChanged.emit(this.itemsForm.getRawValue());
-  // //     });
-  // // }
+
   // /**
   //  * All sharedBy share this method so need groupBy
   //  * TODO might be memory leak below need to check. takeUntil changing bills maybe?
@@ -159,14 +142,6 @@ export class BillComponent implements OnInit, OnDestroy {
   //       )
   //     )
   //     .subscribe();
-  // }
-  // orderByDate(
-  //   a: KeyValue<string, AbstractControl>,
-  //   b: KeyValue<string, AbstractControl>
-  // ) {
-  //   const valueA = a.value.value.date.seconds;
-  //   const valueB = b.value.value.date.seconds;
-  //   return valueA > valueB ? -1 : valueB > valueA ? 1 : 0;
   // }
 
   openAddItemDialog() {
