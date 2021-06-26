@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import {
   AngularFireAuthGuard,
@@ -81,6 +82,7 @@ const routes: Routes = [
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
+    AngularFireDatabaseModule,
     SharedModule,
     ButtonModule,
     DropdownModule,
