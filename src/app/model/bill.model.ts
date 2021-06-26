@@ -1,4 +1,5 @@
 export interface Bill {
+  key: string;
   name: string;
   viewers: { [key: string]: boolean };
   friends: string[];

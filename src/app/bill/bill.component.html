@@ -1,19 +1,17 @@
-<ng-container *ngIf="items$ | async as items">
-  <pre>{{ items | json }}</pre>
-</ng-container>
-<!-- <div class="header">
-  <span class="bill-name">
-    {{ bill.name }}
-  </span>
-  <p-splitButton
-    label="Add item"
-    icon="pi pi-plus"
-    [model]="menuItems"
-    (onClick)="openAddItemDialog()"
-    appendTo="body"
-  ></p-splitButton>
-</div>
-
+<ng-container *ngIf="billWithItems$ | async as bill">
+  <div class="header">
+    <span class="bill-name">
+      {{ bill.name }}
+    </span>
+    <p-splitButton
+      label="Add item"
+      icon="pi pi-plus"
+      [model]="menuItems"
+      (onClick)="openAddItemDialog()"
+      appendTo="body"
+    ></p-splitButton>
+  </div>
+  <!-- 
 <form [formGroup]="itemsForm">
   <ng-container
     *ngFor="let item of itemsForm.controls | keyvalue: orderByDate"
@@ -126,3 +124,5 @@
 </p-dialog>
 
 <p-confirmPopup></p-confirmPopup> -->
+  <pre>{{ bill | json }}</pre>
+</ng-container>

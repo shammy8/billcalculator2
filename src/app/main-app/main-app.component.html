@@ -31,9 +31,7 @@
     <ng-container *ngFor="let bill of bills">
       <p-button
         styleClass="p-button-text"
-        (onClick)="
-          selectedBillControl.setValue(bill.name); displaySidebar = false
-        "
+        (onClick)="navigateToBill(bill); displaySidebar = false"
       >
         <ng-template pTemplate="content">
           <span class="p-text-bold">

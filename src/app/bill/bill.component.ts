@@ -10,13 +10,14 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
 import { KeyValue } from '@angular/common';
-import { Observable, of, Subject } from 'rxjs';
+import { combineLatest, Observable, of, Subject } from 'rxjs';
 import {
   debounceTime,
   filter,
   groupBy,
   map,
   mergeMap,
+  share,
   switchMap,
   takeUntil,
   tap,
@@ -44,9 +45,21 @@ import { BillRTDBService } from '../bill-rtdb.service';
 })
 export class BillComponent implements OnInit, OnDestroy {
   items$: Observable<Item[]> = of([]);
-  // displayAddItemDialog = false;
-  // displayAddUsersDialog = false;
-  // displayCalculateDialog = false;
+  bill$: Observable<Bill | null> = of();
+  billId$: Observable<string | null> = of(null);
+  billWithItems$: Observable<{
+    key?: string | undefined;
+    name?: string | undefined;
+    viewers?: { [key: string]: boolean } | undefined;
+    friends?: string[] | undefined;
+    creator?: string | undefined;
+    items?: Item[];
+  } | null> = of(null);
+
+  displayAddItemDialog = false;
+  displayAddUsersDialog = false;
+  displayCalculateDialog = false;
+
   // itemsForm = this.fb.group({});
   // sharedByForm(itemKey: string) {
   //   return this.itemsForm.get(`${itemKey}.sharedBy`) as FormGroup;
@@ -57,47 +70,47 @@ export class BillComponent implements OnInit, OnDestroy {
   // @Output() itemsChanged = new EventEmitter<ItemElement[]>();
   // @Output() onSettledChange = new EventEmitter<SettledChange>();
   // @Output() onItemDelete = new EventEmitter<DeleteItem>();
-  // @Output() onSetAsPrimaryBill = new EventEmitter<string>();
+  @Output() onSetAsPrimaryBill = new EventEmitter<string>();
   // settledChange$ = new Subject<SettledChange>();
   // destroy = new Subject<void>();
-  // menuItems: MenuItem[] = [
-  //   {
-  //     label: 'Calculate',
-  //     icon: 'pi pi-wallet',
-  //     command: (e) => {
-  //       this.openCalculateDialog();
-  //     },
-  //   },
-  //   {
-  //     label: 'Add users and editors',
-  //     icon: 'pi pi-user-plus',
-  //     command: (e) => {
-  //       this.openAddUsersDialog();
-  //     },
-  //   },
-  //   {
-  //     label: 'Set as primary bill',
-  //     icon: 'pi pi-bookmark',
-  //     command: (e) => {
-  //       this.onSetAsPrimaryBill.emit(this.bill.uid);
-  //     },
-  //   },
-  //   {
-  //     label: 'Order by description',
-  //     icon: 'pi pi-user-plus',
-  //     command: (e) => {
-  //       // this.order = (
-  //       //   a: KeyValue<string, AbstractControl>,
-  //       //   b: KeyValue<string, AbstractControl>
-  //       // ) => {
-  //       //   const valueA = a.value.value.date.seconds;
-  //       //   const valueB = b.value.value.date.seconds;
-  //       //   return valueA > valueB ? -1 : valueB > valueA ? 1 : 0;
-  //       // };
-  //     },
-  //   },
-  //   { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
-  // ];
+  menuItems: MenuItem[] = [
+    {
+      label: 'Calculate',
+      icon: 'pi pi-wallet',
+      command: (e) => {
+        this.openCalculateDialog();
+      },
+    },
+    {
+      label: 'Add users and editors',
+      icon: 'pi pi-user-plus',
+      command: (e) => {
+        this.openAddUsersDialog();
+      },
+    },
+    {
+      label: 'Set as primary bill',
+      icon: 'pi pi-bookmark',
+      command: (e) => {
+        // this.onSetAsPrimaryBill.emit(this.bill.key);
+      },
+    },
+    {
+      label: 'Order by description',
+      icon: 'pi pi-user-plus',
+      command: (e) => {
+        // this.order = (
+        //   a: KeyValue<string, AbstractControl>,
+        //   b: KeyValue<string, AbstractControl>
+        // ) => {
+        //   const valueA = a.value.value.date.seconds;
+        //   const valueB = b.value.value.date.seconds;
+        //   return valueA > valueB ? -1 : valueB > valueA ? 1 : 0;
+        // };
+      },
+    },
+    { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
+  ];
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
@@ -107,11 +120,20 @@ export class BillComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.items$ = this.route.paramMap.pipe(
-      map((params) => params.get('billId')),
-      filter((billId) => !!billId),
-      switchMap((billId) => this.billRTDBService.getItemsForBill(billId!)),
-      tap(console.log)
+    this.billId$ = this.route.paramMap.pipe(
+      map((params) => params.get('billId'))
+    );
+
+    this.items$ = this.billId$.pipe(
+      switchMap((billId) => this.billRTDBService.getItemsForBill(billId!))
+    );
+
+    this.bill$ = this.billId$.pipe(
+      switchMap((billId) => this.billRTDBService.getSingleBill(billId!))
+    );
+
+    this.billWithItems$ = combineLatest([this.items$, this.bill$]).pipe(
+      map(([items, bill]) => ({ ...bill, items: items }))
     );
 
     //   this.buildForm(this.bill.items);
@@ -193,21 +215,27 @@ export class BillComponent implements OnInit, OnDestroy {
   //   const valueB = b.value.value.date.seconds;
   //   return valueA > valueB ? -1 : valueB > valueA ? 1 : 0;
   // }
-  // openAddItemDialog() {
-  //   this.displayAddItemDialog = true;
-  // }
-  // closeAddItemDialog() {
-  //   this.displayAddItemDialog = false;
-  // }
-  // openAddUsersDialog() {
-  //   this.displayAddUsersDialog = true;
-  // }
-  // closeAddUsersDialog() {
-  //   this.displayAddUsersDialog = false;
-  // }
-  // openCalculateDialog() {
-  //   this.displayCalculateDialog = true;
-  // }
+
+  openAddItemDialog() {
+    this.displayAddItemDialog = true;
+  }
+
+  closeAddItemDialog() {
+    this.displayAddItemDialog = false;
+  }
+
+  openAddUsersDialog() {
+    this.displayAddUsersDialog = true;
+  }
+
+  closeAddUsersDialog() {
+    this.displayAddUsersDialog = false;
+  }
+
+  openCalculateDialog() {
+    this.displayCalculateDialog = true;
+  }
+
   // deleteItem({
   //   event,
   //   itemId,

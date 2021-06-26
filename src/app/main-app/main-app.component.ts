@@ -34,7 +34,8 @@ import { BillRTDBService } from '../bill-rtdb.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainAppComponent implements OnInit, OnDestroy {
-  bills$: Observable<Bill[]> | undefined;
+  bills$ = this.billRTDBService.getAllBills();
+
   selectedBill$: Observable<Bill> | undefined;
   selectedBillControl = new FormControl();
 
@@ -56,12 +57,11 @@ export class MainAppComponent implements OnInit, OnDestroy {
 
   // TODO need to tidy everything in here
   ngOnInit(): void {
-    this.bills$ = this.billRTDBService.getAllBills();
+    // this.bills$ = this.billRTDBService.getAllBills();
     // this.user$ = this.auth.user.pipe(
     //   filter((user) => user != null),
     //   tap((user) => (this.user = user))
     // );
-
     // // get all bills for user
     // this.bills$ = this.user$.pipe(
     //   switchMap((user) =>
@@ -74,14 +74,12 @@ export class MainAppComponent implements OnInit, OnDestroy {
     //   ),
     //   share()
     // );
-
     // // get user doc for user
     // this.userDoc$ = this.auth.user.pipe(
     //   switchMap((user) =>
     //     this.store.doc<UserDoc>(`users/${user!.uid}`).valueChanges()
     //   )
     // );
-
     // // set the first bill to be display
     // combineLatest([this.userDoc$, this.bills$])
     //   .pipe(take(2)) // firebase persistence will load from cache first before loading from firestore
@@ -95,7 +93,6 @@ export class MainAppComponent implements OnInit, OnDestroy {
     //       this.selectedBillControl.setValue(bills[0]?.name);
     //     }
     //   });
-
     // // handle changing bill
     // this.selectedBill$ = combineLatest([
     //   this.bills$,
@@ -106,6 +103,10 @@ export class MainAppComponent implements OnInit, OnDestroy {
     //       bills.find((bill) => bill.name === selectedBillName)!
     //   )
     // );
+  }
+
+  navigateToBill(bill: Bill) {
+    this.router.navigate([bill.key]);
   }
 
   openAddBillDialog() {
