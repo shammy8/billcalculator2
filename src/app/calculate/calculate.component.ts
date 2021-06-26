@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Bill, Items, Ledger } from '../model/bill.model';
+// import { Bill, Items, Ledger } from '../model/bill.model';
 
 @Component({
   selector: 'bc-calculate',
   template: `
-    <div *ngFor="let user1 of ledger | keyvalue">
+    <!-- <div *ngFor="let user1 of ledger | keyvalue">
       <div *ngFor="let user2 of user1.value | keyvalue">
         <ng-container *ngIf="user2.value < 0">
           {{ user1.key | titlecase }} owes
@@ -12,12 +12,12 @@ import { Bill, Items, Ledger } from '../model/bill.model';
           £{{ user2.value * -1 | number: '1.2-2' }}
         </ng-container>
       </div>
-    </div>
+    </div> -->
   `,
   styles: [],
 })
 export class CalculateComponent implements OnInit {
-  ledger: Ledger | null = null;
+  // ledger: Ledger | null = null;
   // @Input() bill!: Bill;
   // constructor() {}
   ngOnInit(): void {

@@ -2,14 +2,13 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { nanoid } from 'nanoid';
-import {
-  AddUsersEditorsWithBill,
-  Bill,
-  DeleteItem,
-  NewBill,
-  NewItemWithBill,
-  SettledChange,
-} from './model/bill.model';
+import // AddUsersEditorsWithBill,
+// Bill,
+// DeleteItem,
+// NewBill,
+// NewItemWithBill,
+// SettledChange,
+'./model/bill.model';
 
 @Injectable({
   providedIn: 'root',

@@ -5,17 +5,25 @@ export interface Bill {
   creator: string;
 }
 
-export interface Items {
-  [key: string]: ItemElement;
-}
+// export interface Items {
+//   [key: string]: ItemElement;
+// }
 
-export interface ItemElement {
+export interface Item {
   description: string;
   cost: number;
   paidBy: string;
   date: Date; // TODO firebase date??
   sharedBy: SharedBy;
 }
+
+// export interface ItemElement {
+//   description: string;
+//   cost: number;
+//   paidBy: string;
+//   date: Date; // TODO firebase date??
+//   sharedBy: SharedBy;
+// }
 
 export interface SharedBy {
   [key: string]: SharedByElement;
@@ -26,10 +34,10 @@ export interface SharedByElement {
   settled: boolean;
 }
 
-export interface NewItemWithBill {
-  newItem: ItemElement;
-  bill: Bill;
-}
+// export interface NewItemWithBill {
+//   newItem: ItemElement;
+//   bill: Bill;
+// }
 
 export interface SettledChange {
   checked: boolean;

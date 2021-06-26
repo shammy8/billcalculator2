@@ -10,13 +10,16 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
 import { KeyValue } from '@angular/common';
-import { of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import {
   debounceTime,
+  filter,
   groupBy,
+  map,
   mergeMap,
   switchMap,
   takeUntil,
+  tap,
 } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
@@ -24,11 +27,14 @@ import {
   AddUsersEditorsWithBill,
   Bill,
   DeleteItem,
-  ItemElement,
-  Items,
-  NewItemWithBill,
+  Item,
+  // ItemElement,
+  // Items,
+  // NewItemWithBill,
   SettledChange,
 } from '../model/bill.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BillRTDBService } from '../bill-rtdb.service';
 
 @Component({
   selector: 'bc-bill',
@@ -37,6 +43,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BillComponent implements OnInit, OnDestroy {
+  items$: Observable<Item[]> = of([]);
   // displayAddItemDialog = false;
   // displayAddUsersDialog = false;
   // displayCalculateDialog = false;
@@ -91,11 +98,22 @@ export class BillComponent implements OnInit, OnDestroy {
   //   },
   //   { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
   // ];
-  // constructor(
-  //   private fb: FormBuilder,
-  //   private confirmationService: ConfirmationService
-  // ) {}
+  constructor(
+    private fb: FormBuilder,
+    private confirmationService: ConfirmationService,
+    private billRTDBService: BillRTDBService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
   ngOnInit(): void {
+    this.items$ = this.route.paramMap.pipe(
+      map((params) => params.get('billId')),
+      filter((billId) => !!billId),
+      switchMap((billId) => this.billRTDBService.getItemsForBill(billId!)),
+      tap(console.log)
+    );
+
     //   this.buildForm(this.bill.items);
     //   this.handleEmitSettledChange();
   }

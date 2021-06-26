@@ -1,7 +1,7 @@
 import { Component, Input, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { nanoid } from 'nanoid';
-import { ItemElement, SharedByElement } from '../model/bill.model';
+import { /* ItemElement, */ SharedByElement } from '../model/bill.model';
 
 @Component({
   selector: 'bc-add-item',
@@ -77,7 +77,7 @@ import { ItemElement, SharedByElement } from '../model/bill.model';
 })
 export class AddItemComponent implements OnInit {
   @Input() users!: string[];
-  @Output() addItem = new EventEmitter<ItemElement>();
+  // @Output() addItem = new EventEmitter<ItemElement>();
 
   form = this.fb.group({
     description: ['', [Validators.required]],
@@ -121,10 +121,10 @@ export class AddItemComponent implements OnInit {
         settled: this.form.get('paidBy')?.value === user,
       };
     });
-    this.addItem.emit({
-      ...this.form.value,
-      sharedBy: sharedByInCorrectFormat,
-    });
+    // this.addItem.emit({
+    //   ...this.form.value,
+    //   sharedBy: sharedByInCorrectFormat,
+    // });
     this.form.reset({ cost: 0.0, date: new Date() });
   }
 }

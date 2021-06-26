@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { switchMap } from 'rxjs/operators';
-import { Bill } from './model/bill.model';
+import { Bill, Item } from './model/bill.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,5 +20,9 @@ export class BillRTDBService {
           .valueChanges()
       )
     );
+  }
+
+  getItemsForBill(billId: string) {
+    return this.db.list<Item[]>(`items/${billId}`).valueChanges();
   }
 }

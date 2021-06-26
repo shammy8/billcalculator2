@@ -1,3 +1,6 @@
+<ng-container *ngIf="items$ | async as items">
+  <pre>{{ items | json }}</pre>
+</ng-container>
 <!-- <div class="header">
   <span class="bill-name">
     {{ bill.name }}

@@ -50,6 +50,12 @@ const routes: Routes = [
     data: {
       authGuardPipe: () => redirectUnauthorizedTo(['login']),
     },
+    children: [
+      {
+        path: ':billId',
+        component: BillComponent,
+      },
+    ],
   },
   {
     path: 'login',
