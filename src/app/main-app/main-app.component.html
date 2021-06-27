@@ -1,13 +1,13 @@
-<p-sidebar [(visible)]="displaySidebar" position="right">
-  <button
-    class="p-button-text p-button-danger"
-    pButton
-    label="Sign out"
-    icon="pi pi-sign-out"
-    iconPos="left"
-    (click)="signOut()"
-  ></button>
-  <ng-container *ngIf="user$ | async as user">
+<ng-container *ngIf="user$ | async as user">
+  <p-sidebar [(visible)]="displaySidebar" position="right">
+    <button
+      class="p-button-text p-button-danger"
+      pButton
+      label="Sign out"
+      icon="pi pi-sign-out"
+      iconPos="left"
+      (click)="signOut()"
+    ></button>
     <button
       pButton
       icon="pi pi-copy"
@@ -17,64 +17,54 @@
       pTooltip="{{ user.uid }}"
     ></button>
     <input type="text" pInputText [value]="user.uid" />
-  </ng-container>
 
-  <p-divider></p-divider>
+    <p-divider></p-divider>
 
-  <ng-container *ngIf="bills$ | async as bills">
-    <button
-      type="button"
-      pButton
-      icon="pi pi-plus"
-      label="Add bill"
-      class="p-button-primary"
-      (click)="openAddBillDialog()"
-    ></button>
-    <ng-container *ngFor="let bill of bills">
-      <p-button
-        styleClass="p-button-text"
-        (onClick)="navigateToBill(bill); displaySidebar = false"
-      >
-        <ng-template pTemplate="content">
-          <span class="p-text-bold">
-            {{ bill.name }}
-          </span>
-        </ng-template>
-      </p-button>
+    <ng-container *ngIf="bills$ | async as bills">
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        label="Add bill"
+        class="p-button-primary"
+        (click)="openAddBillDialog()"
+      ></button>
+      <ng-container *ngFor="let bill of bills">
+        <p-button
+          styleClass="p-button-text"
+          (onClick)="navigateToBill(bill); displaySidebar = false"
+        >
+          <ng-template pTemplate="content">
+            <span class="p-text-bold">
+              {{ bill.name }}
+            </span>
+          </ng-template>
+        </p-button>
+      </ng-container>
     </ng-container>
-  </ng-container>
-</p-sidebar>
+  </p-sidebar>
 
-<button
-  pButton
-  (click)="displaySidebar = true"
-  icon="pi pi-bars"
-  class="p-button-text p-button-lg p-d-flex p-mt-2 p-mr-2"
-  style="margin-left: auto"
-></button>
+  <button
+    pButton
+    (click)="displaySidebar = true"
+    icon="pi pi-bars"
+    class="p-button-text p-button-lg p-d-flex p-mt-2 p-mr-2"
+    style="margin-left: auto"
+  ></button>
 
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 
-<!-- <bc-bill
-  *ngIf="selectedBill$ | async as selectedBill"
-  [bill]="selectedBill"
-  (addItem)="this.billService.addItem($event)"
-  (onSettledChange)="this.billService.settledChanged($event)"
-  (addUsersEditors)="this.billService.addUsersEditors($event)"
-  (onItemDelete)="this.billService.deleteItem($event)"
-  (onSetAsPrimaryBill)="this.billService.setAsPrimaryBill($event, user!.uid)"
-></bc-bill> -->
-
-<!-- <p-dialog
-  header="Add Bill"
-  [(visible)]="displayAddBillDialog"
-  [style]="{ width: '100%' }"
-  [modal]="true"
-  [dismissableMask]="true"
->
-  <bc-add-bill
-    (addBill)="
-      this.billService.addBill($event, user!.uid); closeAddBillDialog()
-    "
-  ></bc-add-bill>
-</p-dialog> -->
+  <p-dialog
+    header="Add Bill"
+    [(visible)]="displayAddBillDialog"
+    [style]="{ width: '100%' }"
+    [modal]="true"
+    [dismissableMask]="true"
+  >
+    <bc-add-bill
+      (addBill)="
+        this.billRTDBService.addBill($event, user.uid); closeAddBillDialog()
+      "
+    ></bc-add-bill>
+  </p-dialog>
+</ng-container>

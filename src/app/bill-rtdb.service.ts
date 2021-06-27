@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { map, switchMap } from 'rxjs/operators';
-import { Bill, Item } from './model/bill.model';
+import firebase from 'firebase/app';
+import { Bill, Item, NewBill } from './model/bill.model';
 
 @Injectable({
   providedIn: 'root',
@@ -47,5 +48,21 @@ export class BillRTDBService {
           }))
         )
       );
+  }
+
+  addBill(newBill: NewBill, userId: string) {
+    const viewers: { [key: string]: boolean } = {};
+    for (let viewer of newBill.viewers) {
+      viewers[viewer] = true;
+    }
+    viewers[userId] = true;
+
+    this.db.list('bills').push({
+      name: newBill.name,
+      creator: userId,
+      friends: newBill.friends,
+      viewers,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+    });
   }
 }

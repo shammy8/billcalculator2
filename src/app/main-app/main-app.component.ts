@@ -48,7 +48,7 @@ export class MainAppComponent implements OnInit, OnDestroy {
     private auth: AngularFireAuth,
     private router: Router,
     private clipboard: Clipboard,
-    private billRTDBService: BillRTDBService,
+    public billRTDBService: BillRTDBService,
     private userService: UserService
   ) {}
 

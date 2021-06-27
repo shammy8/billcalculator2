@@ -1,9 +1,12 @@
+// import firebase from 'firebase/app';
+
 export interface Bill {
   key: string;
   name: string;
   viewers: { [key: string]: boolean };
   friends: string[];
   creator: string;
+  createdAt: number; // TODO should be firebase.database.ServerValue.TIMESTAMP
 }
 
 // export interface Items {
@@ -50,8 +53,8 @@ export interface SettledChange {
 
 export interface NewBill {
   name: string;
-  usersArray: string[];
-  editorsArray: string[];
+  friends: string[];
+  viewers: string[];
 }
 
 export interface AddUsersEditorsWithBill {

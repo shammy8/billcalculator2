@@ -4,3 +4,4 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 `firebase deploy --only firestore:rules` to only deploy security rules
 `firebase deploy --only functions` to only deploy cloud functions
+`firebase deploy --only database:rules` to only deploy realtime database security rules
