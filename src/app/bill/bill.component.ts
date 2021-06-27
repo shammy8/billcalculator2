@@ -67,6 +67,9 @@ export class BillComponent implements OnInit, OnDestroy {
   settledChange$ = new Subject<SettledChange>();
   // destroy = new Subject<void>();
 
+  orderBy: 'cost' | 'description' | 'paidBy' = 'description';
+  reverseOrder = false;
+
   menuItems: MenuItem[] = [
     {
       label: 'Calculate',
@@ -90,10 +93,38 @@ export class BillComponent implements OnInit, OnDestroy {
       },
     },
     {
-      label: 'Order by description',
-      icon: 'pi pi-user-plus',
-      command: (e) => {},
+      label: 'Order alphabetically',
+      icon: 'pi pi-sort-alpha-up',
+      command: (e) => {
+        if (this.orderBy === 'description') {
+          this.reverseOrder = !this.reverseOrder;
+        } else {
+          this.orderBy = 'description';
+        }
+      },
     },
+    {
+      label: 'Order by cost',
+      icon: 'pi pi-sort-numeric-up',
+      command: (e) => {
+        if (this.orderBy === 'cost') {
+          this.reverseOrder = !this.reverseOrder;
+        } else {
+          this.orderBy = 'cost';
+        }
+      },
+    },
+    // {
+    //   label: 'Order by payer',
+    //   icon: 'pi pi-user-plus',
+    //   command: (e) => {
+    //     if (this.orderBy === 'paidBy') {
+    //       this.reverseOrder = !this.reverseOrder;
+    //     } else {
+    //       this.orderBy = 'paidBy';
+    //     }
+    //   },
+    // },
     { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
   ];
 

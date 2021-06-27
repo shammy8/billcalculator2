@@ -30,6 +30,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { DividerModule } from 'primeng/divider';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { OrderModule } from 'ngx-order-pipe';
 
 import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
@@ -107,6 +108,7 @@ const routes: Routes = [
     DividerModule,
     ClipboardModule,
     ConfirmPopupModule,
+    OrderModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable

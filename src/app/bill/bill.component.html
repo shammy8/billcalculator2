@@ -13,7 +13,10 @@
   </div>
 
   <div class="items">
-    <ng-container class="items" *ngFor="let item of bill.items">
+    <ng-container
+      class="items"
+      *ngFor="let item of bill.items | orderBy: orderBy:reverseOrder"
+    >
       <div class="item-header">
         <div class="description">
           {{ item.description }}
