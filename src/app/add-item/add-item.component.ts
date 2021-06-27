@@ -1,7 +1,6 @@
 import { Component, Input, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { nanoid } from 'nanoid';
-// import /* ItemElement, */ /* SharedByElement */ '../model/bill.model';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Item } from '../model/bill.model';
 
 @Component({
   selector: 'bc-add-item',
@@ -44,7 +43,7 @@ import { nanoid } from 'nanoid';
         <label for="paidBy-input">Paid by</label>
         <p-dropdown
           id="paidBy-input"
-          [options]="users"
+          [options]="friends"
           appendTo="body"
           formControlName="paidBy"
           placeholder="Select the payer"
@@ -54,7 +53,7 @@ import { nanoid } from 'nanoid';
         <label for="sharedBy-input">Shared by</label>
         <p-multiSelect
           id="sharedBy-input"
-          [options]="users"
+          [options]="friends"
           appendTo="body"
           formControlName="sharedBy"
           placeholder="Select who are to pay for this item"
@@ -76,8 +75,8 @@ import { nanoid } from 'nanoid';
   styles: [],
 })
 export class AddItemComponent implements OnInit {
-  @Input() users!: string[];
-  // @Output() addItem = new EventEmitter<ItemElement>();
+  @Input() friends: string[] = [];
+  @Output() addItem = new EventEmitter<Item>();
 
   form = this.fb.group({
     description: ['', [Validators.required]],
@@ -114,17 +113,17 @@ export class AddItemComponent implements OnInit {
   }
 
   onAddItem() {
-    // const sharedByInCorrectFormat: { [key: string]: SharedByElement } = {};
-    // this.form.get('sharedBy')?.value.forEach((user: string) => {
-    //   sharedByInCorrectFormat[nanoid(6)] = {
-    //     user: user,
-    //     settled: this.form.get('paidBy')?.value === user,
-    //   };
-    // });
-    // // this.addItem.emit({
-    // //   ...this.form.value,
-    // //   sharedBy: sharedByInCorrectFormat,
-    // // });
-    // this.form.reset({ cost: 0.0, date: new Date() });
+    const sharedByInCorrectFormat = this.form
+      .get('sharedBy')
+      ?.value.map((friend: string) => ({
+        friend,
+        settled: this.form.get('paidBy')?.value === friend,
+      }));
+
+    this.addItem.emit({
+      ...this.form.value,
+      sharedBy: sharedByInCorrectFormat,
+    });
+    this.form.reset({ cost: 0.0, date: new Date() });
   }
 }

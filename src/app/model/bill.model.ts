@@ -39,10 +39,10 @@ export interface SharedBy {
   settled: boolean;
 }
 
-// export interface NewItemWithBill {
-//   newItem: ItemElement;
-//   bill: Bill;
-// }
+export interface NewItemWithBill {
+  newItem: Item;
+  bill: any;
+}
 
 export interface SettledChange {
   checked: boolean;

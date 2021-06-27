@@ -1,8 +1,6 @@
 <ng-container *ngIf="billWithItems$ | async as bill">
   <div class="header">
-    <span class="bill-name">
-      {{ bill.name }}
-    </span>
+    <span class="bill-name"> {{ bill.name }} </span>
     <p-splitButton
       label="Add item"
       icon="pi pi-plus"
@@ -74,22 +72,23 @@
       <p-divider></p-divider>
     </ng-container>
   </div>
-  <!--
-<p-dialog
-  header="Add Item"
-  [(visible)]="displayAddItemDialog"
-  [style]="{ width: '100%' }"
-  [modal]="true"
-  [dismissableMask]="true"
->
-  <bc-add-item
-    [users]="bill.usersArray"
-    (addItem)="
-      addItem.emit({ newItem: $event, bill: bill }); closeAddItemDialog()
-    "
-  ></bc-add-item>
-</p-dialog>
 
+  <p-dialog
+    header="Add Item"
+    [(visible)]="displayAddItemDialog"
+    [style]="{ width: '100%' }"
+    [modal]="true"
+    [dismissableMask]="true"
+  >
+    <bc-add-item
+      [friends]="bill.friends ?? []"
+      (addItem)="
+        billRTDBService.addItem({ newItem: $event, bill: bill });
+        closeAddItemDialog()
+      "
+    ></bc-add-item>
+  </p-dialog>
+  <!--
 <p-dialog
   header="Add Users and Editors"
   [(visible)]="displayAddUsersDialog"

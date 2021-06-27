@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { map, switchMap } from 'rxjs/operators';
 import firebase from 'firebase/app';
-import { Bill, Item, NewBill } from './model/bill.model';
+import { Bill, Item, NewBill, NewItemWithBill } from './model/bill.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +33,15 @@ export class BillRTDBService {
   }
 
   getSingleBill(billId: string) {
-    return this.db.object<Bill>(`bills/${billId}`).valueChanges();
+    return this.db
+      .object<Bill>(`bills/${billId}`)
+      .snapshotChanges()
+      .pipe(
+        map((snapshotActionBill) => ({
+          ...snapshotActionBill.payload.val()!,
+          key: snapshotActionBill.key!,
+        }))
+      );
   }
 
   getItemsForBill(billId: string) {
@@ -63,6 +71,12 @@ export class BillRTDBService {
       friends: newBill.friends,
       viewers,
       createdAt: firebase.database.ServerValue.TIMESTAMP,
+    });
+  }
+
+  addItem({ newItem, bill }: NewItemWithBill) {
+    this.db.list(`items/${bill.key}`).push({
+      ...newItem,
     });
   }
 }

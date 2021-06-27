@@ -49,7 +49,7 @@ export class BillComponent implements OnInit, OnDestroy {
     key?: string;
     name?: string | undefined;
     viewers?: { [key: string]: boolean } | undefined;
-    friends?: string[] | undefined;
+    friends?: string[];
     creator?: string | undefined;
   } | null> = of(null);
 
@@ -130,7 +130,7 @@ export class BillComponent implements OnInit, OnDestroy {
 
   constructor(
     private confirmationService: ConfirmationService,
-    private billRTDBService: BillRTDBService,
+    public billRTDBService: BillRTDBService,
     private route: ActivatedRoute
   ) {}
 
