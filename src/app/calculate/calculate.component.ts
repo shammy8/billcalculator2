@@ -37,7 +37,6 @@ export class CalculateComponent implements OnInit {
 
     for (const item of items) {
       for (const sharedBy of item.sharedBy) {
-        console.log(item.paidBy, sharedBy.friend);
         ledger[item.paidBy][sharedBy.friend] +=
           sharedBy.settled === true ? 0 : item.cost / item.sharedBy.length;
         ledger[sharedBy.friend][item.paidBy] -=

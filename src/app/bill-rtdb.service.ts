@@ -77,6 +77,7 @@ export class BillRTDBService {
   addItem({ newItem, bill }: NewItemWithBill) {
     this.db.list(`items/${bill.key}`).push({
       ...newItem,
+      date: newItem.date.getTime(),
     });
   }
 }
