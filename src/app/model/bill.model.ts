@@ -1,13 +1,32 @@
-export interface Bill {
+export interface WithId {
   id: string;
+}
+
+export interface Bill {
   name: string;
   editors: { [key: string]: boolean };
   friends: string[];
   creator: string;
 }
 
+export type BillWithId = Bill & WithId;
+
 export interface UserDoc {
   primaryBill: string;
+}
+
+export interface Item {
+  id: string;
+  description: string;
+  cost: number;
+  paidBy: string;
+  date: Date; // TODO firebase date??
+  sharedBy: SharedBy[];
+}
+
+interface SharedBy {
+  friend: string;
+  settled: boolean;
 }
 
 export interface Items {
@@ -20,10 +39,6 @@ export interface ItemElement {
   paidBy: string;
   date: Date; // TODO firebase date??
   sharedBy: SharedBy;
-}
-
-export interface SharedBy {
-  [key: string]: SharedByElement;
 }
 
 export interface SharedByElement {
@@ -39,7 +54,7 @@ export interface NewItemWithBill {
 export interface SettledChange {
   checked: boolean;
   itemKey: string;
-  sharedByKey: string;
+  sharedByIndex: number;
   billId: string;
 }
 

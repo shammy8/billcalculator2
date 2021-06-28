@@ -1,125 +1,118 @@
-<!-- <div class="header">
-  <span class="bill-name">
-    {{ bill.name }}
-  </span>
-  <p-splitButton
-    label="Add item"
-    icon="pi pi-plus"
-    [model]="menuItems"
-    (onClick)="openAddItemDialog()"
-    appendTo="body"
-  ></p-splitButton>
-</div>
+<ng-container *ngIf="billWithItems$ | async as billWithItems">
+  <div class="header">
+    <span class="bill-name">
+      {{ billWithItems.name }}
+    </span>
+    <p-splitButton
+      label="Add item"
+      icon="pi pi-plus"
+      [model]="menuItems"
+      (onClick)="openAddItemDialog()"
+      appendTo="body"
+    ></p-splitButton>
+  </div>
 
-<form [formGroup]="itemsForm">
-  <ng-container
-    *ngFor="let item of itemsForm.controls | keyvalue: orderByDate"
-    [formGroupName]="item.key"
-  >
-    <div class="item-header">
-      <div class="description">
-        {{ bill.items[item.key].description }}
-        <button
-          pButton
-          icon="pi pi-trash"
-          class="p-button-text p-button-sm p-button-secondary"
-          style="padding: 0; width: 1.5rem"
-          (click)="
-            deleteItem({
-              event: $event,
-              itemId: item.key,
-              item: bill.items[item.key]
-            })
-          "
-        ></button>
-      </div>
-      <div class="price">
-        £{{ bill.items[item.key].cost | number: '1.2-2' }}
-        <div class="paid-by">
-          paid by
-          <span class="name">
-            {{ bill.items[item.key].paidBy }}
-          </span>
+  <div class="items">
+    <ng-container *ngFor="let item of billWithItems.items">
+      <div class="item-header">
+        <div class="description">
+          {{ item.description }}
+          <button
+            pButton
+            icon="pi pi-trash"
+            class="p-button-text p-button-sm p-button-secondary"
+            style="padding: 0; width: 1.5rem"
+            (click)="
+              deleteItem({
+                event: $event,
+                itemId: item.id,
+                item: item
+              })
+            "
+          ></button>
+        </div>
+        <div class="price">
+          £{{ item.cost | number: '1.2-2' }}
+          <div class="paid-by">
+            paid by
+            <span class="name">
+              {{ item.paidBy }}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-    <div formGroupName="sharedBy" class="sharedBy-grid">
-      <div
-        class="p-mt-1 p-mb-1 p-d-flex p-ai-center"
-        [ngClass]="{ 'justify-self-right': j % 2 === 1 }"
-        *ngFor="
-          let sharedBy of sharedByForm(item.key).controls | keyvalue;
-          let j = index
-        "
-        [formGroupName]="sharedBy.key"
-      >
-        <label class="p-mr-2" *ngIf="j % 2 === 1">{{
-          bill.items[item.key].sharedBy[sharedBy.key].user
-        }}</label>
-        <p-inputSwitch
-          formControlName="settled"
-          pTooltip="Can't edit the original payer of the item"
-          [tooltipDisabled]="
-            bill.items[item.key].sharedBy[sharedBy.key].user !==
-            bill.items[item.key].paidBy
-          "
-          tooltipPosition="top"
-          (onChange)="
-            settledChange$.next({
-              checked: $event.checked,
-              itemKey: item.key,
-              sharedByKey: sharedBy.key,
-              billId: bill.uid
-            })
-          "
-        ></p-inputSwitch>
-        <label class="p-ml-2" *ngIf="j % 2 === 0">{{
-          bill.items[item.key].sharedBy[sharedBy.key].user
-        }}</label>
+      <div class="sharedBy-grid">
+        <div
+          class="p-mt-1 p-mb-1 p-d-flex p-ai-center"
+          [ngClass]="{ 'justify-self-right': j % 2 === 1 }"
+          *ngFor="let sharedBy of item.sharedBy; let j = index"
+        >
+          <label class="p-mr-2" *ngIf="j % 2 === 1">{{
+            sharedBy.friend
+          }}</label>
+          <p-inputSwitch
+            pTooltip="Can't edit the original payer of the item"
+            [disabled]="sharedBy.friend === item.paidBy"
+            [tooltipDisabled]="sharedBy.friend !== item.paidBy"
+            tooltipPosition="top"
+            [ngModel]="sharedBy.settled"
+            (onChange)="
+              settledChange$.next({
+                checked: $event.checked,
+                itemKey: item.id,
+                sharedByIndex: j,
+                billId: billWithItems.id!
+              })
+            "
+          ></p-inputSwitch>
+          <label class="p-ml-2" *ngIf="j % 2 === 0">{{
+            sharedBy.friend
+          }}</label>
+        </div>
       </div>
-    </div>
-    <p-divider></p-divider>
-  </ng-container>
-</form>
+      <p-divider></p-divider>
+    </ng-container>
+  </div>
 
-<p-dialog
-  header="Add Item"
-  [(visible)]="displayAddItemDialog"
-  [style]="{ width: '100%' }"
-  [modal]="true"
-  [dismissableMask]="true"
->
-  <bc-add-item
-    [users]="bill.usersArray"
-    (addItem)="
-      addItem.emit({ newItem: $event, bill: bill }); closeAddItemDialog()
-    "
-  ></bc-add-item>
-</p-dialog>
+  <!-- <p-dialog
+    header="Add Item"
+    [(visible)]="displayAddItemDialog"
+    [style]="{ width: '100%' }"
+    [modal]="true"
+    [dismissableMask]="true"
+  >
+    <bc-add-item
+      [users]="billWithItems.friends"
+      (addItem)="
+        addItem.emit({ newItem: $event, bill: bill }); closeAddItemDialog()
+      "
+    ></bc-add-item>
+  </p-dialog> -->
 
-<p-dialog
-  header="Add Users and Editors"
-  [(visible)]="displayAddUsersDialog"
-  [style]="{ width: '100%' }"
-  [modal]="true"
-  [dismissableMask]="true"
->
-  <bc-add-users-editors
-    (addUsersEditors)="
-      addUsersEditors.emit({ usersAndEditors: $event, bill: bill });
-      closeAddUsersDialog()
-    "
-  ></bc-add-users-editors>
-</p-dialog>
+  <p-dialog
+    header="Add Users and Editors"
+    [(visible)]="displayAddUsersDialog"
+    [style]="{ width: '100%' }"
+    [modal]="true"
+    [dismissableMask]="true"
+  >
+    <bc-add-users-editors
+      (addUsersEditors)="
+        addUsersEditors.emit({ usersAndEditors: $event, bill: bill });
+        closeAddUsersDialog()
+      "
+    ></bc-add-users-editors>
+  </p-dialog>
 
-<p-dialog
-  header="Calculate"
-  [(visible)]="displayCalculateDialog"
-  [style]="{ width: '100%' }"
-  [modal]="true"
-  [dismissableMask]="true"
->
-  <bc-calculate *ngIf="displayCalculateDialog" [bill]="bill"></bc-calculate>
-</p-dialog>
+  <p-dialog
+    header="Calculate"
+    [(visible)]="displayCalculateDialog"
+    [style]="{ width: '100%' }"
+    [modal]="true"
+    [dismissableMask]="true"
+  >
+    <bc-calculate *ngIf="displayCalculateDialog" [bill]="bill"></bc-calculate>
+  </p-dialog>
 
-<p-confirmPopup></p-confirmPopup> -->
+  <p-confirmPopup></p-confirmPopup>
+</ng-container>

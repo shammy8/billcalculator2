@@ -29,6 +29,11 @@ service cloud.firestore {
         // might be better to do the other rules inside a cloud function
       
       allow delete: if isCreator();
+
+      match /items/{itemDoc} {
+        allow read;
+        allow write;
+      }
     }
 
     match /users/{userDoc} {

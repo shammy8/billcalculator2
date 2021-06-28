@@ -10,10 +10,11 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
 import { KeyValue } from '@angular/common';
-import { of, Subject } from 'rxjs';
+import { combineLatest, Observable, of, Subject } from 'rxjs';
 import {
   debounceTime,
   groupBy,
+  map,
   mergeMap,
   switchMap,
   takeUntil,
@@ -23,12 +24,16 @@ import { ConfirmationService } from 'primeng/api';
 import {
   AddUsersEditorsWithBill,
   Bill,
+  BillWithId,
   DeleteItem,
+  Item,
   ItemElement,
   Items,
   NewItemWithBill,
   SettledChange,
 } from '../model/bill.model';
+import { ActivatedRoute } from '@angular/router';
+import { BillService } from '../bill.service';
 
 @Component({
   selector: 'bc-bill',
@@ -42,6 +47,30 @@ export class BillComponent implements OnInit, OnDestroy {
   displayCalculateDialog = false;
 
   itemsForm = this.fb.group({});
+
+  billId$ = this.route.paramMap.pipe(
+    map((params) => {
+      const billId = params.get('billId');
+      if (!billId) {
+        // TODO handle when no billId
+        return null;
+      }
+      return billId;
+    })
+  );
+
+  // TODO handle when not allowed or if it doesn't exist
+  bill$ = this.billId$.pipe(
+    switchMap((billId) => this.billService.getSingleBill(billId!))
+  );
+
+  items$ = this.billId$.pipe(
+    switchMap((billId) => this.billService.getItemsForBill(billId!))
+  );
+
+  billWithItems$ = combineLatest([this.items$, this.bill$]).pipe(
+    map(([items, bill]) => ({ ...bill, items: items }))
+  );
 
   sharedByForm(itemKey: string) {
     return this.itemsForm.get(`${itemKey}.sharedBy`) as FormGroup;
@@ -78,7 +107,7 @@ export class BillComponent implements OnInit, OnDestroy {
       label: 'Set as primary bill',
       icon: 'pi pi-bookmark',
       command: (e) => {
-        this.onSetAsPrimaryBill.emit(this.bill.id);
+        // this.onSetAsPrimaryBill.emit(this.bill.id);
       },
     },
     {
@@ -100,7 +129,9 @@ export class BillComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private route: ActivatedRoute,
+    private billService: BillService
   ) {}
 
   ngOnInit(): void {
@@ -115,40 +146,38 @@ export class BillComponent implements OnInit, OnDestroy {
   }
 
   buildForm(items: Items) {
-    this.itemsForm = this.fb.group({});
-
-    for (let itemKey in items) {
-      const itemFormElement = this.fb.group({
-        description: '',
-        paidBy: '',
-        cost: '',
-        date: null,
-      });
-      itemFormElement.patchValue({
-        description: items[itemKey].description,
-        paidBy: items[itemKey].paidBy,
-        cost: items[itemKey].cost,
-        date: items[itemKey].date,
-      });
-
-      const sharedByFormList = this.fb.group({});
-      for (let sharedByKey in items[itemKey].sharedBy) {
-        const sharedByFormElement = this.fb.group({
-          user: '',
-          settled: '',
-        });
-        sharedByFormElement.patchValue({
-          user: items[itemKey].sharedBy[sharedByKey].user,
-          settled: items[itemKey].sharedBy[sharedByKey].settled,
-        });
-        if (sharedByFormElement.get('user')?.value === items[itemKey].paidBy) {
-          sharedByFormElement.get(`settled`)?.disable();
-        }
-        sharedByFormList.addControl(sharedByKey, sharedByFormElement);
-      }
-      itemFormElement.addControl('sharedBy', sharedByFormList);
-      this.itemsForm.addControl(itemKey, itemFormElement);
-    }
+    // this.itemsForm = this.fb.group({});
+    // for (let itemKey in items) {
+    //   const itemFormElement = this.fb.group({
+    //     description: '',
+    //     paidBy: '',
+    //     cost: '',
+    //     date: null,
+    //   });
+    //   itemFormElement.patchValue({
+    //     description: items[itemKey].description,
+    //     paidBy: items[itemKey].paidBy,
+    //     cost: items[itemKey].cost,
+    //     date: items[itemKey].date,
+    //   });
+    //   const sharedByFormList = this.fb.group({});
+    //   for (let sharedByKey in items[itemKey].sharedBy) {
+    //     const sharedByFormElement = this.fb.group({
+    //       user: '',
+    //       settled: '',
+    //     });
+    //     sharedByFormElement.patchValue({
+    //       user: items[itemKey].sharedBy[sharedByKey].user,
+    //       settled: items[itemKey].sharedBy[sharedByKey].settled,
+    //     });
+    //     if (sharedByFormElement.get('user')?.value === items[itemKey].paidBy) {
+    //       sharedByFormElement.get(`settled`)?.disable();
+    //     }
+    //     sharedByFormList.addControl(sharedByKey, sharedByFormElement);
+    //   }
+    //   itemFormElement.addControl('sharedBy', sharedByFormList);
+    //   this.itemsForm.addControl(itemKey, itemFormElement);
+    // }
   }
 
   // private handleEmitItemsChanged() {
@@ -164,22 +193,22 @@ export class BillComponent implements OnInit, OnDestroy {
    * TODO might be memory leak below need to check. takeUntil changing bills maybe?
    */
   handleEmitSettledChange() {
-    this.settledChange$
-      .pipe(
-        takeUntil(this.destroy),
-        groupBy((settleChanged) => settleChanged.sharedByKey),
-        mergeMap((settledChangedGrouped) =>
-          settledChangedGrouped.pipe(
-            debounceTime(100),
-            // distinctUntilChanged((curr, prev) => curr.checked === prev.checked) // don't need this?
-            switchMap((settleChanged) => {
-              this.onSettledChange.emit(settleChanged);
-              return of(settleChanged);
-            })
-          )
-        )
-      )
-      .subscribe();
+    // this.settledChange$
+    //   .pipe(
+    //     takeUntil(this.destroy),
+    //     groupBy((settleChanged) => settleChanged.sharedByKey),
+    //     mergeMap((settledChangedGrouped) =>
+    //       settledChangedGrouped.pipe(
+    //         debounceTime(100),
+    //         // distinctUntilChanged((curr, prev) => curr.checked === prev.checked) // don't need this?
+    //         switchMap((settleChanged) => {
+    //           this.onSettledChange.emit(settleChanged);
+    //           return of(settleChanged);
+    //         })
+    //       )
+    //     )
+    //   )
+    //   .subscribe();
   }
 
   orderByDate(
@@ -218,14 +247,14 @@ export class BillComponent implements OnInit, OnDestroy {
   }: {
     event: MouseEvent;
     itemId: string;
-    item: ItemElement;
+    item: Item;
   }) {
     this.confirmationService.confirm({
       target: event.target as undefined | EventTarget,
       message: `Are you sure you want to delete this item: ${item.description} £${item.cost}?`,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.onItemDelete.emit({ billId: this.bill.id, itemId: itemId });
+        // this.onItemDelete.emit({ billId: this.bill.id, itemId: itemId });
       },
     });
   }

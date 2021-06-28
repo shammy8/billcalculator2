@@ -50,7 +50,6 @@ export class MainAppComponent implements OnInit, OnDestroy {
     private userService: UserService
   ) {}
 
-  // TODO need to tidy everything in here
   ngOnInit(): void {
     this.userService.userDoc$.subscribe((userDoc) => {
       if (!userDoc) return;

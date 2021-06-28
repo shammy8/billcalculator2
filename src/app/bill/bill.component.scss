@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-form {
+.items {
   background: var(--surface-0);
   overflow: auto;
   padding: 0.8rem;
@@ -14,7 +14,6 @@ form {
   height: calc(100vh - 8rem);
   max-height: calc(100vh - 8rem);
   border-top-left-radius: 1.8rem;
-  // border-top-right-radius: 1.3rem;
 }
 
 .bill-name {

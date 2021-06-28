@@ -3,11 +3,13 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { nanoid } from 'nanoid';
-import { switchMap } from 'rxjs/operators';
+import { shareReplay, switchMap, tap } from 'rxjs/operators';
 import {
   AddUsersEditorsWithBill,
   Bill,
   DeleteItem,
+  Item,
+  Items,
   NewBill,
   NewItemWithBill,
   SettledChange,
@@ -27,8 +29,22 @@ export class BillService {
             ref.where(`editors.${user!.uid}`, '==', true)
           )
           .valueChanges({ idField: 'id' })
-      )
+      ),
+      tap((bills) => console.log('getBills', bills))
+      // shareReplay()
     );
+  }
+
+  getSingleBill(billId: string) {
+    return this.store
+      .doc<Bill>(`bills/${billId}`)
+      .valueChanges({ idField: 'id' });
+  }
+
+  getItemsForBill(billId: string) {
+    return this.store
+      .collection<Item>(`bills/${billId}/items`)
+      .valueChanges({ idField: 'id' });
   }
 
   addItem(newItemWithBill: NewItemWithBill) {
