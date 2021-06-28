@@ -1,10 +1,13 @@
 export interface Bill {
-  uid: string;
+  id: string;
   name: string;
-  users: { [key: string]: string };
-  usersArray: string[];
-  items: Items;
-  creatorUid: string;
+  editors: { [key: string]: boolean };
+  friends: string[];
+  creator: string;
+}
+
+export interface UserDoc {
+  primaryBill: string;
 }
 
 export interface Items {

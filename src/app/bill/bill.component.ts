@@ -78,7 +78,7 @@ export class BillComponent implements OnInit, OnDestroy {
       label: 'Set as primary bill',
       icon: 'pi pi-bookmark',
       command: (e) => {
-        this.onSetAsPrimaryBill.emit(this.bill.uid);
+        this.onSetAsPrimaryBill.emit(this.bill.id);
       },
     },
     {
@@ -104,7 +104,7 @@ export class BillComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.buildForm(this.bill.items);
+    // this.buildForm(this.bill.items);
     this.handleEmitSettledChange();
   }
 
@@ -225,7 +225,7 @@ export class BillComponent implements OnInit, OnDestroy {
       message: `Are you sure you want to delete this item: ${item.description} £${item.cost}?`,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.onItemDelete.emit({ billId: this.bill.uid, itemId: itemId });
+        this.onItemDelete.emit({ billId: this.bill.id, itemId: itemId });
       },
     });
   }

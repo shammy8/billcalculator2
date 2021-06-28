@@ -7,7 +7,7 @@ service cloud.firestore {
 
     match /bills/{billDoc} {
       function isEditor() {
-      	return request.auth.uid in resource.data.users
+      	return request.auth.uid in resource.data.users || request.auth.uid in resource.data.editors // TODO need to delete the first part when we move to new schema
       }
       function isCreator() {
       	return request.auth.uid == resource.data.creatorUid
