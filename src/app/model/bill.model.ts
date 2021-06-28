@@ -47,8 +47,8 @@ export interface NewItemWithBill {
 export interface SettledChange {
   checked: boolean;
   itemKey: string;
-  sharedByKey: number;
-  billId: string;
+  sharedByIndex: number;
+  billKey: string;
 }
 
 export interface NewBill {

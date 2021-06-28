@@ -25,9 +25,6 @@ import {
   Bill,
   DeleteItem,
   Item,
-  // ItemElement,
-  // Items,
-  // NewItemWithBill,
   SettledChange,
 } from '../model/bill.model';
 import { ActivatedRoute } from '@angular/router';
@@ -65,7 +62,7 @@ export class BillComponent implements OnInit, OnDestroy {
   @Output() onSetAsPrimaryBill = new EventEmitter<string>();
 
   settledChange$ = new Subject<SettledChange>();
-  // destroy = new Subject<void>();
+  destroy = new Subject<void>();
 
   orderBy: 'cost' | 'description' | 'paidBy' = 'description';
   reverseOrder = false;
@@ -150,30 +147,37 @@ export class BillComponent implements OnInit, OnDestroy {
     this.billWithItems$ = combineLatest([this.items$, this.bill$]).pipe(
       map(([items, bill]) => ({ ...bill, items: items }))
     );
+
+    this.settledChange();
   }
 
   // /**
   //  * All sharedBy share this method so need groupBy
   //  * TODO might be memory leak below need to check. takeUntil changing bills maybe?
   //  */
-  // handleEmitSettledChange() {
-  //   this.settledChange$
-  //     .pipe(
-  //       takeUntil(this.destroy),
-  //       groupBy((settleChanged) => settleChanged.sharedByKey),
-  //       mergeMap((settledChangedGrouped) =>
-  //         settledChangedGrouped.pipe(
-  //           debounceTime(100),
-  //           // distinctUntilChanged((curr, prev) => curr.checked === prev.checked) // don't need this?
-  //           switchMap((settleChanged) => {
-  //             this.onSettledChange.emit(settleChanged);
-  //             return of(settleChanged);
-  //           })
-  //         )
-  //       )
-  //     )
-  //     .subscribe();
-  // }
+  settledChange() {
+    this.settledChange$
+      .pipe(
+        takeUntil(this.destroy),
+        groupBy((settleChanged) => settleChanged.sharedByIndex),
+        mergeMap((settledChangedGrouped) =>
+          settledChangedGrouped.pipe(
+            debounceTime(1000),
+            // distinctUntilChanged((curr, prev) => curr.checked === prev.checked) // don't need this?
+            switchMap((settleChanged) => {
+              this.billRTDBService.settledChanged(settleChanged);
+              return of(settleChanged);
+            })
+          )
+        )
+      )
+      .subscribe();
+  }
+
+  trackBy(index: number, item: Item) {
+    // console.log(item.key);
+    return item.key;
+  }
 
   openAddItemDialog() {
     this.displayAddItemDialog = true;
@@ -215,6 +219,6 @@ export class BillComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    //   this.destroy.next();
+    this.destroy.next();
   }
 }

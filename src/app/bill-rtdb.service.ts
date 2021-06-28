@@ -3,7 +3,13 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { map, switchMap } from 'rxjs/operators';
 import firebase from 'firebase/app';
-import { Bill, Item, NewBill, NewItemWithBill } from './model/bill.model';
+import {
+  Bill,
+  Item,
+  NewBill,
+  NewItemWithBill,
+  SettledChange,
+} from './model/bill.model';
 
 @Injectable({
   providedIn: 'root',
@@ -79,5 +85,12 @@ export class BillRTDBService {
       ...newItem,
       date: newItem.date.getTime(),
     });
+  }
+
+  settledChanged({ checked, itemKey, sharedByIndex, billKey }: SettledChange) {
+    console.log('settledChanged', checked, itemKey, sharedByIndex, billKey);
+    this.db
+      .object(`items/${billKey}/${itemKey}/sharedBy/${sharedByIndex}`)
+      .update({ settled: checked });
   }
 }

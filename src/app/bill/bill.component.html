@@ -11,9 +11,7 @@
   </div>
 
   <div class="items">
-    <ng-container
-      *ngFor="let item of bill.items | orderBy: orderBy:reverseOrder"
-    >
+    <div *ngFor="let item of bill.items | orderBy: orderBy:reverseOrder">
       <div class="item-header">
         <div class="description">
           {{ item.description }}
@@ -53,14 +51,15 @@
           <p-inputSwitch
             pTooltip="Can't edit the original payer of the item"
             [tooltipDisabled]="sharedBy.friend !== item.paidBy"
+            [disabled]="sharedBy.friend === item.paidBy"
             tooltipPosition="top"
             [ngModel]="sharedBy.settled"
             (onChange)="
               settledChange$.next({
                 checked: $event.checked,
                 itemKey: item.key,
-                sharedByKey: j,
-                billId: bill.key!
+                sharedByIndex: j,
+                billKey: bill.key!
               })
             "
           ></p-inputSwitch>
@@ -70,7 +69,7 @@
         </div>
       </div>
       <p-divider></p-divider>
-    </ng-container>
+    </div>
   </div>
 
   <p-dialog
