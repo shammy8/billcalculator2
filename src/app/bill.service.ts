@@ -38,13 +38,15 @@ export class BillService {
   getSingleBill(billId: string) {
     return this.store
       .doc<Bill>(`bills/${billId}`)
-      .valueChanges({ idField: 'id' });
+      .valueChanges({ idField: 'id' })
+      .pipe(tap((bill) => console.log('get single bill', bill)));
   }
 
   getItemsForBill(billId: string) {
     return this.store
       .collection<Item>(`bills/${billId}/items`)
-      .valueChanges({ idField: 'id' });
+      .valueChanges({ idField: 'id' })
+      .pipe(tap((items) => console.log('get items', items)));
   }
 
   addItem(newItemWithBill: NewItemWithBill) {

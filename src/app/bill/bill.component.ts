@@ -59,30 +59,17 @@ export class BillComponent implements OnInit, OnDestroy {
     })
   );
 
-  // TODO handle when not allowed or if it doesn't exist
-  bill$ = this.billId$.pipe(
-    switchMap((billId) => this.billService.getSingleBill(billId!))
+  // TODO handle when not allowed or if doc doesn't exist
+  billWithItems$ = this.billId$.pipe(
+    mergeMap((billId) => {
+      return combineLatest([
+        // get Single bill will fire twice as it first gets it from the cache as I call get all bills in main component
+        this.billService.getSingleBill(billId!),
+        this.billService.getItemsForBill(billId!),
+      ]);
+    }),
+    map(([bill, items]) => ({ ...bill, items: items }))
   );
-
-  items$ = this.billId$.pipe(
-    switchMap((billId) => this.billService.getItemsForBill(billId!))
-  );
-
-  billWithItems$ = combineLatest([this.items$, this.bill$]).pipe(
-    map(([items, bill]) => ({ ...bill, items: items }))
-  );
-
-  sharedByForm(itemKey: string) {
-    return this.itemsForm.get(`${itemKey}.sharedBy`) as FormGroup;
-  }
-
-  @Input() bill!: Bill;
-  @Output() addItem = new EventEmitter<NewItemWithBill>();
-  @Output() addUsersEditors = new EventEmitter<AddUsersEditorsWithBill>();
-  @Output() itemsChanged = new EventEmitter<ItemElement[]>();
-  @Output() onSettledChange = new EventEmitter<SettledChange>();
-  @Output() onItemDelete = new EventEmitter<DeleteItem>();
-  @Output() onSetAsPrimaryBill = new EventEmitter<string>();
 
   settledChange$ = new Subject<SettledChange>();
 
@@ -209,15 +196,6 @@ export class BillComponent implements OnInit, OnDestroy {
     //     )
     //   )
     //   .subscribe();
-  }
-
-  orderByDate(
-    a: KeyValue<string, AbstractControl>,
-    b: KeyValue<string, AbstractControl>
-  ) {
-    const valueA = a.value.value.date.seconds;
-    const valueB = b.value.value.date.seconds;
-    return valueA > valueB ? -1 : valueB > valueA ? 1 : 0;
   }
 
   openAddItemDialog() {
