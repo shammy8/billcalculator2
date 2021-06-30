@@ -24,7 +24,7 @@
     </bc-item>
   </div>
 
-  <!-- <p-dialog
+  <p-dialog
     header="Add Item"
     [(visible)]="displayAddItemDialog"
     [style]="{ width: '100%' }"
@@ -34,10 +34,10 @@
     <bc-add-item
       [users]="billWithItems.friends"
       (addItem)="
-        addItem.emit({ newItem: $event, bill: bill }); closeAddItemDialog()
+        billService.addItem($event, billWithItems.id); closeAddItemDialog()
       "
     ></bc-add-item>
-  </p-dialog> -->
+  </p-dialog>
 
   <!-- <p-dialog
     header="Add Users and Editors"

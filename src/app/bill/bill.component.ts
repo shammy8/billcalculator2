@@ -22,7 +22,6 @@ import {
   BillWithId,
   DeleteItem,
   Item,
-  NewItemWithBill,
 } from '../model/bill.model';
 import { ActivatedRoute } from '@angular/router';
 import { BillService } from '../bill.service';

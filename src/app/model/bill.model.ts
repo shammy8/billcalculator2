@@ -29,11 +29,6 @@ interface SharedBy {
   settled: boolean;
 }
 
-export interface NewItemWithBill {
-  newItem: Item;
-  billId: string;
-}
-
 export interface NewBill {
   name: string;
   usersArray: string[];

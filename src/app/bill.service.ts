@@ -10,7 +10,6 @@ import {
   DeleteItem,
   Item,
   NewBill,
-  NewItemWithBill,
 } from './model/bill.model';
 
 @Injectable({
@@ -47,11 +46,9 @@ export class BillService {
       .pipe(tap((items) => console.log('get items', items)));
   }
 
-  addItem(newItemWithBill: NewItemWithBill) {
-    // const doc = this.store.doc<Bill>(`bills/${newItemWithBill.bill.uid}`);
-    // doc.update({
-    //   [`items.${nanoid(8)}`]: newItemWithBill.newItem,
-    // });
+  addItem(newItem: Item, billId: string) {
+    const collection = this.store.collection<Item>(`bills/${billId}/items`);
+    collection.add(newItem);
   }
 
   itemChange(item: Item, billId: string) {
