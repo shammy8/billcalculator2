@@ -40,6 +40,7 @@ import { AddBillComponent } from './add-bill/add-bill.component';
 import { AddUsersEditorsComponent } from './add-users-editors/add-users-editors.component';
 import { CalculateComponent } from './calculate/calculate.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { ItemComponent } from './item/item.component';
 
 const routes: Routes = [
   {
@@ -72,6 +73,7 @@ const routes: Routes = [
     AddBillComponent,
     AddUsersEditorsComponent,
     CalculateComponent,
+    ItemComponent,
   ],
   imports: [
     BrowserModule,

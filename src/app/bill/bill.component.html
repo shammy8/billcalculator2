@@ -13,65 +13,15 @@
   </div>
 
   <div class="items">
-    <ng-container *ngFor="let item of billWithItems.items">
-      <div class="item-header">
-        <div class="description">
-          {{ item.description }}
-          <button
-            pButton
-            icon="pi pi-trash"
-            class="p-button-text p-button-sm p-button-secondary"
-            style="padding: 0; width: 1.5rem"
-            (click)="
-              deleteItem({
-                event: $event,
-                itemId: item.id,
-                item: item
-              })
-            "
-          ></button>
-        </div>
-        <div class="price">
-          £{{ item.cost | number: '1.2-2' }}
-          <div class="paid-by">
-            paid by
-            <span class="name">
-              {{ item.paidBy }}
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="sharedBy-grid">
-        <div
-          class="p-mt-1 p-mb-1 p-d-flex p-ai-center"
-          [ngClass]="{ 'justify-self-right': j % 2 === 1 }"
-          *ngFor="let sharedBy of item.sharedBy; let j = index"
-        >
-          <label class="p-mr-2" *ngIf="j % 2 === 1">{{
-            sharedBy.friend
-          }}</label>
-          <p-inputSwitch
-            pTooltip="Can't edit the original payer of the item"
-            [disabled]="sharedBy.friend === item.paidBy"
-            [tooltipDisabled]="sharedBy.friend !== item.paidBy"
-            tooltipPosition="top"
-            [ngModel]="sharedBy.settled"
-            (onChange)="
-              settledChange$.next({
-                checked: $event.checked,
-                itemKey: item.id,
-                sharedByIndex: j,
-                billId: billWithItems.id!
-              })
-            "
-          ></p-inputSwitch>
-          <label class="p-ml-2" *ngIf="j % 2 === 0">{{
-            sharedBy.friend
-          }}</label>
-        </div>
-      </div>
-      <p-divider></p-divider>
-    </ng-container>
+    <bc-item
+      *ngFor="let item of billWithItems.items; trackBy: itemTrackBy"
+      [item]="item"
+      (itemChange)="
+        itemsChange$.next({ item: $event, billId: billWithItems.id })
+      "
+      (deleteItem)="deleteItem({ item: $event, billId: billWithItems.id })"
+    >
+    </bc-item>
   </div>
 
   <!-- <p-dialog

@@ -51,13 +51,6 @@ export interface NewItemWithBill {
   bill: Bill;
 }
 
-export interface SettledChange {
-  checked: boolean;
-  itemKey: string;
-  sharedByIndex: number;
-  billId: string;
-}
-
 export interface NewBill {
   name: string;
   usersArray: string[];

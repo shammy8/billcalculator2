@@ -1,0 +1,46 @@
+<form [formGroup]="form">
+  <div class="item-header">
+    <div class="description">
+      {{ item.description }}
+      <button
+        pButton
+        icon="pi pi-trash"
+        class="p-button-text p-button-sm p-button-secondary"
+        style="padding: 0; width: 1.5rem"
+        (click)="this.deleteItem.emit(this.item)"
+      ></button>
+    </div>
+    <div class="price">
+      £{{ item.cost | number: '1.2-2' }}
+      <div class="paid-by">
+        paid by
+        <span class="name">
+          {{ item.paidBy }}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="sharedBy-grid" formArrayName="sharedBy">
+    <div
+      class="p-mt-1 p-mb-1 p-d-flex p-ai-center"
+      [ngClass]="{ 'justify-self-right': j % 2 === 1 }"
+      *ngFor="let sharedBy of sharedByForm.controls; let j = index"
+      [formGroupName]="j"
+    >
+      <label class="p-mr-2" *ngIf="j % 2 === 1">{{
+        sharedBy.value.friend
+      }}</label>
+      <p-inputSwitch
+        pTooltip="Can't edit the original payer of the item"
+        [disabled]="sharedBy.value.friend === item.paidBy"
+        [tooltipDisabled]="sharedBy.value.friend !== item.paidBy"
+        tooltipPosition="top"
+        formControlName="settled"
+      ></p-inputSwitch>
+      <label class="p-ml-2" *ngIf="j % 2 === 0">{{
+        sharedBy.value.friend
+      }}</label>
+    </div>
+  </div>
+</form>
+<p-divider></p-divider>

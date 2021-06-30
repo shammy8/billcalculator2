@@ -1,23 +1,18 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
   OnDestroy,
   OnInit,
-  Output,
-  SimpleChanges,
 } from '@angular/core';
 import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
-import { KeyValue } from '@angular/common';
-import { combineLatest, Observable, of, Subject } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 import {
   debounceTime,
   groupBy,
   map,
   mergeMap,
-  switchMap,
   takeUntil,
+  tap,
 } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
@@ -30,7 +25,6 @@ import {
   ItemElement,
   Items,
   NewItemWithBill,
-  SettledChange,
 } from '../model/bill.model';
 import { ActivatedRoute } from '@angular/router';
 import { BillService } from '../bill.service';
@@ -68,10 +62,10 @@ export class BillComponent implements OnInit, OnDestroy {
         this.billService.getItemsForBill(billId!),
       ]);
     }),
-    map(([bill, items]) => ({ ...bill, items: items }))
+    map(([bill, items]) => ({ ...bill!, items: items }))
   );
 
-  settledChange$ = new Subject<SettledChange>();
+  itemsChange$ = new Subject<{ item: Item; billId: string }>();
 
   destroy = new Subject<void>();
 
@@ -118,18 +112,12 @@ export class BillComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
-    private billService: BillService
+    public billService: BillService
   ) {}
 
   ngOnInit(): void {
     // this.buildForm(this.bill.items);
-    this.handleEmitSettledChange();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.bill && !changes.bill.firstChange) {
-      this.buildForm(changes.bill.currentValue.items);
-    }
+    this.handleItemsChange();
   }
 
   buildForm(items: Items) {
@@ -167,35 +155,22 @@ export class BillComponent implements OnInit, OnDestroy {
     // }
   }
 
-  // private handleEmitItemsChanged() {
-  //   this.itemsForm.valueChanges
-  //     .pipe(takeUntil(this.destroy), debounceTime(2000)) // TODO? distinctUntilChanged(compareMethod) can pass in method to deep compare the object
-  //     .subscribe(() => {
-  //       this.itemsChanged.emit(this.itemsForm.getRawValue());
-  //     });
-  // }
-
   /**
-   * All sharedBy share this method so need groupBy
+   * All items share this method so need groupBy
    * TODO might be memory leak below need to check. takeUntil changing bills maybe?
    */
-  handleEmitSettledChange() {
-    // this.settledChange$
-    //   .pipe(
-    //     takeUntil(this.destroy),
-    //     groupBy((settleChanged) => settleChanged.sharedByKey),
-    //     mergeMap((settledChangedGrouped) =>
-    //       settledChangedGrouped.pipe(
-    //         debounceTime(100),
-    //         // distinctUntilChanged((curr, prev) => curr.checked === prev.checked) // don't need this?
-    //         switchMap((settleChanged) => {
-    //           this.onSettledChange.emit(settleChanged);
-    //           return of(settleChanged);
-    //         })
-    //       )
-    //     )
-    //   )
-    //   .subscribe();
+  handleItemsChange() {
+    this.itemsChange$
+      .pipe(
+        takeUntil(this.destroy),
+        groupBy((itemsChanged) => itemsChanged.item.id),
+        mergeMap((itemsChangedGrouped) =>
+          itemsChangedGrouped.pipe(debounceTime(1000))
+        )
+      )
+      .subscribe(({ item, billId }) =>
+        this.billService.itemChange(item, billId)
+      );
   }
 
   openAddItemDialog() {
@@ -218,21 +193,19 @@ export class BillComponent implements OnInit, OnDestroy {
     this.displayCalculateDialog = true;
   }
 
-  deleteItem({
-    event,
-    itemId,
-    item,
-  }: {
-    event: MouseEvent;
-    itemId: string;
-    item: Item;
-  }) {
+  itemTrackBy(index: number, item: Item) {
+    return item.id;
+  }
+
+  deleteItem({ item, billId }: { item: Item; billId: string }) {
     this.confirmationService.confirm({
-      target: event.target as undefined | EventTarget,
       message: `Are you sure you want to delete this item: ${item.description} £${item.cost}?`,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        // this.onItemDelete.emit({ billId: this.bill.id, itemId: itemId });
+        this.billService.deleteItem({
+          itemId: item.id,
+          billId,
+        });
       },
     });
   }

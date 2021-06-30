@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { nanoid } from 'nanoid';
-import { shareReplay, switchMap, tap } from 'rxjs/operators';
+import { share, shareReplay, switchMap, tap } from 'rxjs/operators';
 import {
   AddUsersEditorsWithBill,
   Bill,
@@ -12,7 +12,6 @@ import {
   Items,
   NewBill,
   NewItemWithBill,
-  SettledChange,
 } from './model/bill.model';
 
 @Injectable({
@@ -56,12 +55,11 @@ export class BillService {
     // });
   }
 
-  settledChanged(settleChange: SettledChange) {
-    // const doc = this.store.doc<Bill>(`bills/${settleChange.billId}`);
-    // doc.update({
-    //   [`items.${settleChange.itemKey}.sharedBy.${settleChange.sharedByKey}.settled`]:
-    //     settleChange.checked,
-    // });
+  itemChange(item: Item, billId: string) {
+    const doc = this.store.doc<Item>(`bills/${billId}/items/${item.id}`);
+    doc.update({
+      sharedBy: item.sharedBy,
+    });
   }
 
   addBill(newBill: NewBill, userUid: string) {
