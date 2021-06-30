@@ -11,10 +11,10 @@ import { NewBill } from '../model/bill.model';
         <input id="name-input" pInputText autofocus formControlName="name" />
       </div>
       <div class="p-field">
-        <label for="users-input">Users Display Name</label>
+        <label for="friends-input">Friends</label>
         <p-chips
-          id="users-input"
-          formControlName="usersArray"
+          id="friends-input"
+          formControlName="friends"
           [allowDuplicate]="false"
           separator=","
           [addOnBlur]="true"
@@ -24,7 +24,7 @@ import { NewBill } from '../model/bill.model';
         <label for="editors-input">Editors UID</label>
         <p-chips
           id="editors-input"
-          formControlName="editorsArray"
+          formControlName="editors"
           [allowDuplicate]="false"
           separator=","
           [addOnBlur]="true"
@@ -38,8 +38,8 @@ import { NewBill } from '../model/bill.model';
 export class AddBillComponent implements OnInit {
   form = this.fb.group({
     name: ['', [Validators.required]],
-    usersArray: [[], [Validators.required]],
-    editorsArray: [[]],
+    friends: [[], [Validators.required]],
+    editors: [[]],
   });
 
   @Output() addBill = new EventEmitter<NewBill>();
@@ -50,6 +50,6 @@ export class AddBillComponent implements OnInit {
 
   onAddBill() {
     this.addBill.emit(this.form.value);
-    this.form.reset({ name: '', usersArray: [], editorsArray: [] });
+    this.form.reset({ name: '', friends: [], editors: [] });
   }
 }

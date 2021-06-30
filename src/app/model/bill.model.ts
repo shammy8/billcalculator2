@@ -31,8 +31,8 @@ interface SharedBy {
 
 export interface NewBill {
   name: string;
-  usersArray: string[];
-  editorsArray: string[];
+  friends: string[];
+  editors: string[];
 }
 
 export interface AddUsersEditorsWithBill {

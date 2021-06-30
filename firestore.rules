@@ -10,19 +10,19 @@ service cloud.firestore {
       	return request.auth.uid in resource.data.users || request.auth.uid in resource.data.editors // TODO need to delete the first part when we move to new schema
       }
       function isCreator() {
-      	return request.auth.uid == resource.data.creatorUid
+      	return request.auth.uid == resource.data.creatorUid  // TODO need  to delete this line
+          || request.auth.uid == resource.data.creator
       }
 
       allow read: if isSignedIn() && isEditor();
       
     	allow create: if isSignedIn() &&
-        request.auth.uid in request.resource.data.users &&
-      	request.resource.data.creatorUid == request.auth.uid &&
+      	request.resource.data.creator == request.auth.uid &&
         request.resource.data.name is string &&
         request.resource.data.name.size() >= 1 &&
         request.resource.data.name.size() <= 20 &&
-        request.auth.uid in request.resource.data.users &&
-        request.resource.data.usersArray.size() > 0;
+        request.auth.uid in request.resource.data.editors &&
+        request.resource.data.friends.size() > 0;
       
       allow update: if isSignedIn() && isEditor() &&
         !request.resource.data.diff(resource.data).affectedKeys().hasAny(['name', 'creatorUid']);
