@@ -9,7 +9,6 @@ import {
   Bill,
   DeleteItem,
   Item,
-  Items,
   NewBill,
   NewItemWithBill,
 } from './model/bill.model';

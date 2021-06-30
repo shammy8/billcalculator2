@@ -29,26 +29,9 @@ interface SharedBy {
   settled: boolean;
 }
 
-export interface Items {
-  [key: string]: ItemElement;
-}
-
-export interface ItemElement {
-  description: string;
-  cost: number;
-  paidBy: string;
-  date: Date; // TODO firebase date??
-  sharedBy: SharedBy;
-}
-
-export interface SharedByElement {
-  user: string;
-  settled: boolean;
-}
-
 export interface NewItemWithBill {
-  newItem: ItemElement;
-  bill: Bill;
+  newItem: Item;
+  billId: string;
 }
 
 export interface NewBill {

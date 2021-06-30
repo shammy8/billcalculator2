@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Bill, Items, Ledger } from '../model/bill.model';
+import { Bill, Ledger } from '../model/bill.model';
 
 @Component({
   selector: 'bc-calculate',
@@ -27,7 +27,7 @@ export class CalculateComponent implements OnInit {
     // this.ledger = this.calculate(this.bill.items);
   }
 
-  calculate(items: Items) {
+  calculate(items: any) {
     // const ledger: Ledger = this.createObjectWithEveryone(
     //   this.createObjectWithEveryone<number>(0)
     // );

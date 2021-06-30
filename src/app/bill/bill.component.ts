@@ -22,8 +22,6 @@ import {
   BillWithId,
   DeleteItem,
   Item,
-  ItemElement,
-  Items,
   NewItemWithBill,
 } from '../model/bill.model';
 import { ActivatedRoute } from '@angular/router';
@@ -120,7 +118,7 @@ export class BillComponent implements OnInit, OnDestroy {
     this.handleItemsChange();
   }
 
-  buildForm(items: Items) {
+  buildForm(items: any) {
     // this.itemsForm = this.fb.group({});
     // for (let itemKey in items) {
     //   const itemFormElement = this.fb.group({
