@@ -5,12 +5,13 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
-import { combineLatest, Subject } from 'rxjs';
+import { combineLatest, of, Subject } from 'rxjs';
 import {
   debounceTime,
   groupBy,
   map,
   mergeMap,
+  switchMap,
   takeUntil,
   tap,
 } from 'rxjs/operators';
@@ -54,12 +55,17 @@ export class BillComponent implements OnInit, OnDestroy {
   billWithItems$ = this.billId$.pipe(
     mergeMap((billId) => {
       return combineLatest([
-        // get Single bill will fire twice as it first gets it from the cache as I call get all bills in main component
         this.billService.getSingleBill(billId!),
-        this.billService.getItemsForBill(billId!),
+        this.billService.fetchItemsForBill(billId!),
       ]);
     }),
     map(([bill, items]) => ({ ...bill!, items: items }))
+  );
+
+  itemStateChange$ = this.billId$.pipe(
+    switchMap((billId) =>
+      this.billService.fetchItemsForBillStateChanges(billId!)
+    )
   );
 
   itemsChange$ = new Subject<{ item: Item; billId: string }>();

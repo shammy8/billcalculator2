@@ -34,7 +34,7 @@ import { UserService } from '../user.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainAppComponent implements OnInit, OnDestroy {
-  bills$ = this.billService.getBills();
+  bills$ = this.billService.bills$;
 
   displaySidebar = false;
   displayAddBillDialog = false;
@@ -55,6 +55,7 @@ export class MainAppComponent implements OnInit, OnDestroy {
       if (!userDoc) return;
       this.router.navigate([userDoc.primaryBill]);
     });
+    this.billService.fetchBills();
   }
 
   openAddBillDialog() {
