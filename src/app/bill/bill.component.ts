@@ -62,12 +62,6 @@ export class BillComponent implements OnInit, OnDestroy {
     map(([bill, items]) => ({ ...bill!, items: items }))
   );
 
-  itemStateChange$ = this.billId$.pipe(
-    switchMap((billId) =>
-      this.billService.fetchItemsForBillStateChanges(billId!)
-    )
-  );
-
   itemsChange$ = new Subject<{ item: Item; billId: string }>();
 
   destroy = new Subject<void>();
@@ -123,41 +117,6 @@ export class BillComponent implements OnInit, OnDestroy {
     this.handleItemsChange();
   }
 
-  buildForm(items: any) {
-    // this.itemsForm = this.fb.group({});
-    // for (let itemKey in items) {
-    //   const itemFormElement = this.fb.group({
-    //     description: '',
-    //     paidBy: '',
-    //     cost: '',
-    //     date: null,
-    //   });
-    //   itemFormElement.patchValue({
-    //     description: items[itemKey].description,
-    //     paidBy: items[itemKey].paidBy,
-    //     cost: items[itemKey].cost,
-    //     date: items[itemKey].date,
-    //   });
-    //   const sharedByFormList = this.fb.group({});
-    //   for (let sharedByKey in items[itemKey].sharedBy) {
-    //     const sharedByFormElement = this.fb.group({
-    //       user: '',
-    //       settled: '',
-    //     });
-    //     sharedByFormElement.patchValue({
-    //       user: items[itemKey].sharedBy[sharedByKey].user,
-    //       settled: items[itemKey].sharedBy[sharedByKey].settled,
-    //     });
-    //     if (sharedByFormElement.get('user')?.value === items[itemKey].paidBy) {
-    //       sharedByFormElement.get(`settled`)?.disable();
-    //     }
-    //     sharedByFormList.addControl(sharedByKey, sharedByFormElement);
-    //   }
-    //   itemFormElement.addControl('sharedBy', sharedByFormList);
-    //   this.itemsForm.addControl(itemKey, itemFormElement);
-    // }
-  }
-
   /**
    * All items share this method so need groupBy
    * TODO might be memory leak below need to check. takeUntil changing bills maybe?
@@ -168,7 +127,7 @@ export class BillComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy),
         groupBy((itemsChanged) => itemsChanged.item.id),
         mergeMap((itemsChangedGrouped) =>
-          itemsChangedGrouped.pipe(debounceTime(1000))
+          itemsChangedGrouped.pipe(debounceTime(200))
         )
       )
       .subscribe(({ item, billId }) =>

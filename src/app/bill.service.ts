@@ -33,7 +33,7 @@ export class BillService {
             )
             .valueChanges({ idField: 'id' })
         ),
-        tap((bills) => console.log('getBills', bills))
+        tap((bills) => console.log('READ Bills', bills))
       )
       .subscribe((bills) => this.billsRS.next(bills));
   }
@@ -49,23 +49,25 @@ export class BillService {
   fetchItemsForBill(billId: string) {
     return this.store
       .collection<Item>(`bills/${billId}/items`)
-      .valueChanges({ idField: 'id' });
-    // .pipe(tap((items) => console.log('get items', items)));
+      .valueChanges({ idField: 'id' })
+      .pipe(tap((items) => console.log('READ items', items)));
   }
 
-  fetchItemsForBillStateChanges(billId: string) {
-    return this.store
-      .collection<Item>(`bills/${billId}/items`)
-      .stateChanges()
-      .pipe(tap((items) => console.log('get items state change', items)));
-  }
+  // fetchItemsForBillStateChanges(billId: string) {
+  //   return this.store
+  //     .collection<Item>(`bills/${billId}/items`)
+  //     .stateChanges()
+  //     .pipe(tap((items) => console.log('get items state change', items)));
+  // }
 
   addItem(newItem: Item, billId: string) {
+    console.log('CREATE ITEM');
     const collection = this.store.collection<Item>(`bills/${billId}/items`);
     collection.add(newItem);
   }
 
   itemChange(item: Item, billId: string) {
+    console.log('UPDATE item');
     const doc = this.store.doc<Item>(`bills/${billId}/items/${item.id}`);
     doc.update({
       sharedBy: item.sharedBy,
@@ -73,6 +75,7 @@ export class BillService {
   }
 
   addBill(newBill: NewBill, userUid: string) {
+    console.log('CREATE BILL');
     const editors: { [key: string]: boolean } = {};
     for (let editor in newBill.editors) {
       editors[newBill.editors[editor]] = true;
