@@ -127,7 +127,7 @@ export class BillComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy),
         groupBy((itemsChanged) => itemsChanged.item.id),
         mergeMap((itemsChangedGrouped) =>
-          itemsChangedGrouped.pipe(debounceTime(200))
+          itemsChangedGrouped.pipe(debounceTime(500))
         )
       )
       .subscribe(({ item, billId }) =>

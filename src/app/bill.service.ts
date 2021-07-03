@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { nanoid } from 'nanoid';
 import { ReplaySubject } from 'rxjs';
-import { map, share, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { auditTime, map, switchMap, tap } from 'rxjs/operators';
 import {
   AddUsersEditorsWithBill,
   Bill,
@@ -46,11 +46,15 @@ export class BillService {
     );
   }
 
+  // TODO changing bills or loading first bill will still wait the 800ms in the auditTime below.
   fetchItemsForBill(billId: string) {
     return this.store
       .collection<Item>(`bills/${billId}/items`)
       .valueChanges({ idField: 'id' })
-      .pipe(tap((items) => console.log('READ items', items)));
+      .pipe(
+        auditTime(800),
+        tap((items) => console.log('READ items', items))
+      );
   }
 
   // fetchItemsForBillStateChanges(billId: string) {
