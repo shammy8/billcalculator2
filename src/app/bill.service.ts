@@ -67,7 +67,7 @@ export class BillService {
   addItem(newItem: Item, billId: string) {
     console.log('CREATE ITEM');
     const collection = this.store.collection<Item>(`bills/${billId}/items`);
-    collection.add(newItem);
+    collection.add({ ...newItem, cost: +newItem.cost });
   }
 
   itemChange(item: Item, billId: string) {
