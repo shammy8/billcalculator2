@@ -53,7 +53,7 @@ export class BillComponent implements OnInit, OnDestroy {
 
   // TODO handle when not allowed or if doc doesn't exist
   billWithItems$ = this.billId$.pipe(
-    mergeMap((billId) => {
+    switchMap((billId) => {
       return combineLatest([
         this.billService.getSingleBill(billId!),
         this.billService.fetchItemsForBill(billId!),
