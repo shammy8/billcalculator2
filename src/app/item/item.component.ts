@@ -27,7 +27,10 @@ export class ItemComponent implements OnInit, OnChanges {
   @Input() item!: Item;
 
   @Output() itemChange = new EventEmitter<any>();
-  @Output() deleteItem = new EventEmitter<Item>();
+  @Output() deleteItem = new EventEmitter<{
+    item: Item;
+    event: MouseEvent;
+  }>();
 
   constructor(private fb: FormBuilder) {}
 

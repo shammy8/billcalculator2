@@ -19,7 +19,13 @@
       (itemChange)="
         itemsChange$.next({ item: $event, billId: billWithItems.id })
       "
-      (deleteItem)="deleteItem({ item: $event, billId: billWithItems.id })"
+      (deleteItem)="
+        deleteItem({
+          item: $event.item,
+          event: $event.event,
+          billId: billWithItems.id
+        })
+      "
     >
     </bc-item>
   </div>

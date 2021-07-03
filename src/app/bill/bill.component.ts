@@ -159,8 +159,17 @@ export class BillComponent implements OnInit, OnDestroy {
     return item.id;
   }
 
-  deleteItem({ item, billId }: { item: Item; billId: string }) {
+  deleteItem({
+    item,
+    event,
+    billId,
+  }: {
+    item: Item;
+    event: MouseEvent;
+    billId: string;
+  }) {
     this.confirmationService.confirm({
+      target: event?.target as undefined | EventTarget,
       message: `Are you sure you want to delete this item: ${item.description} £${item.cost}?`,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
