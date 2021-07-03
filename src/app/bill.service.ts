@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { nanoid } from 'nanoid';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { auditTime, map, switchMap, take, tap } from 'rxjs/operators';
 import {
   AddUsersEditorsWithBill,
@@ -11,6 +11,7 @@ import {
   BillWithId,
   DeleteItem,
   Item,
+  ItemWithId,
   NewBill,
 } from './model/bill.model';
 
@@ -47,7 +48,7 @@ export class BillService {
   }
 
   // TODO changing bills or loading first bill will still wait the 800ms in the auditTime below.
-  fetchItemsForBill(billId: string) {
+  fetchItemsForBill(billId: string): Observable<ItemWithId[]> {
     return this.store
       .collection<Item>(`bills/${billId}/items`)
       .valueChanges({ idField: 'id' })
@@ -70,7 +71,7 @@ export class BillService {
     collection.add({ ...newItem, cost: +newItem.cost });
   }
 
-  itemChange(item: Item, billId: string) {
+  itemChange(item: ItemWithId, billId: string) {
     console.log('UPDATE item');
     const doc = this.store.doc<Item>(`bills/${billId}/items/${item.id}`);
     doc.update({

@@ -16,13 +16,14 @@ export interface UserDoc {
 }
 
 export interface Item {
-  id: string;
   description: string;
   cost: number;
   paidBy: string;
   date: Date; // TODO firebase date??
   sharedBy: SharedBy[];
 }
+
+export type ItemWithId = Item & WithId;
 
 interface SharedBy {
   friend: string;

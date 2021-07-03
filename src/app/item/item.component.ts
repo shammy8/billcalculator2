@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
-import { Item } from '../model/bill.model';
+import { Item, ItemWithId } from '../model/bill.model';
 
 @Component({
   selector: 'bc-item',
@@ -24,11 +24,11 @@ export class ItemComponent implements OnInit, OnChanges {
     return this.form.get('sharedBy') as FormArray;
   }
 
-  @Input() item!: Item;
+  @Input() item!: ItemWithId;
 
   @Output() itemChange = new EventEmitter<any>();
   @Output() deleteItem = new EventEmitter<{
-    item: Item;
+    item: ItemWithId;
     event: MouseEvent;
   }>();
 

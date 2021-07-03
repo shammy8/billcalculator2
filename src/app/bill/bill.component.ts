@@ -23,6 +23,7 @@ import {
   BillWithId,
   DeleteItem,
   Item,
+  ItemWithId,
 } from '../model/bill.model';
 import { ActivatedRoute } from '@angular/router';
 import { BillService } from '../bill.service';
@@ -67,7 +68,7 @@ export class BillComponent implements OnInit, OnDestroy {
     map(([bill, items]) => ({ ...bill!, items: items }))
   );
 
-  itemsChange$ = new Subject<{ item: Item; billId: string }>();
+  itemsChange$ = new Subject<{ item: ItemWithId; billId: string }>();
 
   destroy = new Subject<void>();
 
@@ -161,7 +162,7 @@ export class BillComponent implements OnInit, OnDestroy {
     this.displayCalculateDialog = true;
   }
 
-  itemTrackBy(index: number, item: Item) {
+  itemTrackBy(index: number, item: ItemWithId) {
     return item.id;
   }
 
@@ -182,7 +183,7 @@ export class BillComponent implements OnInit, OnDestroy {
     event,
     billId,
   }: {
-    item: Item;
+    item: ItemWithId;
     event: MouseEvent;
     billId: string;
   }) {
