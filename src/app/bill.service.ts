@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { nanoid } from 'nanoid';
 import { ReplaySubject } from 'rxjs';
-import { auditTime, map, switchMap, tap } from 'rxjs/operators';
+import { auditTime, map, switchMap, take, tap } from 'rxjs/operators';
 import {
   AddUsersEditorsWithBill,
   Bill,
@@ -134,8 +134,10 @@ export class BillService {
     doc.delete();
   }
 
-  setAsPrimaryBill(billId: string, uid: string) {
-    // const doc = this.store.doc(`users/${uid}`);
-    // doc.update({ primaryBill: billId });
+  setAsPrimaryBill(billId: string) {
+    this.auth.user.pipe(take(1)).subscribe((user) => {
+      const doc = this.store.doc(`users/${user!.uid}`);
+      doc.update({ primaryBill: billId });
+    });
   }
 }

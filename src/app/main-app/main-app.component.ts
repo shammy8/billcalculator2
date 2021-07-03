@@ -7,7 +7,6 @@ import {
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BillService } from '../bill.service';
@@ -44,7 +43,6 @@ export class MainAppComponent implements OnInit, OnDestroy {
 
   constructor(
     private auth: AngularFireAuth,
-    private store: AngularFirestore,
     public router: Router,
     public billService: BillService,
     public clipboard: Clipboard,

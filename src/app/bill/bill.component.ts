@@ -40,6 +40,7 @@ export class BillComponent implements OnInit, OnDestroy {
 
   itemsForm = this.fb.group({});
 
+  billId = '';
   billId$ = this.route.paramMap.pipe(
     map((params) => {
       const billId = params.get('billId');
@@ -47,6 +48,7 @@ export class BillComponent implements OnInit, OnDestroy {
         // TODO handle when no billId
         return null;
       }
+      this.billId = billId;
       return billId;
     })
   );
@@ -85,7 +87,7 @@ export class BillComponent implements OnInit, OnDestroy {
       label: 'Set as primary bill',
       icon: 'pi pi-bookmark',
       command: (e) => {
-        // this.onSetAsPrimaryBill.emit(this.bill.id);
+        this.billService.setAsPrimaryBill(this.billId);
       },
     },
     {
