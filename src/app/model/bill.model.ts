@@ -25,9 +25,13 @@ export interface Item {
 
 export type ItemWithId = Item & WithId;
 
-interface SharedBy {
+export interface SharedBy {
   friend: string;
   settled: boolean;
+}
+
+export interface BillWithItems extends BillWithId {
+  items: ItemWithId[];
 }
 
 export interface NewBill {

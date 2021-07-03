@@ -60,15 +60,18 @@
     ></bc-add-users-editors>
   </p-dialog> -->
 
-  <!-- <p-dialog
+  <p-dialog
     header="Calculate"
     [(visible)]="displayCalculateDialog"
     [style]="{ width: '100%' }"
     [modal]="true"
     [dismissableMask]="true"
   >
-    <bc-calculate *ngIf="displayCalculateDialog" [bill]="bill"></bc-calculate>
-  </p-dialog> -->
+    <bc-calculate
+      *ngIf="displayCalculateDialog"
+      [billWithItems]="billWithItems"
+    ></bc-calculate>
+  </p-dialog>
 
   <p-confirmPopup></p-confirmPopup>
 </ng-container>
