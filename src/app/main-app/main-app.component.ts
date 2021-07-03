@@ -4,13 +4,12 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { combineLatest, Observable, of } from 'rxjs';
-import { filter, map, share, switchMap, take, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { BillService } from '../bill.service';
 import { Bill } from '../model/bill.model';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -41,6 +40,8 @@ export class MainAppComponent implements OnInit, OnDestroy {
 
   user$ = this.auth.user;
 
+  destroy = new Subject<void>();
+
   constructor(
     private auth: AngularFireAuth,
     private store: AngularFirestore,
@@ -51,10 +52,13 @@ export class MainAppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userService.userDoc$.subscribe((userDoc) => {
-      if (!userDoc) return;
-      this.router.navigate([userDoc.primaryBill]);
-    });
+    this.userService.userDoc$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((userDoc) => {
+        if (!userDoc) return;
+        this.router.navigate([userDoc.primaryBill]);
+      });
+
     this.billService.fetchBills();
   }
 
@@ -72,5 +76,7 @@ export class MainAppComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.destroy.next();
+  }
 }
