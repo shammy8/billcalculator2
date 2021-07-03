@@ -38,6 +38,9 @@ export class BillComponent implements OnInit, OnDestroy {
   displayAddUsersDialog = false;
   displayCalculateDialog = false;
 
+  order: 'description' | 'cost' | 'date' = 'date';
+  reverse = true;
+
   itemsForm = this.fb.group({});
 
   billId = '';
@@ -91,18 +94,19 @@ export class BillComponent implements OnInit, OnDestroy {
       },
     },
     {
-      label: 'Order by description',
-      icon: 'pi pi-user-plus',
-      command: (e) => {
-        // this.order = (
-        //   a: KeyValue<string, AbstractControl>,
-        //   b: KeyValue<string, AbstractControl>
-        // ) => {
-        //   const valueA = a.value.value.date.seconds;
-        //   const valueB = b.value.value.date.seconds;
-        //   return valueA > valueB ? -1 : valueB > valueA ? 1 : 0;
-        // };
-      },
+      label: 'Order alphabetically',
+      icon: 'pi pi-sort-alpha-down',
+      command: (e) => this.handleOrdering('description', false),
+    },
+    {
+      label: 'Order by cost',
+      icon: 'pi pi-sort-numeric-down',
+      command: (e) => this.handleOrdering('cost', false),
+    },
+    {
+      label: 'Order by date',
+      icon: 'pi pi-sort-amount-down',
+      command: (e) => this.handleOrdering('date'),
     },
     { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
   ];
@@ -159,6 +163,18 @@ export class BillComponent implements OnInit, OnDestroy {
 
   itemTrackBy(index: number, item: Item) {
     return item.id;
+  }
+
+  handleOrdering(
+    order: 'description' | 'cost' | 'date',
+    reverseFirst: boolean = true
+  ) {
+    if (this.order === order) {
+      this.reverse = !this.reverse;
+    } else {
+      this.order = order;
+      this.reverse = reverseFirst;
+    }
   }
 
   deleteItem({

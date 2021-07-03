@@ -14,7 +14,7 @@
 
   <div class="items">
     <bc-item
-      *ngFor="let item of billWithItems.items; trackBy: itemTrackBy"
+      *ngFor="let item of billWithItems.items | orderBy: order:reverse"
       [item]="item"
       (itemChange)="
         itemsChange$.next({ item: $event, billId: billWithItems.id })
