@@ -9,6 +9,9 @@ import { NewBill } from '../model/bill.model';
       <div class="p-field">
         <label for="name-input">Name</label>
         <input id="name-input" pInputText autofocus formControlName="name" />
+        <span *ngIf="form.get('name')?.errors?.maxlength" class="p-error">
+          Max of 20 characters
+        </span>
       </div>
       <div class="p-field">
         <label for="friends-input">Friends</label>
@@ -37,7 +40,7 @@ import { NewBill } from '../model/bill.model';
 })
 export class AddBillComponent implements OnInit {
   form = this.fb.group({
-    name: ['', [Validators.required]],
+    name: ['', [Validators.required, Validators.maxLength(20)]],
     friends: [[], [Validators.required]],
     editors: [[]],
   });
@@ -49,6 +52,7 @@ export class AddBillComponent implements OnInit {
   ngOnInit(): void {}
 
   onAddBill() {
+    this.form.get('name')?.getError('maxLength');
     this.addBill.emit(this.form.value);
     this.form.reset({ name: '', friends: [], editors: [] });
   }
