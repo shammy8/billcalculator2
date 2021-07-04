@@ -36,7 +36,7 @@ import { BillService } from '../bill.service';
 })
 export class BillComponent implements OnInit, OnDestroy {
   displayAddItemDialog = false;
-  // displayAddUsersDialog = false;
+  displayAddEditorsDialog = false;
   displayAddFriendsDialog = false;
   displayCalculateDialog = false;
 
@@ -86,6 +86,13 @@ export class BillComponent implements OnInit, OnDestroy {
       icon: 'pi pi-user-plus',
       command: (e) => {
         this.openAddFriendsDialog();
+      },
+    },
+    {
+      label: 'Add editors',
+      icon: 'pi pi-user-plus',
+      command: (e) => {
+        this.openAddEditorsDialog();
       },
     },
     {
@@ -149,6 +156,14 @@ export class BillComponent implements OnInit, OnDestroy {
 
   closeAddItemDialog() {
     this.displayAddItemDialog = false;
+  }
+
+  openAddEditorsDialog() {
+    this.displayAddEditorsDialog = true;
+  }
+
+  closeAddEditorsDialog() {
+    this.displayAddEditorsDialog = false;
   }
 
   openAddFriendsDialog() {

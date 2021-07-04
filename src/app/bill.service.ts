@@ -97,39 +97,17 @@ export class BillService {
     });
   }
 
-  /**
-   * If user is adding more editors it will run a transaction as we need to check if the editor already exists in the map
-   * If only users are to be added to usersArray then just run a normal update
-   */
-  addUsersEditors({ bill, usersAndEditors }: any) {
-    // if (usersAndEditors.editorsArray.length !== 0) {
-    //   const docRef = this.store.firestore.doc(`bills/${bill.uid}`);
-    //   this.store.firestore.runTransaction(async (transaction) => {
-    //     const billDoc = await transaction.get(docRef);
-    //     if (!billDoc.exists) {
-    //       return;
-    //     }
-    //     const newUsers: { [key: string]: string } = billDoc.data()!.users;
-    //     for (const user of usersAndEditors.editorsArray) {
-    //       if (billDoc.data()!.users[user] == null) {
-    //         newUsers[user] = '';
-    //       }
-    //     }
-    //     transaction.update(docRef, {
-    //       users: newUsers,
-    //       usersArray: firebase.firestore.FieldValue.arrayUnion(
-    //         ...usersAndEditors.usersArray
-    //       ),
-    //     });
-    //   });
-    // } else {
-    //   const doc = this.store.doc(`bills/${bill.uid}`);
-    //   doc.update({
-    //     usersArray: firebase.firestore.FieldValue.arrayUnion(
-    //       ...usersAndEditors.usersArray
-    //     ),
-    //   });
-    // }
+  addEditors(
+    newEditorsArray: string[],
+    billId: string,
+    editors: { [key: string]: boolean }
+  ) {
+    console.log('UPDATE editors in bill');
+    for (const editor of newEditorsArray) {
+      editors[editor] = true;
+    }
+    const doc = this.store.firestore.doc(`bills/${billId}`);
+    doc.update({ editors });
   }
 
   addFriends(friends: string[], billId: string) {

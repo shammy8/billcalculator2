@@ -46,7 +46,7 @@
   </p-dialog>
 
   <p-dialog
-    header="Add Friends"
+    header="Add friends"
     [(visible)]="displayAddFriendsDialog"
     [style]="{ width: '100%' }"
     [modal]="true"
@@ -58,6 +58,21 @@
         closeAddFriendsDialog()
       "
     ></bc-add-friends>
+  </p-dialog>
+
+  <p-dialog
+    header="Add editors"
+    [(visible)]="displayAddEditorsDialog"
+    [style]="{ width: '100%' }"
+    [modal]="true"
+    [dismissableMask]="true"
+  >
+    <bc-add-editors
+      (addEditors)="
+        billService.addEditors($event, billWithItems.id, billWithItems.editors);
+        closeAddEditorsDialog()
+      "
+    ></bc-add-editors>
   </p-dialog>
 
   <p-dialog

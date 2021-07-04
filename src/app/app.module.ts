@@ -37,7 +37,7 @@ import { MainAppComponent } from './main-app/main-app.component';
 import { BillComponent } from './bill/bill.component';
 import { AddItemComponent } from './add-item/add-item.component';
 import { AddBillComponent } from './add-bill/add-bill.component';
-import { AddUsersEditorsComponent } from './add-users-editors/add-users-editors.component';
+import { AddEditorsComponent } from './add-editors/add-editors.component';
 import { CalculateComponent } from './calculate/calculate.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ItemComponent } from './item/item.component';
@@ -74,7 +74,7 @@ const routes: Routes = [
     BillComponent,
     AddItemComponent,
     AddBillComponent,
-    AddUsersEditorsComponent,
+    AddEditorsComponent,
     CalculateComponent,
     ItemComponent,
     AddFriendsComponent,
