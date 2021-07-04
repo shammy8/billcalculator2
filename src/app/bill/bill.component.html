@@ -45,20 +45,20 @@
     ></bc-add-item>
   </p-dialog>
 
-  <!-- <p-dialog
-    header="Add Users and Editors"
-    [(visible)]="displayAddUsersDialog"
+  <p-dialog
+    header="Add Friends"
+    [(visible)]="displayAddFriendsDialog"
     [style]="{ width: '100%' }"
     [modal]="true"
     [dismissableMask]="true"
   >
-    <bc-add-users-editors
-      (addUsersEditors)="
-        addUsersEditors.emit({ usersAndEditors: $event, bill: bill });
-        closeAddUsersDialog()
+    <bc-add-friends
+      (addFriends)="
+        billService.addFriends($event, billWithItems.id);
+        closeAddFriendsDialog()
       "
-    ></bc-add-users-editors>
-  </p-dialog> -->
+    ></bc-add-friends>
+  </p-dialog>
 
   <p-dialog
     header="Calculate"

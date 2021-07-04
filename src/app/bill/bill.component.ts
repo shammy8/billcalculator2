@@ -36,7 +36,8 @@ import { BillService } from '../bill.service';
 })
 export class BillComponent implements OnInit, OnDestroy {
   displayAddItemDialog = false;
-  displayAddUsersDialog = false;
+  // displayAddUsersDialog = false;
+  displayAddFriendsDialog = false;
   displayCalculateDialog = false;
 
   order: 'description' | 'cost' | 'date' = 'date';
@@ -81,10 +82,10 @@ export class BillComponent implements OnInit, OnDestroy {
       },
     },
     {
-      label: 'Add users and editors',
+      label: 'Add friends',
       icon: 'pi pi-user-plus',
       command: (e) => {
-        this.openAddUsersDialog();
+        this.openAddFriendsDialog();
       },
     },
     {
@@ -150,12 +151,12 @@ export class BillComponent implements OnInit, OnDestroy {
     this.displayAddItemDialog = false;
   }
 
-  openAddUsersDialog() {
-    this.displayAddUsersDialog = true;
+  openAddFriendsDialog() {
+    this.displayAddFriendsDialog = true;
   }
 
-  closeAddUsersDialog() {
-    this.displayAddUsersDialog = false;
+  closeAddFriendsDialog() {
+    this.displayAddFriendsDialog = false;
   }
 
   openCalculateDialog() {

@@ -43,6 +43,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { ItemComponent } from './item/item.component';
 import { OrderModule } from 'ngx-order-pipe';
 import { EditableModule } from '@ngneat/edit-in-place';
+import { AddFriendsComponent } from './add-friends/add-friends.component';
 
 const routes: Routes = [
   {
@@ -76,6 +77,7 @@ const routes: Routes = [
     AddUsersEditorsComponent,
     CalculateComponent,
     ItemComponent,
+    AddFriendsComponent,
   ],
   imports: [
     BrowserModule,

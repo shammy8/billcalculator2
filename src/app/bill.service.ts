@@ -101,7 +101,7 @@ export class BillService {
    * If user is adding more editors it will run a transaction as we need to check if the editor already exists in the map
    * If only users are to be added to usersArray then just run a normal update
    */
-  addUsersEditors({ bill, usersAndEditors }: AddUsersEditorsWithBill) {
+  addUsersEditors({ bill, usersAndEditors }: any) {
     // if (usersAndEditors.editorsArray.length !== 0) {
     //   const docRef = this.store.firestore.doc(`bills/${bill.uid}`);
     //   this.store.firestore.runTransaction(async (transaction) => {
@@ -130,6 +130,14 @@ export class BillService {
     //     ),
     //   });
     // }
+  }
+
+  addFriends(friends: string[], billId: string) {
+    console.log('UPDATE friends in bill');
+    const doc = this.store.doc(`bills/${billId}`);
+    doc.update({
+      friends: firebase.firestore.FieldValue.arrayUnion(...friends),
+    });
   }
 
   deleteItem({ billId, itemId }: DeleteItem) {
