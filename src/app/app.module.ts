@@ -42,6 +42,7 @@ import { CalculateComponent } from './calculate/calculate.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ItemComponent } from './item/item.component';
 import { OrderModule } from 'ngx-order-pipe';
+import { EditableModule } from '@ngneat/edit-in-place';
 
 const routes: Routes = [
   {
@@ -104,6 +105,7 @@ const routes: Routes = [
     ClipboardModule,
     ConfirmPopupModule,
     OrderModule,
+    EditableModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable

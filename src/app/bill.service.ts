@@ -75,6 +75,8 @@ export class BillService {
     console.log('UPDATE item');
     const doc = this.store.doc<Item>(`bills/${billId}/items/${item.id}`);
     doc.update({
+      description: item.description,
+      cost: item.cost,
       sharedBy: item.sharedBy,
     });
   }

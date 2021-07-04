@@ -1,7 +1,14 @@
 <form [formGroup]="form">
   <div class="item-header">
     <div class="description">
-      {{ item.description }}
+      <editable (save)="updateItemModel('description')">
+        <ng-template viewMode>
+          {{ item.description }}
+        </ng-template>
+        <ng-template editMode>
+          <input type="text" pInputText formControlName="description" />
+        </ng-template>
+      </editable>
       <button
         pButton
         icon="pi pi-trash"
@@ -11,7 +18,18 @@
       ></button>
     </div>
     <div class="price">
-      £{{ item.cost | number: '1.2-2' }}
+      <editable (save)="updateItemModel('cost')">
+        <ng-template viewMode> £{{ item.cost | number: '1.2-2' }} </ng-template>
+        <ng-template editMode>
+          <p-inputNumber
+            formControlName="cost"
+            mode="currency"
+            currency="GBP"
+            type="number"
+          ></p-inputNumber>
+          <!-- TODO Need to change above to the calculable input in add-item component -->
+        </ng-template>
+      </editable>
       <div class="paid-by">
         paid by
         <span class="name">

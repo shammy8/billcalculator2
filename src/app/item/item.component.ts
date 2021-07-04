@@ -47,8 +47,8 @@ export class ItemComponent implements OnInit, OnChanges {
   private initialiseForm() {
     this.form = this.fb.group({
       id: this.item.id,
-      description: this.item.description,
-      cost: this.item.cost,
+      description: [this.item.description, { updateOn: 'blur' }],
+      cost: [this.item.cost, { updateOn: 'blur' }],
       paidBy: this.item.paidBy,
       sharedBy: this.fb.array([]),
     });
@@ -69,6 +69,10 @@ export class ItemComponent implements OnInit, OnChanges {
     this.formChangesSub = this.form.valueChanges.subscribe((changes) =>
       this.itemChange.emit(changes)
     );
+  }
+
+  updateItemModel(field: 'description' | 'cost') {
+    (this.item[field] as any) = this.form.get(field)!.value;
   }
 
   ngOnDestroy() {
