@@ -40,14 +40,6 @@ export interface NewBill {
   editors: string[];
 }
 
-export interface AddUsersEditorsWithBill {
-  usersAndEditors: {
-    usersArray: string[];
-    editorsArray: string[];
-  };
-  bill: Bill;
-}
-
 export interface Ledger {
   [key: string]: { [key: string]: number };
 }

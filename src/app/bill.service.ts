@@ -6,7 +6,6 @@ import { nanoid } from 'nanoid';
 import { Observable, ReplaySubject } from 'rxjs';
 import { auditTime, map, switchMap, take, tap } from 'rxjs/operators';
 import {
-  AddUsersEditorsWithBill,
   Bill,
   BillWithId,
   DeleteItem,

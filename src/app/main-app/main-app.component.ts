@@ -5,14 +5,11 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BillService } from '../bill.service';
-import { Bill } from '../model/bill.model';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { UserDoc } from '../model/user.model';
 import { UserService } from '../user.service';
 
 @Component({

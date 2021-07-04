@@ -8,8 +8,8 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
-import { Item, ItemWithId } from '../model/bill.model';
+import { Subscription } from 'rxjs';
+import { ItemWithId } from '../model/bill.model';
 
 @Component({
   selector: 'bc-item',

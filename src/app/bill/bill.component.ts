@@ -4,7 +4,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { combineLatest, of, Subject } from 'rxjs';
 import {
   debounceTime,
@@ -13,18 +13,10 @@ import {
   mergeMap,
   switchMap,
   takeUntil,
-  tap,
 } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
-import {
-  AddUsersEditorsWithBill,
-  Bill,
-  BillWithId,
-  DeleteItem,
-  Item,
-  ItemWithId,
-} from '../model/bill.model';
+import { ItemWithId } from '../model/bill.model';
 import { ActivatedRoute } from '@angular/router';
 import { BillService } from '../bill.service';
 
