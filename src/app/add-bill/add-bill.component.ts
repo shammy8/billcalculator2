@@ -14,7 +14,16 @@ import { NewBill } from '../model/bill.model';
         </span>
       </div>
       <div class="p-field">
-        <label for="friends-input">Friends</label>
+        <label for="friends-input" pTooltip="Enter your username"
+          >Friends
+          <button
+            pButton
+            icon="pi pi-info-circle"
+            class="p-button-text p-button-md"
+            style=" padding-bottom: 0"
+            pTooltip="Name of your friends that will appear in this bill. Press enter after each name. You need to enter your own name too"
+          ></button>
+        </label>
         <p-chips
           id="friends-input"
           formControlName="friends"
@@ -24,7 +33,16 @@ import { NewBill } from '../model/bill.model';
         ></p-chips>
       </div>
       <div class="p-field">
-        <label for="editors-input">Editors UID</label>
+        <label for="editors-input"
+          >Editors UID
+          <button
+            pButton
+            icon="pi pi-info-circle"
+            class="p-button-text p-button-md"
+            style=" padding-bottom: 0"
+            pTooltip="User id of the accounts that can view and edit this bill. Uid can be found in the side bar. Press enter after each uid. You don't need to enter your own uid."
+          ></button>
+        </label>
         <p-chips
           id="editors-input"
           formControlName="editors"
@@ -35,10 +53,21 @@ import { NewBill } from '../model/bill.model';
       </div>
       <button pButton type="submit" [disabled]="form.invalid">Add Bill</button>
     </form>
+
+    <p-dialog
+      header="Add Bill"
+      [(visible)]="displayFriendsDialog"
+      [style]="{ width: '100%' }"
+      [modal]="true"
+      [dismissableMask]="true"
+      >Hi
+    </p-dialog>
   `,
   styles: [],
 })
 export class AddBillComponent implements OnInit {
+  displayFriendsDialog = false;
+
   form = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(20)]],
     friends: [[], [Validators.required]],
