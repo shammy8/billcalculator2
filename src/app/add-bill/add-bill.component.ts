@@ -18,6 +18,7 @@ import { NewBill } from '../model/bill.model';
           >Friends
           <button
             pButton
+            type="button"
             icon="pi pi-info-circle"
             class="p-button-text p-button-md"
             style=" padding-bottom: 0"
@@ -37,6 +38,7 @@ import { NewBill } from '../model/bill.model';
           >Editors UID
           <button
             pButton
+            type="button"
             icon="pi pi-info-circle"
             class="p-button-text p-button-md"
             style=" padding-bottom: 0"

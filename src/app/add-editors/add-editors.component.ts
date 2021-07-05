@@ -10,6 +10,7 @@ import { FormBuilder } from '@angular/forms';
           >Editors' UID
           <button
             pButton
+            type="button"
             icon="pi pi-info-circle"
             class="p-button-text p-button-md"
             style=" padding-bottom: 0"
