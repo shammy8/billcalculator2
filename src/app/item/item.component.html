@@ -9,13 +9,13 @@
           <input type="text" pInputText formControlName="description" />
         </ng-template>
       </editable>
-      <button
+      <!-- <button
         pButton
         icon="pi pi-trash"
         class="p-button-text p-button-sm p-button-secondary"
         style="padding: 0; width: 1.5rem"
         (click)="this.deleteItem.emit({ item: this.item, event: $event })"
-      ></button>
+      ></button> -->
     </div>
     <div class="price">
       <editable (save)="updateItemModel('cost')">

@@ -12,6 +12,7 @@ import { BillWithItems, ItemWithId, Ledger } from '../model/bill.model';
           £{{ friend2.value * -1 | number: '1.2-2' }}
         </ng-container>
       </div>
+      <br />
     </div>
   `,
   styles: [],

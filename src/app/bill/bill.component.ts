@@ -4,8 +4,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { combineLatest, of, Subject } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 import {
   debounceTime,
   groupBy,
@@ -34,8 +33,6 @@ export class BillComponent implements OnInit, OnDestroy {
 
   order: 'description' | 'cost' | 'date' = 'date';
   reverse = true;
-
-  itemsForm = this.fb.group({});
 
   billId = '';
   billId$ = this.route.paramMap.pipe(
@@ -109,11 +106,26 @@ export class BillComponent implements OnInit, OnDestroy {
       icon: 'pi pi-sort-amount-down',
       command: (e) => this.handleOrdering('date'),
     },
-    { label: 'Delete Bill', icon: 'pi pi-trash', command: (e) => {} },
+    {
+      label: 'Delete Bill (Not implemented)',
+      icon: 'pi pi-trash',
+      command: (e) => {
+        // this.confirmationService.confirm({
+        //   target: event?.target as undefined | EventTarget,
+        //   message: `Are you sure you want to delete this item: ${item.description} £${item.cost}?`,
+        //   icon: 'pi pi-exclamation-triangle',
+        //   accept: () => {
+        //     this.billService.deleteItem({
+        //       itemId: item.id,
+        //       billId,
+        //     });
+        //   },
+        // });
+      },
+    },
   ];
 
   constructor(
-    private fb: FormBuilder,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     public billService: BillService
@@ -131,11 +143,11 @@ export class BillComponent implements OnInit, OnDestroy {
   handleItemsChange() {
     this.itemsChange$
       .pipe(
-        takeUntil(this.destroy),
-        groupBy((itemsChanged) => itemsChanged.item.id),
-        mergeMap((itemsChangedGrouped) =>
-          itemsChangedGrouped.pipe(debounceTime(500))
-        )
+        takeUntil(this.destroy)
+        // groupBy((itemsChanged) => itemsChanged.item.id),
+        // mergeMap((itemsChangedGrouped) =>
+        //   itemsChangedGrouped.pipe(debounceTime(500))
+        // )
       )
       .subscribe(({ item, billId }) =>
         this.billService.itemChange(item, billId)

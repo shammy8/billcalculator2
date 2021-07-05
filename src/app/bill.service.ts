@@ -52,7 +52,7 @@ export class BillService {
       .collection<Item>(`bills/${billId}/items`)
       .valueChanges({ idField: 'id' })
       .pipe(
-        auditTime(800),
+        // auditTime(800),
         tap((items) => console.log('READ items', items))
       );
   }
