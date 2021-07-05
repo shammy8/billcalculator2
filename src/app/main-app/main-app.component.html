@@ -1,4 +1,4 @@
-<ng-container *ngIf="bills$ | async as bills">
+<ng-container *ngIf="bills$ | async as bills; else loading">
   <p-sidebar [(visible)]="displaySidebar" position="right">
     <button
       class="p-button-text p-button-danger"
@@ -70,3 +70,7 @@
     </p-dialog>
   </ng-container>
 </ng-container>
+
+<ng-template #loading>
+  <p-progressBar mode="indeterminate"></p-progressBar>
+</ng-template>
