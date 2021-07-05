@@ -83,6 +83,12 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "sourceMap": {
+                "scripts": true,
+                "hidden": true,
+                "styles": true,
+                "vendor": true
+              },
               "outputHashing": "all"
             },
             "development": {
