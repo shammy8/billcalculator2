@@ -14,6 +14,12 @@ import { Item } from '../model/bill.model';
           autofocus
           formControlName="description"
         />
+        <span
+          *ngIf="form.get('description')?.errors?.maxlength"
+          class="p-error"
+        >
+          Max of 25 characters
+        </span>
       </div>
       <div class="p-field">
         <label for="cost-input">Cost</label> &nbsp;
@@ -79,7 +85,7 @@ export class AddItemComponent implements OnInit {
   @Output() addItem = new EventEmitter<Item>();
 
   form = this.fb.group({
-    description: ['', [Validators.required]],
+    description: ['', [Validators.required, Validators.maxLength(25)]],
     // cost: [0.0, [Validators.required]],
     cost: [
       0.0,

@@ -10,29 +10,44 @@ service cloud.firestore {
       	return request.auth.uid in resource.data.users || request.auth.uid in resource.data.editors // TODO need to delete the first part when we move to new schema
       }
       function isCreator() {
-      	return request.auth.uid == resource.data.creatorUid  // TODO need  to delete this line
+      	return request.auth.uid == resource.data.creatorUid  // TODO need to delete this line
           || request.auth.uid == resource.data.creator
       }
 
       allow read: if isSignedIn() && isEditor();
       
     	allow create: if isSignedIn() &&
+        // (request.resource.data.key().hasAll(['name', 'creator', 'friends', 'editors'])) && // TODO not working
+        request.resource.data.size() == 4 &&
       	request.resource.data.creator == request.auth.uid &&
         request.resource.data.name is string &&
         request.resource.data.name.size() >= 1 &&
         request.resource.data.name.size() <= 20 &&
+        request.resource.data.editors is map &&
         request.auth.uid in request.resource.data.editors &&
+        request.resource.data.friends is list &&
         request.resource.data.friends.size() > 0;
       
       allow update: if isSignedIn() && isEditor() &&
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['name', 'creatorUid']);
-        // might be better to do the other rules inside a cloud function
+        // request.resource.data.key().hasOnly(['friends', 'editors']);
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['name', 'creator']);
       
       allow delete: if isCreator();
 
       match /items/{itemDoc} {
-        allow read;
-        allow write;
+        allow read: if get(/databases/$(database)/documents/bills/$(billDoc)).data.editors[request.auth.uid] == true;
+        allow create, update: if get(/databases/$(database)/documents/bills/$(billDoc)).data.editors[request.auth.uid] == true &&
+          // request.resource.data.key().hasOnly(['cost', 'date', 'description', 'paidBy', 'sharedBy']) &&
+          request.resource.data.size() == 5 &&
+          request.resource.data.cost is number &&
+          request.resource.data.cost >= 0 &&
+          request.resource.data.date is timestamp &&
+          request.resource.data.description is string && 
+          request.resource.data.description.size() >= 1 && 
+          request.resource.data.description.size() <= 25 &&
+          request.resource.data.paidBy is string &&
+          request.resource.data.sharedBy is list; 
+        allow delete: if get(/databases/$(database)/documents/bills/$(billDoc)).data.editors[request.auth.uid] == true;
       }
     }
 
