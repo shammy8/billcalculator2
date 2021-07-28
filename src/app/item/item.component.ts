@@ -72,7 +72,7 @@ export class ItemComponent implements OnInit, OnChanges {
     // this is actually good cause it means we don't go into an infinite loop when changing the form
     this.formChangesSub?.unsubscribe();
     this.formChangesSub = this.form.valueChanges.subscribe((changes) =>
-      this.itemChange.emit(changes)
+      this.itemChange.emit(this.form.getRawValue())
     );
   }
 
