@@ -48,6 +48,14 @@ import { AddFriendsComponent } from './add-friends/add-friends.component';
 
 const routes: Routes = [
   {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: {
+      authGuardPipe: () => redirectLoggedInTo(['']),
+    },
+  },
+  {
     path: '',
     component: MainAppComponent,
     canActivate: [AngularFireAuthGuard],
@@ -55,14 +63,6 @@ const routes: Routes = [
       authGuardPipe: () => redirectUnauthorizedTo(['login']),
     },
     children: [{ path: ':billId', component: BillComponent }],
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [AngularFireAuthGuard],
-    data: {
-      authGuardPipe: () => redirectLoggedInTo(['']),
-    },
   },
   // { path: '**', component: PageNotFoundComponent }
 ];
