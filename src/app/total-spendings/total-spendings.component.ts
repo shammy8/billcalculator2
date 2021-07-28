@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BillWithItems, ItemWithId } from '../model/bill.model';
+import { createObjectWithEveryone } from '../utility-functions';
 
 @Component({
   selector: 'bc-total-spendings',
@@ -22,7 +23,10 @@ export class TotalSpendingsComponent implements OnInit {
   }
 
   calculateTotalSpendings(items: ItemWithId[]) {
-    const totalSpendingsObject = this.createObjectWithEveryone<number>(0);
+    const totalSpendingsObject = createObjectWithEveryone<number>(
+      0,
+      this.billWithItems.friends
+    );
     for (const item of items) {
       for (const sharedBy of item.sharedBy) {
         totalSpendingsObject[sharedBy.friend] +=
@@ -30,17 +34,5 @@ export class TotalSpendingsComponent implements OnInit {
       }
     }
     return totalSpendingsObject;
-  }
-
-  private createObjectWithEveryone<T>(value: T): { [key: string]: T } {
-    const object: { [key: string]: T } = {};
-    this.billWithItems.friends.forEach((friend) => {
-      if (typeof value === 'object' && value !== null) {
-        object[friend] = { ...value };
-      } else {
-        object[friend] = value;
-      }
-    });
-    return object;
   }
 }
