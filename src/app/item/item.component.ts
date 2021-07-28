@@ -56,7 +56,12 @@ export class ItemComponent implements OnInit, OnChanges {
     for (let sharedByElement of this.item.sharedBy) {
       this.sharedByForm.push(
         this.fb.group({
-          settled: sharedByElement.settled,
+          settled: [
+            {
+              value: sharedByElement.settled,
+              disabled: this.item.paidBy === sharedByElement.friend,
+            },
+          ],
           friend: sharedByElement.friend,
         })
       );

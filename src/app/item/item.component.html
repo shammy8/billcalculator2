@@ -50,7 +50,6 @@
       }}</label>
       <p-inputSwitch
         pTooltip="Can't edit the original payer of the item"
-        [disabled]="sharedBy.value.friend === item.paidBy"
         [tooltipDisabled]="sharedBy.value.friend !== item.paidBy"
         tooltipPosition="top"
         formControlName="settled"
