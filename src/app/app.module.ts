@@ -45,6 +45,7 @@ import { ItemComponent } from './item/item.component';
 import { OrderModule } from 'ngx-order-pipe';
 import { EditableModule } from '@ngneat/edit-in-place';
 import { AddFriendsComponent } from './add-friends/add-friends.component';
+import { TotalSpendingsComponent } from './total-spendings/total-spendings.component';
 
 const routes: Routes = [
   {
@@ -79,6 +80,7 @@ const routes: Routes = [
     CalculateComponent,
     ItemComponent,
     AddFriendsComponent,
+    TotalSpendingsComponent,
   ],
   imports: [
     BrowserModule,

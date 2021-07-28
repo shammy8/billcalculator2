@@ -88,5 +88,18 @@
     ></bc-calculate>
   </p-dialog>
 
+  <p-dialog
+    header="Total spendings"
+    [(visible)]="displayTotalSpendingsDialog"
+    [style]="{ width: '100%' }"
+    [modal]="true"
+    [dismissableMask]="true"
+  >
+    <bc-total-spendings
+      *ngIf="displayTotalSpendingsDialog"
+      [billWithItems]="billWithItems"
+    ></bc-total-spendings>
+  </p-dialog>
+
   <p-confirmPopup></p-confirmPopup>
 </ng-container>

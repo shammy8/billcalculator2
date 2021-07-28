@@ -30,6 +30,7 @@ export class BillComponent implements OnInit, OnDestroy {
   displayAddEditorsDialog = false;
   displayAddFriendsDialog = false;
   displayCalculateDialog = false;
+  displayTotalSpendingsDialog = false;
 
   order: 'description' | 'cost' | 'date' = 'date';
   reverse = true;
@@ -68,6 +69,13 @@ export class BillComponent implements OnInit, OnDestroy {
       icon: 'pi pi-wallet',
       command: (e) => {
         this.openCalculateDialog();
+      },
+    },
+    {
+      label: 'Total spendings',
+      icon: 'pi pi-wallet',
+      command: (e) => {
+        this.openTotalSpendingsDialog();
       },
     },
     {
@@ -180,6 +188,14 @@ export class BillComponent implements OnInit, OnDestroy {
 
   openCalculateDialog() {
     this.displayCalculateDialog = true;
+  }
+
+  openTotalSpendingsDialog() {
+    this.displayTotalSpendingsDialog = true;
+  }
+
+  closeTotalSpendingsDialog() {
+    this.displayTotalSpendingsDialog = false;
   }
 
   itemTrackBy(index: number, item: ItemWithId) {
