@@ -87,8 +87,8 @@ export class BillService {
       editors[newBill.editors[editor]] = true;
     }
     editors[userUid] = true;
-    const billCollection = this.store.collection('bills');
-    billCollection.add({
+    const billCollection = this.store.collection<Bill>('bills');
+    return billCollection.add({
       name: newBill.name,
       friends: newBill.friends,
       creator: userUid,

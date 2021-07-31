@@ -11,6 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { BillService } from '../bill.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { UserService } from '../user.service';
+import { NewBill } from '../model/bill.model';
 
 @Component({
   selector: 'bc-main-app',
@@ -57,12 +58,23 @@ export class MainAppComponent implements OnInit, OnDestroy {
     this.billService.fetchBills();
   }
 
+  closeSideBar() {
+    this.displaySidebar = false;
+  }
+
   openAddBillDialog() {
     this.displayAddBillDialog = true;
   }
 
   closeAddBillDialog() {
     this.displayAddBillDialog = false;
+  }
+
+  async addBill(newBill: NewBill, userId: string) {
+    this.closeAddBillDialog();
+    this.closeSideBar();
+    const doc = await this.billService.addBill(newBill, userId);
+    this.router.navigate([doc.id]);
   }
 
   signOut() {
