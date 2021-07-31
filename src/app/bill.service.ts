@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { nanoid } from 'nanoid';
-import { Observable, ReplaySubject } from 'rxjs';
+import { EMPTY, Observable, ReplaySubject } from 'rxjs';
 import { auditTime, map, switchMap, take, tap } from 'rxjs/operators';
 import {
   Bill,
@@ -26,13 +26,14 @@ export class BillService {
   fetchBills() {
     this.auth.user
       .pipe(
-        switchMap((user) =>
-          this.store
+        switchMap((user) => {
+          if (!user) return EMPTY;
+          return this.store
             .collection<Bill>(`bills`, (ref) =>
-              ref.where(`editors.${user!.uid}`, '==', true)
+              ref.where(`editors.${user.uid}`, '==', true)
             )
-            .valueChanges({ idField: 'id' })
-        ),
+            .valueChanges({ idField: 'id' });
+        }),
         tap((bills) => console.log('READ Bills', bills))
       )
       .subscribe((bills) => this.billsRS.next(bills));
