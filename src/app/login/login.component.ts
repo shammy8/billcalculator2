@@ -5,12 +5,19 @@ import firebase from 'firebase/app';
 
 @Component({
   selector: 'bc-login',
-  template: `<button
-    pButton
-    icon="pi pi-google"
-    label="Sign in"
-    (click)="login()"
-  ></button>`,
+  template: `<div>
+    <button
+      pButton
+      icon="pi pi-google"
+      label="Sign in with Google"
+      (click)="loginWithGoogle()"
+    ></button>
+    <button
+      pButton
+      label="Sign in anonymously"
+      (click)="loginAnonymously()"
+    ></button>
+  </div>`,
   styles: [
     `
       :host {
@@ -20,6 +27,11 @@ import firebase from 'firebase/app';
         justify-content: center;
         background: var(--surface-0);
       }
+      button {
+        display: block;
+        width: 200px;
+        margin-bottom: 50px;
+      }
     `,
   ],
 })
@@ -28,9 +40,13 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  login() {
+  loginWithGoogle() {
     this.auth
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(() => this.router.navigate(['']));
+  }
+
+  loginAnonymously() {
+    this.auth.signInAnonymously().then(() => this.router.navigate(['']));
   }
 }
