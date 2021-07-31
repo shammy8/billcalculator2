@@ -51,7 +51,7 @@ export class MainAppComponent implements OnInit, OnDestroy {
     this.userService.userDoc$
       .pipe(takeUntil(this.destroy))
       .subscribe((userDoc) => {
-        if (!userDoc) return;
+        if (!userDoc?.primaryBill) return;
         this.router.navigate([userDoc.primaryBill]);
       });
 
