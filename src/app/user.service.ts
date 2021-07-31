@@ -14,8 +14,7 @@ export class UserService {
       if (!user) return EMPTY;
       return this.store.doc<UserDoc>(`users/${user.uid}`).valueChanges();
     }),
-    tap((userDoc) => console.log('userDoc$', userDoc)),
-    shareReplay()
+    tap((userDoc) => console.log('userDoc$', userDoc))
   );
 
   constructor(private auth: AngularFireAuth, private store: AngularFirestore) {}
