@@ -7,11 +7,12 @@ import {
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { BillService } from '../bill.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { UserService } from '../user.service';
 import { NewBill } from '../model/bill.model';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'bc-main-app',
@@ -44,7 +45,8 @@ export class MainAppComponent implements OnInit, OnDestroy {
     public router: Router,
     public billService: BillService,
     public clipboard: Clipboard,
-    private userService: UserService
+    private userService: UserService,
+    private confirmService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -77,9 +79,21 @@ export class MainAppComponent implements OnInit, OnDestroy {
     this.router.navigate([doc.id]);
   }
 
-  signOut() {
-    this.auth.signOut().then(() => {
-      this.router.navigate(['login']);
+  signOut(event: MouseEvent) {
+    this.user$.pipe(take(1)).subscribe((user) => {
+      const message = user?.isAnonymous
+        ? 'You are logged in anonymously, your data will be lost if you log out. Are you sure you want to log out?'
+        : 'Are you sure you want to log out?';
+      this.confirmService.confirm({
+        target: event.target as undefined | EventTarget,
+        message,
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.auth.signOut().then(() => {
+            this.router.navigate(['login']);
+          });
+        },
+      });
     });
   }
 

@@ -6,7 +6,7 @@
       label="Sign out"
       icon="pi pi-sign-out"
       iconPos="left"
-      (click)="signOut()"
+      (click)="signOut($event)"
     ></button>
     <ng-container *ngIf="user$ | async as user">
       <button
@@ -65,6 +65,8 @@
       <bc-add-bill (addBill)="addBill($event, user.uid)"></bc-add-bill>
     </p-dialog>
   </ng-container>
+
+  <p-confirmPopup></p-confirmPopup>
 </ng-container>
 
 <ng-template #loading>
