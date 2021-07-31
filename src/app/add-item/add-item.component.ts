@@ -34,6 +34,7 @@ import { Item } from '../model/bill.model';
           pInputText
         />
       </div>
+      <!-- <bc-input-number-calculator></bc-input-number-calculator> -->
       <!-- <div class="p-field">
         <label for="cost-input">Cost</label>
         <p-inputNumber
