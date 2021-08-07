@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { nanoid } from 'nanoid';
 import { EMPTY, Observable, ReplaySubject } from 'rxjs';
 import { auditTime, map, switchMap, take, tap } from 'rxjs/operators';
 import {
