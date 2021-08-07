@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve --hmr --open",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "explore": "source-map-explorer dist/**/*.js"
   },
   "private": true,
   "dependencies": {
@@ -33,17 +34,18 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
+    "@angular-devkit/architect": "0.1201.0",
     "@angular-devkit/build-angular": "~12.1.0",
     "@angular/cli": "~12.1.0",
     "@angular/compiler-cli": "~12.1.0",
     "@types/node": "^12.11.1",
-    "typescript": "~4.2.3",
-    "@angular-devkit/architect": "0.1201.0",
     "firebase-tools": "^8.0.0 || ^9.0.0",
     "fuzzy": "^0.1.3",
     "inquirer": "^6.2.2",
     "inquirer-autocomplete-prompt": "^1.0.1",
+    "jsonc-parser": "^3.0.0",
     "open": "^7.0.3",
-    "jsonc-parser": "^3.0.0"
+    "source-map-explorer": "^2.5.2",
+    "typescript": "~4.2.3"
   }
 }
