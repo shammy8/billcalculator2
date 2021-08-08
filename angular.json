@@ -123,9 +123,21 @@
         "deploy": {
           "builder": "@angular/fire:deploy",
           "options": {}
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "billcalculator2"
+  "defaultProject": "billcalculator2",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
