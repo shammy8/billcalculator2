@@ -3,7 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
+  OnDestroy,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -16,7 +16,7 @@ import { ItemWithId } from '../model/bill.model';
   templateUrl: 'item.component.html',
   styleUrls: ['item.component.scss'],
 })
-export class ItemComponent implements OnInit, OnChanges {
+export class ItemComponent implements OnDestroy, OnChanges {
   form!: FormGroup;
   formChangesSub!: Subscription;
 
@@ -33,10 +33,6 @@ export class ItemComponent implements OnInit, OnChanges {
   }>();
 
   constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {
-    // this.initialiseForm();
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.item) {

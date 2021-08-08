@@ -46,7 +46,7 @@ import { OrderModule } from 'ngx-order-pipe';
 import { EditableModule } from '@ngneat/edit-in-place';
 import { AddFriendsComponent } from './add-friends/add-friends.component';
 import { TotalSpendingsComponent } from './total-spendings/total-spendings.component';
-import { InputNumberCalculatorComponent } from './input-number-calulator/input-number-calulator.component';
+// import { InputNumberCalculatorComponent } from './input-number-calulator/input-number-calulator.component';
 import { NoBillComponent } from './no-bill/no-bill.component';
 
 const routes: Routes = [
@@ -86,7 +86,7 @@ const routes: Routes = [
     ItemComponent,
     AddFriendsComponent,
     TotalSpendingsComponent,
-    InputNumberCalculatorComponent,
+    // InputNumberCalculatorComponent,
     NoBillComponent,
   ],
   imports: [

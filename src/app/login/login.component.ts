@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
@@ -35,10 +35,8 @@ import firebase from 'firebase/app';
     `,
   ],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   constructor(private auth: AngularFireAuth, private router: Router) {}
-
-  ngOnInit(): void {}
 
   loginWithGoogle() {
     this.auth

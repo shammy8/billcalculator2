@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NewBill } from '../model/bill.model';
 
@@ -67,7 +67,7 @@ import { NewBill } from '../model/bill.model';
   `,
   styles: [],
 })
-export class AddBillComponent implements OnInit {
+export class AddBillComponent {
   displayFriendsDialog = false;
 
   form = this.fb.group({
@@ -79,8 +79,6 @@ export class AddBillComponent implements OnInit {
   @Output() addBill = new EventEmitter<NewBill>();
 
   constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {}
 
   onAddBill() {
     this.form.get('name')?.getError('maxLength');

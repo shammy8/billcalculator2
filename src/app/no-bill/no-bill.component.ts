@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'bc-no-bill',
@@ -22,8 +22,6 @@ import { Component, OnInit } from '@angular/core';
   `,
   styleUrls: ['../bill/bill.component.scss'], // shares a stylesheet with bill component
 })
-export class NoBillComponent implements OnInit {
+export class NoBillComponent {
   constructor() {}
-
-  ngOnInit(): void {}
 }

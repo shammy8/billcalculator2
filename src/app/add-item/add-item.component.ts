@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Item } from '../model/bill.model';
 
@@ -81,7 +81,7 @@ import { Item } from '../model/bill.model';
   `,
   styles: [],
 })
-export class AddItemComponent implements OnInit {
+export class AddItemComponent {
   @Input() users!: string[];
   @Output() addItem = new EventEmitter<Item>();
 
@@ -103,8 +103,6 @@ export class AddItemComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {}
 
   calculateCost(event: Event) {
     const value = (event.target as HTMLInputElement).value;
